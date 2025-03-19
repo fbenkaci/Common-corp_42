@@ -6,7 +6,7 @@
 /*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/04 14:08:51 by fbenkaci          #+#    #+#             */
-/*   Updated: 2025/03/19 12:34:13 by fbenkaci         ###   ########.fr       */
+/*   Updated: 2025/03/19 15:52:24 by fbenkaci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,5 +34,6 @@ int			check_if_digit(char **av, int i, int j);
 int			check_sign(char **av, int i, int j);
 int			check_duplicate_nb(t_data *data);
 void		ft_free(t_data *data);
+int			has_spaces(char *str);
 
 #endif
