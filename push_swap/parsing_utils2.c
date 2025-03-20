@@ -6,7 +6,7 @@
 /*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 12:23:14 by fbenkaci          #+#    #+#             */
-/*   Updated: 2025/03/19 15:38:31 by fbenkaci         ###   ########.fr       */
+/*   Updated: 2025/03/20 15:55:09 by fbenkaci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,6 @@ int	check_duplicate_nb(t_data *data)
 			if (data->nb[i] - data->nb[j] == 0)
 			{
 				write(2, "Error\nThere is duplicate number.\n", 34);
-				free_map(data->dest);
-				free(data->nb);
 				return (1);
 			}
 			j++;
@@ -45,5 +43,7 @@ void	ft_free(t_data *data)
 
 int	has_spaces(char *str)
 {
-	return (ft_strchr(str, ' ') != NULL);
+	if (ft_strchr(str, ' ') == NULL)
+		return (1);
+	return (0);
 }

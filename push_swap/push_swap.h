@@ -6,7 +6,7 @@
 /*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/04 14:08:51 by fbenkaci          #+#    #+#             */
-/*   Updated: 2025/03/19 15:52:24 by fbenkaci         ###   ########.fr       */
+/*   Updated: 2025/03/20 15:38:32 by fbenkaci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,10 +22,12 @@ typedef struct push_swap
 	int		*nb;
 	char	int_min[11];
 	char	int_max[11];
+	int		j;
+	char	**tmp;
 }			t_data;
 
 int			check_if_numbers(char **av);
-int			check_doublon(char **av, int ac);
+int			check_doublon(char **av, t_data *data);
 int			check_doublon_string(char **av, t_data *data);
 char		*remove_extra_spaces(char *str);
 int			convert_to_int(t_data *data);
@@ -35,5 +37,6 @@ int			check_sign(char **av, int i, int j);
 int			check_duplicate_nb(t_data *data);
 void		ft_free(t_data *data);
 int			has_spaces(char *str);
+int			count_words(t_data *data);
 
 #endif

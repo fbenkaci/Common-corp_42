@@ -6,7 +6,7 @@
 /*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/16 14:43:58 by fbenkaci          #+#    #+#             */
-/*   Updated: 2025/03/19 15:52:10 by fbenkaci         ###   ########.fr       */
+/*   Updated: 2025/03/20 14:56:26 by fbenkaci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,9 @@ int	convert_to_int(t_data *data)
 	{
 		if (is_valid_int(data->dest[i]) == 1)
 			return (1);
-		data->nb[i] = ft_atoi(data->dest[i]);
+		data->nb[data->j] = ft_atoi(data->dest[i]);
+		ft_printf("%d\n", data->nb[data->j]);
+		data->j++;
 		i++;
 	}
 	return (0);
@@ -58,29 +60,21 @@ int	convert_to_int(t_data *data)
 
 int	is_valid_int(char *str)
 {
-	int	len_nb;
-	int	i;
+	long	nbr;
+	char	*error;
 
-	i = 0;
-	len_nb = ft_strlen(str);
-	if (len_nb > 11)
+	error = "Error\nAll numbers must be between -2147483648 and 2147483647.\n";
+	if (ft_strlen(str) > 11)
 	{
-		if (str[0] == '-')
-		{
-			write(2, "Error\nThe following digit : ", 29);
-			write(2, str, len_nb);
-			write(2, " is too small.\n", 16);
-			return (1);
-		}
-		write(2, "Error\nThe following digit  : ", 30);
-		write(2, str, len_nb);
-		write(2, " is too long\n", 14);
+		ft_putstr_fd(error, 2);
 		return (1);
 	}
-	if (len_nb == 11 && ft_strcmp(str, "-2147483648") != 0)
+	nbr = ft_atol(str);
+	if (nbr > INT_MAX || nbr < INT_MIN)
+	{
+		ft_putstr_fd(error, 2);
 		return (1);
-	if (len_nb == 10 && ft_strcmp(str, "2147483647") != 0)
-		return (1);
+	}
 	return (0);
 }
 
