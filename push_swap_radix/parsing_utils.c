@@ -6,7 +6,7 @@
 /*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 15:30:12 by fbenkaci          #+#    #+#             */
-/*   Updated: 2025/04/16 15:35:25 by fbenkaci         ###   ########.fr       */
+/*   Updated: 2025/04/19 15:24:40 by fbenkaci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,14 +99,14 @@ void	ft_lstadd_back_bis(t_node **lst, t_node *new)
 }
 
 t_node	*lst_new_2(int a)
-{   
-    t_node *new;
+{
+	t_node *new;
 
 	new = malloc(sizeof(t_node));
 	if (!new)
-		return NULL;
+		return (NULL);
 	new->value = a;
 	new->next = NULL;
 
-    return (new);
+	return (new);
 }
