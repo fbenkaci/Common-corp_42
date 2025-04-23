@@ -6,7 +6,7 @@
 /*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 12:11:12 by fbenkaci          #+#    #+#             */
-/*   Updated: 2025/04/23 19:40:26 by fbenkaci         ###   ########.fr       */
+/*   Updated: 2025/04/23 19:55:16 by fbenkaci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,16 +30,39 @@ int	A_is_sorted(t_stack *stack)
 	return (1);
 }
 
-void sort_index(t_stack *stack)
+void	swap(int *a, int *b)
 {
-	
+	int	tmp;
+
+	tmp = *a;
+	*a = *b;
+	*b = tmp;
+}
+
+void	sort_index(t_stack *stack)
+{
+	t_node	*tmp;
+	t_node	*current;
+
+	current = stack->cpy_stack_a;
+	tmp = stack->cpy_stack_a;
+	while (current && current->next)
+	{
+		if (current->value > current->next->value)
+		{
+			swap(&current->value, &current->next->value);
+			current = tmp;
+		}
+		else
+			current = current->next;
+	}
 }
 
 void	index_stack(t_stack *stack)
 {
 	t_node	*tmp;
 	t_node	*current;
-	
+
 	tmp = stack->a;
 	// ft_printf("%d\n", tmp->a->next);
 	while (tmp)
