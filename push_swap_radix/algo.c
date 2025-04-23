@@ -6,7 +6,7 @@
 /*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 12:11:12 by fbenkaci          #+#    #+#             */
-/*   Updated: 2025/04/23 11:59:23 by fbenkaci         ###   ########.fr       */
+/*   Updated: 2025/04/23 19:40:26 by fbenkaci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,36 @@ int	A_is_sorted(t_stack *stack)
 	}
 	// ft_printf("Trié.\n");
 	return (1);
+}
+
+void sort_index(t_stack *stack)
+{
+	
+}
+
+void	index_stack(t_stack *stack)
+{
+	t_node	*tmp;
+	t_node	*current;
+	
+	tmp = stack->a;
+	// ft_printf("%d\n", tmp->a->next);
+	while (tmp)
+	{
+		current = lst_new_2(tmp->value);
+		ft_lstadd_back_cpy(&stack, current);
+		tmp = tmp->next;
+	}
+	while (stack->cpy_stack_a)
+	{
+		ft_printf("%d\n", stack->cpy_stack_a->value);
+		stack->cpy_stack_a = stack->cpy_stack_a->next;
+	}
+}
+
+void	sort_big_stack(t_stack *stack)
+{
+	index_stack(stack);
 }
 
 void	sort_small_stack(t_stack *stack)

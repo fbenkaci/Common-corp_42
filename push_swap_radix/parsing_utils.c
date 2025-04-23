@@ -6,7 +6,7 @@
 /*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 15:30:12 by fbenkaci          #+#    #+#             */
-/*   Updated: 2025/04/22 15:42:41 by fbenkaci         ###   ########.fr       */
+/*   Updated: 2025/04/23 19:29:29 by fbenkaci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,8 +59,8 @@ int	fill_result(char **args, char **result, char **tmp)
 	int	j;
 	int	k;
 
-	i = 0;
-	k = -1;
+	i = 1;
+	k = 0;
 	while (args[i])
 	{
 		tmp = ft_split(args[i], ' ');
@@ -70,7 +70,7 @@ int	fill_result(char **args, char **result, char **tmp)
 		while (tmp[j])
 		{
 			result[k] = ft_strdup(tmp[j]);
-			if (result[k] == NULL)
+			if (!result[k])
 				return (free_map(result), free_map(tmp), 0);
 			j++;
 			k++;
@@ -84,7 +84,7 @@ int	fill_result(char **args, char **result, char **tmp)
 
 void	ft_lstadd_back_bis(t_stack **lst, t_node *new)
 {
-	t_node *tmp;
+	t_node	*tmp;
 
 	if (!new || !lst)
 		return ;
@@ -98,6 +98,23 @@ void	ft_lstadd_back_bis(t_stack **lst, t_node *new)
 	{
 		tmp = tmp->next;
 	}
+	tmp->next = new;
+}
+
+void	ft_lstadd_back_cpy(t_stack **stack, t_node *new)
+{
+	t_node	*tmp;
+
+	if (!new || !stack || !(*stack))
+		return ;
+	if (!(*stack)->cpy_stack_a)
+	{
+		(*stack)->cpy_stack_a = new;
+		return ;
+	}
+	tmp = (*stack)->cpy_stack_a;
+	while (tmp->next)
+		tmp = tmp->next;
 	tmp->next = new;
 }
 
@@ -133,4 +150,17 @@ t_node	*ft_last_bis(t_node *lst)
 	while (lst->next != NULL)
 		lst = lst->next;
 	return (lst);
+}
+
+void	free_stack(t_stack **stack)
+{
+	t_node *tmp;
+
+	while ((*stack)->a)
+	{
+		tmp = (*stack)->a;
+		(*stack)->a = (*stack)->a->next;
+		free(tmp);
+	}
+	(*stack)->a = NULL;
 }

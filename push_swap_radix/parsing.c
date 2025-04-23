@@ -6,7 +6,7 @@
 /*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 10:25:52 by fbenkaci          #+#    #+#             */
-/*   Updated: 2025/04/23 12:02:07 by fbenkaci         ###   ########.fr       */
+/*   Updated: 2025/04/23 19:14:43 by fbenkaci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,7 @@ void	fill_stack_AA(t_stack **stack, char **args)
 	while (args[i])
 	{
 		if (!(*stack)->a)
-		{
 			(*stack)->a = lst_new_2(ft_atoi(args[i]));
-		}
 		else
 		{
 			tmp = lst_new_2(ft_atoi(args[i]));
@@ -53,7 +51,7 @@ char	**split_args(char **args)
 	result = malloc((nb_words + 1) * sizeof(char *));
 	if (!result)
 		return (NULL);
-	if (fill_result(args, result, tmp) == 0)
+	if (!fill_result(args, result, tmp))
 	{
 		free_map(result);
 		return (NULL);
@@ -123,7 +121,6 @@ int	main(int ac, char **av)
 	t_stack	*stack;
 	char	**args;
 
-	// int		nb_in_stack;
 	stack = malloc(sizeof(t_stack));
 	if (!stack)
 		return (1);
@@ -133,20 +130,33 @@ int	main(int ac, char **av)
 	if (ac > 1)
 	{
 		if (check_error(args) == 0 || check_duplicate_nb(args) == 0)
+		{
+			free_map(args);
+			free(stack);
 			return (0);
+		}
 		fill_stack_AA(&stack, args);
 		if (A_is_sorted(stack))
-			return (0);
-		stack->nb_in_stack = count_element(args);
-		// ft_printf("%d\n", stack->nb_in_stack);
-		if (stack->nb_in_stack <= 5)
 		{
-			sort_small_stack(stack);
+			free_stack(&stack);
 			free(stack);
 			free_map(args);
 			return (0);
 		}
+		stack->nb_in_stack = count_element(args);
+		if (stack->nb_in_stack <= 5)
+		{
+			sort_small_stack(stack);
+			free_stack(&stack);
+			free(stack);
+			free_map(args);
+			return (0);
+		}
+		else
+		{
+			sort_big_stack(stack);
+		}
+		
 	}
-	// free_map(args);
 	return (0);
 }
