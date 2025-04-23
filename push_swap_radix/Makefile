@@ -6,14 +6,14 @@
 #    By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/12 10:27:13 by fbenkaci          #+#    #+#              #
-#    Updated: 2025/04/19 12:59:20 by fbenkaci         ###   ########.fr        #
+#    Updated: 2025/04/21 17:07:49 by fbenkaci         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = push_swap
 CC = cc -g
 CFLAGS = -Wall -Wextra -Werror
-SRCS = parsing.c parsing_utils.c algo.c swap.c
+SRCS = parsing.c parsing_utils.c algo.c swap.c rotate.c push.c
 OBJS = $(SRCS:.c=.o)
 
 all: $(NAME) 

@@ -6,7 +6,7 @@
 /*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 19:15:59 by fbenkaci          #+#    #+#             */
-/*   Updated: 2025/04/19 13:34:45 by fbenkaci         ###   ########.fr       */
+/*   Updated: 2025/04/22 11:20:14 by fbenkaci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,12 +16,13 @@ void	sa(t_node *a)
 {
 	int	tmp;
 
-	if (a == NULL || (a)->next == NULL)
-		return ;
+	tmp = 0;
+	// if (a == NULL)
+		// return ;
 	tmp = a->value;
 	a->value = a->next->value;
 	a->next->value = tmp;
-	write(1, "sa\n", 3);
+	ft_printf("sa\n");
 }
 
 // void	sb(t_list **b)

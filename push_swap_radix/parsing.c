@@ -6,33 +6,40 @@
 /*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 10:25:52 by fbenkaci          #+#    #+#             */
-/*   Updated: 2025/04/19 15:14:03 by fbenkaci         ###   ########.fr       */
+/*   Updated: 2025/04/23 12:02:07 by fbenkaci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-t_node	*fill_stack_AA(char **args)
+void	fill_stack_AA(t_stack **stack, char **args)
 {
-	int		i;
-	t_node	*stack;
 	t_node	*tmp;
+	int		i;
 
-	stack = NULL;
-	i = 0;
+	// t_node	*current;
 	tmp = NULL;
+	i = 0;
 	while (args[i])
 	{
-		if (!stack)
-			stack = lst_new_2(ft_atoi(args[i]));
+		if (!(*stack)->a)
+		{
+			(*stack)->a = lst_new_2(ft_atoi(args[i]));
+		}
 		else
 		{
 			tmp = lst_new_2(ft_atoi(args[i]));
-			ft_lstadd_back_bis(&stack, tmp);
+			ft_lstadd_back_bis(stack, tmp);
 		}
+		// current = stack->a;
+		// while (current)
+		// {
+		// 	ft_printf("%d\n", current->value);
+		// 	current = current->next;
+		// }
 		i++;
 	}
-	return (stack);
+	// ft_printf("%d\n", current->value);
 }
 
 char	**split_args(char **args)
@@ -98,18 +105,8 @@ int	check_duplicate_nb(char **args)
 		}
 		i++;
 	}
-	// fill_stack_AA(args);
 	return (1);
 }
-
-// int  check_list_error(char **args)
-// {
-//  if (!check_error(args))
-//      return (0);
-//  if (!check_duplicate_nb(args))
-//      return (0);
-//  return (1);
-// }
 
 int	count_element(char **args)
 {
@@ -123,22 +120,30 @@ int	count_element(char **args)
 
 int	main(int ac, char **av)
 {
+	t_stack	*stack;
 	char	**args;
-	t_node	*stack;
-	int		nb_in_stack;
 
+	// int		nb_in_stack;
+	stack = malloc(sizeof(t_stack));
+	if (!stack)
+		return (1);
+	stack->a = NULL;
+	stack->b = NULL;
 	args = split_args(av);
 	if (ac > 1)
 	{
 		if (check_error(args) == 0 || check_duplicate_nb(args) == 0)
 			return (0);
-		stack = fill_stack_AA(args);
+		fill_stack_AA(&stack, args);
 		if (A_is_sorted(stack))
 			return (0);
-		nb_in_stack = count_element(args); 
-		if (nb_in_stack <= 5)
+		stack->nb_in_stack = count_element(args);
+		// ft_printf("%d\n", stack->nb_in_stack);
+		if (stack->nb_in_stack <= 5)
 		{
-			sort_small_stack(stack, nb_in_stack);
+			sort_small_stack(stack);
+			free(stack);
+			free_map(args);
 			return (0);
 		}
 	}

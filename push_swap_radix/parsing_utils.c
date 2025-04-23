@@ -6,7 +6,7 @@
 /*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 15:30:12 by fbenkaci          #+#    #+#             */
-/*   Updated: 2025/04/19 15:24:40 by fbenkaci         ###   ########.fr       */
+/*   Updated: 2025/04/22 15:42:41 by fbenkaci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,31 +82,55 @@ int	fill_result(char **args, char **result, char **tmp)
 	return (1);
 }
 
-void	ft_lstadd_back_bis(t_node **lst, t_node *new)
+void	ft_lstadd_back_bis(t_stack **lst, t_node *new)
 {
+	t_node *tmp;
+
 	if (!new || !lst)
 		return ;
 	if (!*lst)
 	{
-		*lst = new;
+		(*lst)->a = new;
 		return ;
 	}
-	while (*lst != NULL)
+	tmp = (*lst)->a;
+	while (tmp->next)
 	{
-		lst = &(*lst)->next;
+		tmp = tmp->next;
 	}
-	*lst = new;
+	tmp->next = new;
 }
 
 t_node	*lst_new_2(int a)
 {
-	t_node *new;
+	t_node	*new;
 
 	new = malloc(sizeof(t_node));
 	if (!new)
 		return (NULL);
 	new->value = a;
 	new->next = NULL;
-
 	return (new);
+}
+
+t_node	*ft_avdernier_bis(t_node *lst)
+{
+	if (!lst)
+		return (NULL);
+	if (lst->next == NULL)
+		return (lst);
+	while (lst->next->next != NULL)
+		lst = lst->next;
+	return (lst);
+}
+
+t_node	*ft_last_bis(t_node *lst)
+{
+	if (!lst)
+		return (NULL);
+	if (lst->next == NULL)
+		return (lst);
+	while (lst->next != NULL)
+		lst = lst->next;
+	return (lst);
 }

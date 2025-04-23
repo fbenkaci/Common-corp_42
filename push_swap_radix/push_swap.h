@@ -6,7 +6,7 @@
 /*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 10:26:12 by fbenkaci          #+#    #+#             */
-/*   Updated: 2025/04/19 15:11:00 by fbenkaci         ###   ########.fr       */
+/*   Updated: 2025/04/22 14:41:53 by fbenkaci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,27 +17,38 @@
 
 typedef struct s_node
 {
-    int             value;
-    struct s_node   *next;
-}                   t_node;
+	int				value;
+	struct s_node	*next;
 
-void	sort_small_stack(t_node *stack, int nb_elmt);
-int                 A_is_sorted(t_node *stack);
-void                ft_lstadd_back_bis(t_node **lst, t_node *new);
-t_node              *lst_new_2(int a);
-int                 count_words(char **args);
-int                 is_valid_int(char *str);
-int                 fill_result(char **args, char **result, char **tmp);
-void                rra(t_list **a);
-void                rrb(t_list **b);
-void                ra(t_list **a);
-void                rb(t_list **b);
-void                rr(t_list **a, t_list **b);
-void                rrr(t_list **a, t_list **b);
-void                pa(t_list **a, t_list **b);
-void                pb(t_list **b, t_list **a);
-void                sa(t_node *a);
-void                sb(t_list **b);
-void                ss(t_list **a, t_list **b);
+}					t_node;
+
+typedef struct s_stack
+{
+	int				nb_in_stack;
+	t_node			*a;
+	t_node			*b;
+}					t_stack;
+
+void				sort_stack_4_5(t_stack *stack);
+t_node				*ft_avdernier_bis(t_node *lst);
+t_node				*ft_last_bis(t_node *lst);
+void				sort_small_stack(t_stack *stack);
+int					A_is_sorted(t_stack *stack);
+void				ft_lstadd_back_bis(t_stack **lst, t_node *new);
+t_node				*lst_new_2(int a);
+int					count_words(char **args);
+int					is_valid_int(char *str);
+int					fill_result(char **args, char **result, char **tmp);
+void				rra(t_node **a);
+void				rrb(t_node **b);
+void				ra(t_node **a);
+void				rb(t_node **b);
+void				rr(t_node **a, t_node **b);
+void				rrr(t_node **a, t_node **b);
+void				pa(t_node **a, t_node **b);
+void				pb(t_node **b, t_node **a);
+void				sa(t_node *a);
+void				sb(t_node **b);
+void				ss(t_node **a, t_node **b);
 
 #endif

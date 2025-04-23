@@ -6,7 +6,7 @@
 /*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 18:20:15 by fbenkaci          #+#    #+#             */
-/*   Updated: 2024/12/10 11:06:05 by fbenkaci         ###   ########.fr       */
+/*   Updated: 2025/04/21 10:51:03 by fbenkaci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 int	ft_putnbrbase_x_maj(unsigned int nb, unsigned int base)
 {
-	int		count;
-	char	*base_16;
+	int					count;
+	static const char	*base_16;
 
 	count = 0;
 	base_16 = "0123456789ABCDEF";
