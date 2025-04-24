@@ -6,7 +6,7 @@
 /*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 12:11:12 by fbenkaci          #+#    #+#             */
-/*   Updated: 2025/04/23 19:55:16 by fbenkaci         ###   ########.fr       */
+/*   Updated: 2025/04/24 13:19:28 by fbenkaci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,48 +39,83 @@ void	swap(int *a, int *b)
 	*b = tmp;
 }
 
-void	sort_index(t_stack *stack)
+void	index_sort_nb_cpy(t_stack *stack)
 {
-	t_node	*tmp;
 	t_node	*current;
+	int		i;
 
 	current = stack->cpy_stack_a;
-	tmp = stack->cpy_stack_a;
 	while (current && current->next)
 	{
 		if (current->value > current->next->value)
 		{
 			swap(&current->value, &current->next->value);
-			current = tmp;
+			current = stack->cpy_stack_a;
 		}
 		else
 			current = current->next;
 	}
+	current = stack->cpy_stack_a;
+	i = 0;
+	while (current)
+	{
+		current->index = i;
+		current = current->next;
+		i++;
+	}
+}
+
+void	assign_sorted_index(t_stack *stack)
+{
+	t_node	*cpy_start;
+	t_node	*current;
+
+	cpy_start = stack->cpy_stack_a;
+	current = stack->a;
+	while (current)
+	{
+		while (stack->cpy_stack_a)
+		{
+			if (current->value == stack->cpy_stack_a->value)
+			{
+				current->value = stack->cpy_stack_a->index;
+				stack->cpy_stack_a = cpy_start;
+				break ;
+			}
+			else
+				stack->cpy_stack_a = stack->cpy_stack_a->next;
+		}
+		current = current->next;
+	}
+	// while (current)
+	// {
+	// 	ft_printf("%d\n", current->value);
+	// 	current = current->next;
+	// }
 }
 
 void	index_stack(t_stack *stack)
 {
 	t_node	*tmp;
-	t_node	*current;
+	t_node	*new;
 
 	tmp = stack->a;
+	stack->cpy_stack_a = NULL; 
 	// ft_printf("%d\n", tmp->a->next);
 	while (tmp)
 	{
-		current = lst_new_2(tmp->value);
-		ft_lstadd_back_cpy(&stack, current);
+		new = lst_new_2(tmp->value);
+		// ft_printf("%d\n", tmp->value);
+		ft_lstadd_back_cpy(stack, new);
 		tmp = tmp->next;
 	}
-	while (stack->cpy_stack_a)
-	{
-		ft_printf("%d\n", stack->cpy_stack_a->value);
-		stack->cpy_stack_a = stack->cpy_stack_a->next;
-	}
+	index_sort_nb_cpy(stack);
 }
 
 void	sort_big_stack(t_stack *stack)
 {
 	index_stack(stack);
+	assign_sorted_index(stack);
 }
 
 void	sort_small_stack(t_stack *stack)

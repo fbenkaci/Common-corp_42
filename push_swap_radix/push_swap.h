@@ -6,7 +6,7 @@
 /*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 10:26:12 by fbenkaci          #+#    #+#             */
-/*   Updated: 2025/04/23 19:40:11 by fbenkaci         ###   ########.fr       */
+/*   Updated: 2025/04/24 13:10:41 by fbenkaci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,9 +31,10 @@ typedef struct s_stack
 	t_node			*cpy_stack_a;
 }					t_stack;
 
-void				ft_lstadd_back_cpy(t_stack **stack, t_node *new);
+void	free_stack(t_node *stack);
+void				ft_lstadd_back_cpy(t_stack *stack, t_node *new);
 void				sort_big_stack(t_stack *stack);
-void				free_stack(t_stack **stack);
+// void				free_stack(t_stack **stack);
 void				sort_stack_4_5(t_stack *stack);
 t_node				*ft_avdernier_bis(t_node *lst);
 t_node				*ft_last_bis(t_node *lst);

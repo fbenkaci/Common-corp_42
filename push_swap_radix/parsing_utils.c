@@ -6,7 +6,7 @@
 /*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 15:30:12 by fbenkaci          #+#    #+#             */
-/*   Updated: 2025/04/23 19:29:29 by fbenkaci         ###   ########.fr       */
+/*   Updated: 2025/04/24 13:16:59 by fbenkaci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,18 +101,18 @@ void	ft_lstadd_back_bis(t_stack **lst, t_node *new)
 	tmp->next = new;
 }
 
-void	ft_lstadd_back_cpy(t_stack **stack, t_node *new)
+void	ft_lstadd_back_cpy(t_stack *stack, t_node *new)
 {
 	t_node	*tmp;
 
-	if (!new || !stack || !(*stack))
+	if (!new || !stack)
 		return ;
-	if (!(*stack)->cpy_stack_a)
+	if (!stack->cpy_stack_a)
 	{
-		(*stack)->cpy_stack_a = new;
+		stack->cpy_stack_a = new;
 		return ;
 	}
-	tmp = (*stack)->cpy_stack_a;
+	tmp = stack->cpy_stack_a;
 	while (tmp->next)
 		tmp = tmp->next;
 	tmp->next = new;
@@ -152,15 +152,28 @@ t_node	*ft_last_bis(t_node *lst)
 	return (lst);
 }
 
-void	free_stack(t_stack **stack)
+// void	free_stack(t_stack **stack)
+// {
+// 	t_node *tmp;
+
+// 	while ((*stack)->a)
+// 	{
+// 		tmp = (*stack)->a;
+// 		(*stack)->a = (*stack)->a->next;
+// 		free(tmp);
+// 	}
+// 	(*stack)->a = NULL;
+// }
+
+void	free_stack(t_node *stack)
 {
 	t_node *tmp;
 
-	while ((*stack)->a)
+	while (stack)
 	{
-		tmp = (*stack)->a;
-		(*stack)->a = (*stack)->a->next;
+		tmp = stack;
+		stack = stack->next;
 		free(tmp);
 	}
-	(*stack)->a = NULL;
+	stack = NULL;
 }

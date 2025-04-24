@@ -6,7 +6,7 @@
 /*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 10:25:52 by fbenkaci          #+#    #+#             */
-/*   Updated: 2025/04/23 19:14:43 by fbenkaci         ###   ########.fr       */
+/*   Updated: 2025/04/24 13:14:09 by fbenkaci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,7 +138,7 @@ int	main(int ac, char **av)
 		fill_stack_AA(&stack, args);
 		if (A_is_sorted(stack))
 		{
-			free_stack(&stack);
+			free_stack(stack->a);
 			free(stack);
 			free_map(args);
 			return (0);
@@ -147,7 +147,7 @@ int	main(int ac, char **av)
 		if (stack->nb_in_stack <= 5)
 		{
 			sort_small_stack(stack);
-			free_stack(&stack);
+			free_stack(stack->a);
 			free(stack);
 			free_map(args);
 			return (0);
@@ -155,6 +155,10 @@ int	main(int ac, char **av)
 		else
 		{
 			sort_big_stack(stack);
+			free_stack(stack->cpy_stack_a);
+			free_stack(stack->a);
+			free(stack);
+			free_map(args);
 		}
 		
 	}
