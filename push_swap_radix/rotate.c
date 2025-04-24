@@ -6,7 +6,7 @@
 /*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 19:14:41 by fbenkaci          #+#    #+#             */
-/*   Updated: 2025/04/23 11:47:35 by fbenkaci         ###   ########.fr       */
+/*   Updated: 2025/04/24 19:35:22 by fbenkaci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ void	ra(t_node **a)
 {
 	t_node	*tmp;
 
-	if (!a || !(*a)->next || !(*a)->next)
+	if (!a || !*a || !(*a)->next)
 		return ;
 	tmp = *a;
 	*a = (*a)->next;

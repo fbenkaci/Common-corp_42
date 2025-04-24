@@ -6,7 +6,7 @@
 /*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 10:26:12 by fbenkaci          #+#    #+#             */
-/*   Updated: 2025/04/24 13:10:41 by fbenkaci         ###   ########.fr       */
+/*   Updated: 2025/04/24 17:22:54 by fbenkaci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,12 +26,13 @@ typedef struct s_node
 typedef struct s_stack
 {
 	int				nb_in_stack;
+	int				max_bits;
 	t_node			*a;
 	t_node			*b;
 	t_node			*cpy_stack_a;
 }					t_stack;
 
-void	free_stack(t_node *stack);
+void				free_stack(t_node *stack);
 void				ft_lstadd_back_cpy(t_stack *stack, t_node *new);
 void				sort_big_stack(t_stack *stack);
 // void				free_stack(t_stack **stack);
