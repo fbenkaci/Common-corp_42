@@ -6,18 +6,17 @@
 /*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 10:25:52 by fbenkaci          #+#    #+#             */
-/*   Updated: 2025/04/24 19:50:39 by fbenkaci         ###   ########.fr       */
+/*   Updated: 2025/04/25 20:22:59 by fbenkaci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-void	fill_stack_AA(t_stack **stack, char **args)
+void	fill_stack_a(t_stack **stack, char **args)
 {
 	t_node	*tmp;
 	int		i;
 
-	// t_node	*current;
 	tmp = NULL;
 	i = 0;
 	while (args[i])
@@ -29,29 +28,27 @@ void	fill_stack_AA(t_stack **stack, char **args)
 			tmp = lst_new_2(ft_atoi(args[i]));
 			ft_lstadd_back_bis(stack, tmp);
 		}
-		// current = stack->a;
-		// while (current)
-		// {
-		// 	ft_printf("%d\n", current->value);
-		// 	current = current->next;
-		// }
 		i++;
 	}
-	// ft_printf("%d\n", current->value);
 }
 
 char	**split_args(char **args)
 {
 	int		nb_words;
 	char	**result;
-	char	**tmp;
+	int		i;
 
-	tmp = NULL;
+	i = 0;
 	nb_words = count_words(args);
 	result = malloc((nb_words + 1) * sizeof(char *));
 	if (!result)
 		return (NULL);
-	if (!fill_result(args, result, tmp))
+	while (i <= nb_words)
+	{
+		result[i] = NULL;
+		i++;
+	}
+	if (!fill_result(args, result))
 	{
 		free_map(result);
 		return (NULL);
@@ -95,7 +92,6 @@ int	check_duplicate_nb(char **args)
 		k = i + 1;
 		while (args[k])
 		{
-			// ft_printf("i == %d, k == %d\n", i, k);
 			if (ft_atoi(args[i]) == ft_atoi(args[k]))
 				return ((ft_putendl_fd("Error\nThere is duplicate numbers.", 2),
 						0));
@@ -106,61 +102,28 @@ int	check_duplicate_nb(char **args)
 	return (1);
 }
 
-int	count_element(char **args)
-{
-	int	i;
+// int	main(int ac, char **av)
+// {
+// 	t_stack	*stack;
+// 	char	**args;
 
-	i = 0;
-	while (args[i])
-		i++;
-	return (i);
-}
-
-int	main(int ac, char **av)
-{
-	t_stack	*stack;
-	char	**args;
-
-	stack = malloc(sizeof(t_stack));
-	if (!stack)
-		return (1);
-	stack->a = NULL;
-	stack->b = NULL;
-	args = split_args(av);
-	if (ac > 1)
-	{
-		if (check_error(args) == 0 || check_duplicate_nb(args) == 0)
-		{
-			free_map(args);
-			free(stack);
-			return (0);
-		}
-		fill_stack_AA(&stack, args);
-		if (A_is_sorted(stack))
-		{
-			free_stack(stack->a);
-			free(stack);
-			free_map(args);
-			return (0);
-		}
-		stack->nb_in_stack = count_element(args);
-		if (stack->nb_in_stack <= 5)
-		{
-			sort_small_stack(stack);
-			free_stack(stack->a);
-			free(stack);
-			free_map(args);
-			return (0);
-		}
-		else
-		{
-			sort_big_stack(stack);
-			free_stack(stack->cpy_stack_a);
-			free_stack(stack->a);
-			free(stack);
-			free_map(args);
-		}
-		
-	}
-	return (0);
-}
+// 	if (ac <= 1)
+// 		return (0);
+// 	stack = malloc(sizeof(t_stack));
+// 	if (!stack)
+// 		return (1);
+// 	stack->a = NULL;
+// 	stack->b = NULL;
+// 	args = split_args(av);
+// 	if (!args || check_error(args) == 0 || check_duplicate_nb(args) == 0)
+// 		return (free_all(stack, args));
+// 	fill_stack_AA(&stack, args);
+// 	if (A_is_sorted(stack))
+// 		return (free_all(stack, args));
+// 	stack->nb_in_stack = count_element(args);
+// 	if (stack->nb_in_stack <= 5)
+// 		sort_small_and_free(stack, args);
+// 	else
+// 		sort_big_and_free(stack, args);
+// 	return (0);
+// }

@@ -6,64 +6,65 @@
 /*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 12:11:12 by fbenkaci          #+#    #+#             */
-/*   Updated: 2025/04/24 16:31:45 by fbenkaci         ###   ########.fr       */
+/*   Updated: 2025/04/25 20:44:19 by fbenkaci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-int	A_is_sorted(t_stack *stack)
+int	a_is_sorted(t_stack *stack)
 {
 	t_node	*current;
 
 	current = stack->a;
-	// ft_printf("%d\n", stack->a->value);
 	while (current->next)
 	{
-		// ft_printf("current->value == %d current->next->value == %d\n",
-		// current->value, current->next->value);
 		if (current->value > current->next->value)
 			return (0);
 		current = current->next;
 	}
-	// ft_printf("Trié.\n");
 	return (1);
 }
 
-
-void	sort_small_stack(t_stack *stack)
+void	sort_three(t_stack *stack)
 {
 	int	a;
 	int	b;
 	int	c;
 
-	if (A_is_sorted(stack))
+	a = stack->a->value;
+	b = stack->a->next->value;
+	c = stack->a->next->next->value;
+	if (a > b && a < c)
+		sa(stack->a);
+	else if (a > b && b < c)
+		ra(&stack->a);
+	else if (a > b && b > c)
+	{
+		ra(&stack->a);
+		sa(stack->a);
+	}
+	else if (a < b && a > c)
+		rra(&stack->a);
+	else if (a < b && b > c)
+	{
+		rra(&stack->a);
+		sa(stack->a);
+	}
+}
+
+void	sort_small_stack(t_stack *stack)
+{
+	if (a_is_sorted(stack))
 		return ;
 	if (stack->nb_in_stack == 2)
-		sa(stack->a);
-	else if (stack->nb_in_stack == 3)
 	{
-		a = stack->a->value;
-		b = stack->a->next->value;
-		c = stack->a->next->next->value;
-		if (a > b && b < c && a < c)
-			sa(stack->a);
-		else if (a > b && b < c && a > c)
-			ra(&stack->a);
-		else if (a > b && b > c && a > c)
-		{
-			ra(&stack->a);
-			sa(stack->a);
-		}
-		else if (a < b && b > c && a > c)
-			rra(&stack->a);
-		else if (a < b && b > c && a < c)
-		{
-			rra(&stack->a);
-			sa(stack->a);
-		}
+		sa(stack->a);
+		return ;
 	}
-	else if (stack->nb_in_stack <= 5)
+	if (stack->nb_in_stack == 3)
+		sort_three(stack);
+	if (stack->nb_in_stack > 3)
 		sort_stack_4_5(stack);
 }
 
