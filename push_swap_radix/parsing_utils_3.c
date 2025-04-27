@@ -6,7 +6,7 @@
 /*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 20:13:20 by fbenkaci          #+#    #+#             */
-/*   Updated: 2025/04/25 20:24:33 by fbenkaci         ###   ########.fr       */
+/*   Updated: 2025/04/26 21:48:18 by fbenkaci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,13 +35,25 @@ int	find_max_nb(t_stack *stack)
 	return (max_value->value);
 }
 
-void	swap(int *a, int *b)
+void	find_min(t_stack *stack, int *min_index)
 {
-	int	tmp;
+	t_node	*current;
+	t_node	*min_value;
+	int		index;
 
-	tmp = *a;
-	*a = *b;
-	*b = tmp;
+	current = stack->a;
+	min_value = current;
+	index = 0;
+	while (current)
+	{
+		if (current->value < min_value->value)
+		{
+			min_value = current;
+			*min_index = index;
+		}
+		current = current->next;
+		index++;
+	}
 }
 
 int	count_element(char **args)
@@ -57,6 +69,7 @@ int	count_element(char **args)
 int	free_all(t_stack *stack, char **args)
 {
 	free_map(args);
+	free_stack(stack->a);
 	if (stack)
 		free(stack);
 	return (0);

@@ -6,7 +6,7 @@
 /*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 20:12:32 by fbenkaci          #+#    #+#             */
-/*   Updated: 2025/04/25 20:44:34 by fbenkaci         ###   ########.fr       */
+/*   Updated: 2025/04/27 15:37:20 by fbenkaci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,14 +42,12 @@ int	main(int ac, char **av)
 	stack->a = NULL;
 	stack->b = NULL;
 	args = split_args(av);
-	if (!args || check_error(args) == 0 || check_duplicate_nb(args) == 0)
+	if (!args || !check_error(args) || !check_duplicate_nb(args)
+		|| !is_valid_int(args))
 		return (free_all(stack, args));
 	fill_stack_a(&stack, args);
 	if (a_is_sorted(stack))
-	{
-		free_stack(stack->a);
 		return (free_all(stack, args));
-	}
 	stack->nb_in_stack = count_element(args);
 	if (stack->nb_in_stack <= 5)
 		sort_small_and_free(stack, args);

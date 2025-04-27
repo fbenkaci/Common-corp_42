@@ -6,15 +6,15 @@
 /*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/27 11:24:24 by fbenkaci          #+#    #+#             */
-/*   Updated: 2025/01/04 12:09:41 by fbenkaci         ###   ########.fr       */
+/*   Updated: 2025/04/27 15:44:27 by fbenkaci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-int ft_putchar(int c)
+int	ft_putchar(int c)
 {
-	int count;
+	int	count;
 
 	count = 0;
 	count += write(1, &c, 1);

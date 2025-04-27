@@ -6,7 +6,7 @@
 /*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 12:11:12 by fbenkaci          #+#    #+#             */
-/*   Updated: 2025/04/25 20:44:19 by fbenkaci         ###   ########.fr       */
+/*   Updated: 2025/04/26 21:45:53 by fbenkaci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,27 +68,6 @@ void	sort_small_stack(t_stack *stack)
 		sort_stack_4_5(stack);
 }
 
-void	find_min(t_stack *stack, int *min_index)
-{
-	t_node	*current;
-	t_node	*min_value;
-	int		index;
-
-	current = stack->a;
-	min_value = current;
-	index = 0;
-	while (current)
-	{
-		if (current->value < min_value->value)
-		{
-			min_value = current;
-			*min_index = index;
-		}
-		current = current->next;
-		index++;
-	}
-}
-
 void	put_min_in_first(t_stack *stack)
 {
 	int	min_index;
@@ -104,7 +83,7 @@ void	put_min_in_first(t_stack *stack)
 	else
 	{
 		moves = stack->nb_in_stack - min_index;
-		while (moves-- > 0)
+		while (moves-- > 1)
 			rra(&stack->a);
 	}
 }

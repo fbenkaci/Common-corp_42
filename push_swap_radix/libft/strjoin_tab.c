@@ -6,41 +6,36 @@
 /*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 12:01:21 by fbenkaci          #+#    #+#             */
-/*   Updated: 2025/04/12 13:10:09 by fbenkaci         ###   ########.fr       */
+/*   Updated: 2025/04/27 15:44:08 by fbenkaci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
+#include <stdlib.h>
 
-// int	strlen_tab(char **tab)
-// {
-// 	int	i;
-
-// 	i = 0;
-// 	if (!tab || !tab[i])
-// 		return (0);
-// 	while (tab && tab[i])
-// 		i++;
-// 	return (i);
-// }
-
-char	**strjoin_tab(char **result, char **new_data)
+static char	**allocate_joined(char **result, char **new_data, int *len_result,
+		int *len_new_data)
 {
-	int		len_result;
-	int		len_new_data;
 	char	**joined;
-	int		i;
-	int		j;
 
-	len_result = 0;
-	len_new_data = 0;
-	while (result && result[len_result])
-		len_result++;
-	while (new_data && new_data[len_new_data])
-		len_new_data++;
-	joined = malloc((sizeof(char *)) * (len_result + len_new_data + 1));
+	*len_result = 0;
+	*len_new_data = 0;
+	while (result && result[*len_result])
+		(*len_result)++;
+	while (new_data && new_data[*len_new_data])
+		(*len_new_data)++;
+	joined = malloc(sizeof(char *) * (*len_result + *len_new_data + 1));
 	if (!joined)
 		return (NULL);
+	return (joined);
+}
+
+static void	fill_joined(char **joined, char **result, char **new_data,
+		int len_result)
+{
+	int	i;
+	int	j;
+
 	i = 0;
 	while (i < len_result)
 	{
@@ -48,12 +43,24 @@ char	**strjoin_tab(char **result, char **new_data)
 		i++;
 	}
 	j = 0;
-	while (j < len_new_data)
+	while (new_data && new_data[j])
 	{
 		joined[i] = ft_strjoin(joined[i - 1], new_data[j]);
 		i++;
-        j++;
+		j++;
 	}
 	joined[i] = NULL;
+}
+
+char	**strjoin_tab(char **result, char **new_data)
+{
+	char	**joined;
+	int		len_result;
+	int		len_new_data;
+
+	joined = allocate_joined(result, new_data, &len_result, &len_new_data);
+	if (!joined)
+		return (NULL);
+	fill_joined(joined, result, new_data, len_result);
 	return (joined);
 }

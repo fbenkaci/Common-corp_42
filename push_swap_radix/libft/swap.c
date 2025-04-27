@@ -1,27 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strcpy.c                                        :+:      :+:    :+:   */
+/*   swap.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/27 14:08:37 by fbenkaci          #+#    #+#             */
-/*   Updated: 2025/04/27 15:42:37 by fbenkaci         ###   ########.fr       */
+/*   Created: 2025/04/26 15:43:33 by fbenkaci          #+#    #+#             */
+/*   Updated: 2025/04/27 15:44:20 by fbenkaci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-char	*ft_strcpy(char *dest, const char *src)
+void	swap(int *a, int *b)
 {
-	int	i;
+	int	tmp;
 
-	i = 0;
-	while (src[i])
-	{
-		dest[i] = src[i];
-		i++;
-	}
-	dest[i] = '\0';
-	return (dest);
+	tmp = *a;
+	*a = *b;
+	*b = tmp;
 }

@@ -6,7 +6,7 @@
 /*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 10:25:52 by fbenkaci          #+#    #+#             */
-/*   Updated: 2025/04/25 20:22:59 by fbenkaci         ###   ########.fr       */
+/*   Updated: 2025/04/27 15:01:51 by fbenkaci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,8 @@ int	check_error(char **args)
 		while (args[i][j])
 		{
 			if ((args[i][j] == '-' || args[i][j] == '+')
-				&& (!ft_isdigit(args[i][j + 1]) || ft_isdigit(args[i][j - 1])))
+				&& (!ft_isdigit(args[i][j + 1]) || (j > 0
+						&& ft_isdigit(args[i][j - 1]))))
 				return (ft_putendl_fd("Error\nInvalid sign usage.", 2), 0);
 			else if (!ft_isdigit(args[i][j]) && args[i][j] != '-'
 				&& args[i][j] != '+')
@@ -101,29 +102,3 @@ int	check_duplicate_nb(char **args)
 	}
 	return (1);
 }
-
-// int	main(int ac, char **av)
-// {
-// 	t_stack	*stack;
-// 	char	**args;
-
-// 	if (ac <= 1)
-// 		return (0);
-// 	stack = malloc(sizeof(t_stack));
-// 	if (!stack)
-// 		return (1);
-// 	stack->a = NULL;
-// 	stack->b = NULL;
-// 	args = split_args(av);
-// 	if (!args || check_error(args) == 0 || check_duplicate_nb(args) == 0)
-// 		return (free_all(stack, args));
-// 	fill_stack_AA(&stack, args);
-// 	if (A_is_sorted(stack))
-// 		return (free_all(stack, args));
-// 	stack->nb_in_stack = count_element(args);
-// 	if (stack->nb_in_stack <= 5)
-// 		sort_small_and_free(stack, args);
-// 	else
-// 		sort_big_and_free(stack, args);
-// 	return (0);
-// }

@@ -6,7 +6,7 @@
 /*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/18 16:14:01 by fbenkaci          #+#    #+#             */
-/*   Updated: 2025/03/31 15:18:40 by fbenkaci         ###   ########.fr       */
+/*   Updated: 2025/04/27 15:41:46 by fbenkaci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,6 @@ static int	number_size(int nb)
 
 static char	*copie(unsigned long int tmp, int i, char *dest)
 {
-	// printf("%ld\n", tmp);
 	while (tmp != 0)
 	{
 		i--;
@@ -69,9 +68,8 @@ char	*ft_itoa(int n)
 	return (dest);
 }
 
-int main(void)
+int	main(void)
 {
 	printf("%s\n", ft_itoa(10));
-
 	return (0);
 }
