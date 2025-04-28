@@ -6,7 +6,7 @@
 /*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 16:31:18 by fbenkaci          #+#    #+#             */
-/*   Updated: 2025/04/25 20:25:30 by fbenkaci         ###   ########.fr       */
+/*   Updated: 2025/04/28 16:34:03 by fbenkaci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,4 +115,9 @@ void	sort_big_stack(t_stack *stack)
 	max_nb = find_max_nb(stack);
 	calculate_max_bit(stack, max_nb);
 	radix_sort(stack);
+	while(stack->a)
+	{
+		ft_printf("%d\n", stack->a->value);
+		stack->a = stack->a->next;
+	}
 }

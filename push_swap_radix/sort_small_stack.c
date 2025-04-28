@@ -6,7 +6,7 @@
 /*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 12:11:12 by fbenkaci          #+#    #+#             */
-/*   Updated: 2025/04/28 16:04:35 by fbenkaci         ###   ########.fr       */
+/*   Updated: 2025/04/28 16:38:30 by fbenkaci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@ int	a_is_sorted(t_stack *stack)
 {
 	t_node	*current;
 
+	if(!stack->a)
+		return (1);
 	current = stack->a;
 	while (current->next)
 	{
