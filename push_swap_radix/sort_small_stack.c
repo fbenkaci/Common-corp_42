@@ -6,7 +6,7 @@
 /*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 12:11:12 by fbenkaci          #+#    #+#             */
-/*   Updated: 2025/04/26 21:45:53 by fbenkaci         ###   ########.fr       */
+/*   Updated: 2025/04/28 16:04:35 by fbenkaci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,34 +83,26 @@ void	put_min_in_first(t_stack *stack)
 	else
 	{
 		moves = stack->nb_in_stack - min_index;
-		while (moves-- > 1)
+		while (moves-- > 0)
 			rra(&stack->a);
 	}
 }
 
 void	sort_stack_4_5(t_stack *stack)
 {
-	int	i;
+	int	to_push;
 
-	i = 2;
 	if (stack->nb_in_stack == 4)
+		to_push = 1;
+	else
+		to_push = 2;
+	while (to_push--)
 	{
 		put_min_in_first(stack);
 		pb(&stack->b, &stack->a);
-		stack->nb_in_stack = 3;
-		sort_small_stack(stack);
+		stack->nb_in_stack--;
+	}
+	sort_small_stack(stack);
+	while (stack->b)
 		pa(&stack->a, &stack->b);
-	}
-	else
-	{
-		while (i--)
-		{
-			put_min_in_first(stack);
-			pb(&stack->b, &stack->a);
-		}
-		stack->nb_in_stack = 3;
-		sort_small_stack(stack);
-		while (i++ < 2)
-			pa(&stack->a, &stack->b);
-	}
 }

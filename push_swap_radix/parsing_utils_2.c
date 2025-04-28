@@ -6,7 +6,7 @@
 /*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 19:38:55 by fbenkaci          #+#    #+#             */
-/*   Updated: 2025/04/27 15:40:35 by fbenkaci         ###   ########.fr       */
+/*   Updated: 2025/04/28 16:03:20 by fbenkaci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,6 @@ int	is_valid_int(char **args)
 	while (args[i])
 	{
 		nbr = ft_atol(args[i]);
-		ft_printf("%d\n", nbr);
 		if (nbr > INT_MAX || nbr < INT_MIN)
 		{
 			ft_putstr_fd(error, 2);
