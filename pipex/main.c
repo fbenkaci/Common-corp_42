@@ -6,7 +6,7 @@
 /*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/17 14:07:04 by fbenkaci          #+#    #+#             */
-/*   Updated: 2025/03/17 10:12:05 by fbenkaci         ###   ########.fr       */
+/*   Updated: 2025/05/05 17:17:52 by fbenkaci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,23 +34,13 @@ void	first_child(char **av, t_pipex *data, char **envp)
 			close(data->fd[1]);
 			exit(1);
 		}
-		if (init_first_child_process(av, data, envp) == 1)
+		if (init_first_child_process(data, envp) == 1)
 			exit(1);
 	}
 }
 
-int	init_first_child_process(char **av, t_pipex *data, char **envp)
+int	init_first_child_process(t_pipex *data, char **envp)
 {
-	data->outputfd = check_outfile_exist(av);
-	if (data->outputfd == -1)
-	{
-		ft_free_array(data->cmd);
-		ft_free_array(data->args);
-		free(data->path);
-		close(data->fd[1]);
-		close(data->inputfd);
-		return (1);
-	}
 	if (dup2(data->inputfd, 0) == -1 || dup2(data->fd[1], 1) == -1)
 	{
 		ft_free_array(data->cmd);
@@ -60,7 +50,6 @@ int	init_first_child_process(char **av, t_pipex *data, char **envp)
 		return (1);
 	}
 	ft_free_array(data->cmd);
-	close(data->outputfd);
 	close(data->inputfd);
 	close(data->fd[1]);
 	if (executioon(data, envp) == 1)
@@ -78,7 +67,10 @@ void	second_child(char **av, t_pipex *data, char **envp)
 		close(data->fd[1]);
 		cmd = ft_split(av[3], ' ');
 		if (error_cmd(cmd) == 1)
+		{
+			close(data->fd[0]);
 			exit(1);
+		}
 		data->path = command_loc(envp, cmd[0]);
 		if (!data->path)
 		{
@@ -110,14 +102,11 @@ int	init_second_child_process(char **av, t_pipex *data, char **envp, char **cmd)
 		perror("dup2 of id2: failed");
 		return (1);
 	}
-	error(data, cmd);
-	if (execve(data->path, data->args, envp) == 1)
-	{
-		perror("Execution: failed");
-		ft_free_array(data->args);
-		free(data->path);
+	ft_free_array(cmd);
+	close(data->outputfd);
+	close(data->fd[0]);
+	if (executioon(data, envp) == 1)
 		return (1);
-	}
 	return (0);
 }
 
@@ -126,6 +115,14 @@ int	main(int ac, char **av, char **envp)
 	t_pipex	data;
 	int		status;
 
+	if (ft_strcmp(av[1], "here_doc") == 0)
+		return (handle_here_doc(ac, av, envp));
+	else
+	{
+		if ((handle_pipex(ac, av, envp)) == 1)
+			return (1);
+		return (0);
+	}
 	if (ac == 5)
 	{
 		if (pipe(data.fd) == -1)

@@ -6,7 +6,7 @@
 /*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 12:14:21 by fbenkaci          #+#    #+#             */
-/*   Updated: 2025/03/09 11:57:25 by fbenkaci         ###   ########.fr       */
+/*   Updated: 2025/05/04 17:04:13 by fbenkaci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,11 +64,4 @@ void	process_command(t_pipex *data, char **av, char **envp)
 		close(data->fd[1]);
 		exit(1);
 	}
-}
-
-void	error(t_pipex *data, char **cmd)
-{
-	ft_free_array(cmd);
-	close(data->outputfd);
-	close(data->fd[0]);
 }
