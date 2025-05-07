@@ -6,7 +6,7 @@
 /*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 17:12:04 by fbenkaci          #+#    #+#             */
-/*   Updated: 2025/05/07 16:31:21 by fbenkaci         ###   ########.fr       */
+/*   Updated: 2025/05/07 17:28:18 by fbenkaci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,20 +27,40 @@ int	check_outfile_exist2(char **av, int ac)
 
 int	handle_pipex(t_pipex *data, int ac, char **av, char **envp)
 {
-	int	nb_cmds = ac - 3;
-	int	pids[nb_cmds];
 	int	i;
-	int	pipes[2 * (nb_cmds - 1)][2];
 	int	j;
-	// int	status = 0;
 	int	k;
-	// data->inputfd = 0;
-	// data->outputfd = 0;
+
+	data->nb_cmds = ac - 3;
+	data->pids = malloc(sizeof(int) * data->nb_cmds);
+	if (!data->pids)
+		return (1);
+	data->pipes = malloc(sizeof(int *) * (2 * (data->nb_cmds - 1)));
+	if (!data->pipes)
+		return (1);
 	i = 0;
-	while (i < nb_cmds - 1)
+	while (i < data->nb_cmds - 1)
 	{
-		if (pipe(pipes[i]) == -1)
+		data->pipes[i] = malloc(sizeof(int) * 2);
+		if (!data->pipes[i])
+		{
+			while (i < data->nb_cmds - 1)
+			{
+				free(data->pipes[i]);
+				i--;
+			}
+			free(data->pipes);
+			free(data->pids);
 			return (1);
+		}
+		if (pipe(data->pipes[i]) == -1)
+		{
+			while (i >= 0)
+				free(data->pipes[i--]);
+			free(data->pipes);
+			free(data->pids);
+			return (1);
+		}
 		i++;
 	}
 	i = 0;
@@ -51,25 +71,22 @@ int	handle_pipex(t_pipex *data, int ac, char **av, char **envp)
 	data->outputfd = check_outfile_exist2(av, ac);
 	if (data->outputfd == -1)
 		return (1);
-	while (i < nb_cmds)
+	while (i < data->nb_cmds)
 	{
-		pids[i] = fork();
-		if (pids[i] == -1)
+		data->pids[i] = fork();
+		if (data->pids[i] == -1)
 			return (1);
-		if (pids[i] == 0)
+		if (data->pids[i] == 0)
 		{
-			// Close pipes
 			k = 0;
-			while (k < nb_cmds - 1)
+			while (k < data->nb_cmds - 1)
 			{
 				if (k != i)
-					close(pipes[k][1]);
+					close(data->pipes[k][1]);
 				if (k != i - 1)
-					close(pipes[k][0]);
-				k++;	
+					close(data->pipes[k][0]);
+				k++;
 			}
-			// Close pipes
-			
 			data->cmd = ft_split(av[j], ' ');
 			if (!data->cmd)
 				return (1);
@@ -78,32 +95,33 @@ int	handle_pipex(t_pipex *data, int ac, char **av, char **envp)
 				return (1);
 			if (i == 0)
 			{
-				if (dup2(data->inputfd, STDIN_FILENO) == -1 || dup2(pipes[0][1],
-						STDOUT_FILENO) == -1)
+				if (dup2(data->inputfd, STDIN_FILENO) == -1
+					|| dup2(data->pipes[0][1], STDOUT_FILENO) == -1)
 					return (1);
 				close(data->inputfd);
-				close(pipes[0][1]);
+				close(data->pipes[0][1]);
 				close(data->outputfd);
 			}
-			else if (i == nb_cmds - 1)
+			else if (i == data->nb_cmds - 1)
 			{
-				if (dup2(pipes[i - 1][0], 0) == -1 || dup2(data->outputfd, 1) ==
-					-1)
+				if (dup2(data->pipes[i - 1][0], 0) == -1 || dup2(data->outputfd,
+						1) == -1)
 					return (1);
-				close(pipes[i - 1][0]);
+				close(data->pipes[i - 1][0]);
 				close(data->outputfd);
 				close(data->inputfd);
 			}
 			else
 			{
-				if (dup2(pipes[i - 1][0], 0) == -1 || dup2(pipes[i][1], 1) ==
-					-1)
+				if (dup2(data->pipes[i - 1][0], 0) == -1
+					|| dup2(data->pipes[i][1], 1) == -1)
 					return (1);
-				close(pipes[i - 1][0]);
-				close(pipes[i][1]);
+				close(data->pipes[i - 1][0]);
+				close(data->pipes[i][1]);
 				close(data->inputfd);
 				close(data->outputfd);
 			}
+			free(data->pids);
 			if (execve(data->path, data->cmd, envp) == 1)
 			{
 				perror("Execution: failed");
@@ -116,17 +134,19 @@ int	handle_pipex(t_pipex *data, int ac, char **av, char **envp)
 		j++;
 	}
 	i = 0;
-	while (i < nb_cmds - 1)
+	while (i < data->nb_cmds - 1)
 	{
-		close(pipes[i][0]);
-		close(pipes[i][1]);
+		close(data->pipes[i][0]);
+		close(data->pipes[i][1]);
+		free(data->pipes[i]);
 		i++;
 	}
+	free(data->pipes);
 	close(data->outputfd);
 	close(data->inputfd);
 	i = 0;
-	while (i < nb_cmds - 1)
-		waitpid(pids[i++], NULL, 0);
-	
+	while (i < data->nb_cmds - 1)
+		waitpid(data->pids[i++], NULL, 0);
+	free(data->pids);
 	return (0);
 }

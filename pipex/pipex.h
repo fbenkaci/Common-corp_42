@@ -6,7 +6,7 @@
 /*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 11:54:38 by fbenkaci          #+#    #+#             */
-/*   Updated: 2025/05/07 13:12:20 by fbenkaci         ###   ########.fr       */
+/*   Updated: 2025/05/07 17:28:39 by fbenkaci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,9 +32,12 @@ typedef struct pipex
 	char	**args;
 	char	*path;
 	char	**cmd;
+	int		nb_cmds;
+	int		**pipes;
+	int		*pids;
 }			t_pipex;
 
-int			handle_pipex(t_pipex *data , int ac, char **av, char **envp);
+int			handle_pipex(t_pipex *data, int ac, char **av, char **envp);
 void		first_child(char **av, t_pipex *data, char **envp);
 void		second_child(char **av, t_pipex *data, char **envp);
 char		*command_loc(char **envp, char *av);
