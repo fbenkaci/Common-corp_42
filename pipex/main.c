@@ -6,7 +6,7 @@
 /*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/17 14:07:04 by fbenkaci          #+#    #+#             */
-/*   Updated: 2025/05/05 17:17:52 by fbenkaci         ###   ########.fr       */
+/*   Updated: 2025/05/06 22:29:02 by fbenkaci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,14 +115,14 @@ int	main(int ac, char **av, char **envp)
 	t_pipex	data;
 	int		status;
 
-	if (ft_strcmp(av[1], "here_doc") == 0)
-		return (handle_here_doc(ac, av, envp));
-	else
-	{
-		if ((handle_pipex(ac, av, envp)) == 1)
-			return (1);
-		return (0);
-	}
+	// if (ft_strcmp(av[1], "here_doc") == 0)
+	// 	return (handle_here_doc(ac, av, envp));
+	// else
+	// {
+	if ((handle_pipex(&data, ac, av, envp)) == 1)
+		return (1);
+	return (0);
+	// }
 	if (ac == 5)
 	{
 		if (pipe(data.fd) == -1)

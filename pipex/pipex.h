@@ -6,7 +6,7 @@
 /*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 11:54:38 by fbenkaci          #+#    #+#             */
-/*   Updated: 2025/05/05 17:17:25 by fbenkaci         ###   ########.fr       */
+/*   Updated: 2025/05/06 19:32:04 by fbenkaci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ typedef struct pipex
 	char	**cmd;
 }			t_pipex;
 
-int		handle_pipex(ac, av, envp);
+int			handle_pipex(t_pipex *data , int ac, char **av, char **envp);
 void		first_child(char **av, t_pipex *data, char **envp);
 void		second_child(char **av, t_pipex *data, char **envp);
 char		*command_loc(char **envp, char *av);
