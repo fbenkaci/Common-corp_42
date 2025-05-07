@@ -6,7 +6,7 @@
 /*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 12:14:21 by fbenkaci          #+#    #+#             */
-/*   Updated: 2025/05/04 17:04:13 by fbenkaci         ###   ########.fr       */
+/*   Updated: 2025/05/07 16:21:49 by fbenkaci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ void	args_second(t_pipex *data, char **av, char **cmd)
 
 void	process_command(t_pipex *data, char **av, char **envp)
 {
+	(void)av;
 	data->path = command_loc(envp, data->cmd[0]);
 	if (!data->path)
 	{
@@ -65,3 +66,11 @@ void	process_command(t_pipex *data, char **av, char **envp)
 		exit(1);
 	}
 }
+
+// void	error(t_pipex *data, char **cmd)
+// {
+// 	ft_free_array(cmd);
+// 	close(data->outputfd);
+// 	close(data->fd[0]);
+// }
+

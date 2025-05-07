@@ -6,7 +6,7 @@
 /*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 11:54:38 by fbenkaci          #+#    #+#             */
-/*   Updated: 2025/05/06 19:32:04 by fbenkaci         ###   ########.fr       */
+/*   Updated: 2025/05/07 13:12:20 by fbenkaci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,5 +50,6 @@ int			init_second_child_process(char **av, t_pipex *data, char **envp,
 				char **cmd);
 void		args_second(t_pipex *data, char **av, char **cmd);
 void		process_command(t_pipex *data, char **av, char **envp);
-void		error(t_pipex *data, char **cmd);
+// void		error(t_pipex *data, char **cmd);
+
 #endif

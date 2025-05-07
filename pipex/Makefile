@@ -6,13 +6,13 @@
 #    By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/02/24 11:15:59 by fbenkaci          #+#    #+#              #
-#    Updated: 2025/05/06 22:29:50 by fbenkaci         ###   ########.fr        #
+#    Updated: 2025/05/07 15:40:51 by fbenkaci         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = pipex
 CC = cc
-CFLAGS = -Wall -Wextra -Werror 
+CFLAGS = -Wall -Wextra -Werror -g
 SRCS = check_files.c utils.c main.c path.c handle_pipex.c
 OBJS = $(SRCS:.c=.o)
 

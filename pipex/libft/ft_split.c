@@ -6,7 +6,7 @@
 /*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 16:43:15 by fbenkaci          #+#    #+#             */
-/*   Updated: 2025/02/25 15:19:26 by fbenkaci         ###   ########.fr       */
+/*   Updated: 2025/05/07 14:57:28 by fbenkaci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,6 +95,7 @@ char	**ft_split(char const *s, char c)
 	dest[i] = NULL;
 	return (dest);
 }
+
 // void free_split(char **split)
 // {
 // 	int i = 0;
