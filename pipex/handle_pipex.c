@@ -6,11 +6,24 @@
 /*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 17:12:04 by fbenkaci          #+#    #+#             */
-/*   Updated: 2025/05/06 22:34:34 by fbenkaci         ###   ########.fr       */
+/*   Updated: 2025/05/07 12:11:57 by fbenkaci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
+
+int	check_outfile_exist2(char **av, int ac)
+{
+	int	fd;
+
+	fd = open(av[ac - 1], O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	if (fd == -1)
+	{
+		perror("Error opening outfile");
+		return (-1);
+	}
+	return (fd);
+}
 
 int	handle_pipex(t_pipex *data, int ac, char **av, char **envp)
 {
@@ -47,10 +60,17 @@ int	handle_pipex(t_pipex *data, int ac, char **av, char **envp)
 				return (1);
 			data->inputfd = check_infile_exist(av);
 			if (data->inputfd == -1)
+			data->outputfd = check_outfile_exist2(av, ac);
+			if (data->outputfd == -1)
 				return (1);
 			if (i == 0)
 			{
-				if (dup2(data->inputfd, 0) == -1 || dup2(pipes[0][1], 1) == -1)
+				if (dup2(data->inputfd, STDIN_FILENO) == -1 || dup2(pipes[0][1], STDOUT_FILENO) == -1)
+					return (1);
+			}
+			else if	(i == ac - 1)
+			{
+				if (dup2(pipes[i - 1][0], 0) == -1 || dup2(pipes[i][1], 1) == -1)
 					return (1);
 			}
 			else
