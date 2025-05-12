@@ -6,7 +6,7 @@
 /*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 09:00:27 by fbenkaci          #+#    #+#             */
-/*   Updated: 2025/02/27 15:24:02 by fbenkaci         ###   ########.fr       */
+/*   Updated: 2025/05/10 16:29:05 by fbenkaci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ char				*ft_strnstr(const char *big, const char *little,
 						size_t len);
 int					ft_atoi(const char *nptr);
 void				*ft_calloc(size_t number, size_t size);
-char				*ft_substr(char const *s, unsigned int start, size_t len);
+char				*ft_substr(char *s, unsigned int start, size_t len);
 char				*ft_strjoin(char const *s1, char const *s2);
 char				*ft_strtrim(char const *s1, char const *set);
 char				*ft_itoa(int n);

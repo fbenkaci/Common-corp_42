@@ -6,7 +6,7 @@
 /*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 12:07:39 by fbenkaci          #+#    #+#             */
-/*   Updated: 2025/02/03 09:11:40 by fbenkaci         ###   ########.fr       */
+/*   Updated: 2025/05/10 16:30:19 by fbenkaci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,12 +19,13 @@
 # include <stdio.h>  // for
 # include <stdlib.h> // for malloc
 # include <unistd.h> // for write
+#include "../libft/libft.h"
 
 char	*get_next_line(int fd);
 char	*ft_strchr(const char *s, int c);
 size_t	ft_strlen(const char *s);
 char	*ft_strdup(const char *s);
 char	*ft_strjoin(const char *s1, const char *s2);
-char	*ft_substr(char const *s, unsigned int start, size_t len);
+// char	*ft_substr(char const *s, unsigned int start, size_t len);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/17 14:07:04 by fbenkaci          #+#    #+#             */
-/*   Updated: 2025/05/07 16:21:55 by fbenkaci         ###   ########.fr       */
+/*   Updated: 2025/05/11 22:21:08 by fbenkaci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,36 +110,38 @@ int	init_second_child_process(char **av, t_pipex *data, char **envp, char **cmd)
 	return (0);
 }
 
-int	main(int ac, char **av, char **envp)
-{
-	t_pipex	data;
-	int		status;
+// int	main(int ac, char **av, char **envp)
+// {
+// 	t_pipex	data;
+// 	int		status;
 
-	if (ac == 5)
-	{
-		if (pipe(data.fd) == -1)
-		{
-			perror("Pipe failed");
-			return (1);
-		}
-		first_child(av, &data, envp);
-		second_child(av, &data, envp);
-		close(data.fd[1]);
-		close(data.fd[0]);
-		waitpid(data.id1, &status, 0);
-		waitpid(data.id2, &status, 0);
-		if (status == -1)
-		{
-			free(data.path);
-			return (WEXITSTATUS(status));
-		}
-	}
-	else if (ac > 5)
-	{
-		if ((handle_pipex(&data, ac, av, envp)) == 1)
-			return (1);
-	}
-	else 
-		write(2, "You must have in less 5 arguments.\n", 36);
-	return (0);
-}
+// 	status = 0;
+	
+// 	if (ac < 5)
+// 		ft_putstr_fd("You must have in less 5 arguments.\n", 2);
+// 	if (ac == 5)
+// 	{
+// 		if (pipe(data.fd) == -1)
+// 		{
+// 			ft_putstr_fd("Error pipes", 2);
+// 			exit(-1);
+// 		}
+// 		first_child(av, &data, envp);
+// 		second_child(av, &data, envp);
+// 		close(data.fd[1]);
+// 		close(data.fd[0]);
+// 		waitpid(data.id1, &status, 0);
+// 		waitpid(data.id2, &status, 0);
+// 		if (status == -1)
+// 		{
+// 			free(data.path);
+// 			return (WEXITSTATUS(status));
+// 		}
+// 	}
+// 	else
+// 	{
+// 		if ((handle_pipex(&data, ac, av, envp)) == 0)
+// 			return (-1);
+// 	}
+// 	return (0);
+// }

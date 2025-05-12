@@ -6,7 +6,7 @@
 /*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 13:36:25 by fbenkaci          #+#    #+#             */
-/*   Updated: 2024/12/14 09:27:06 by fbenkaci         ###   ########.fr       */
+/*   Updated: 2025/05/10 16:18:54 by fbenkaci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,11 +39,11 @@ int	print_format(char descriptor, va_list ap)
 int	ft_printf(const char *format, ...)
 {
 	va_list	ap;
-	char	*str;
+	// char	*str;
 	int		count;
 
 	count = 0;
-	str = NULL;
+	// str = NULL;
 	if (!format)
 		return (-1);
 	va_start(ap, format);

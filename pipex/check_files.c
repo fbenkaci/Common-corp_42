@@ -6,7 +6,7 @@
 /*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/17 12:13:47 by fbenkaci          #+#    #+#             */
-/*   Updated: 2025/03/14 15:48:13 by fbenkaci         ###   ########.fr       */
+/*   Updated: 2025/05/09 17:12:53 by fbenkaci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ int	check_infile_exist(char **av1)
 
 	if (access(av1[1], F_OK) == -1)
 	{
-		perror("Infile not exist");
+		write(2, "Infile not exist.\n", 19);
 		return (-1);
 	}
 	fd = open(av1[1], O_RDONLY);
@@ -34,7 +34,7 @@ int	check_outfile_exist(char **av)
 	fd = open(av[4], O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (fd == -1)
 	{
-		perror("Error opening outfile");
+		write(2, "Error opening outfile.\n", 23);
 		return (-1);
 	}
 	return (fd);
