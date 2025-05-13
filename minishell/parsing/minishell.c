@@ -6,7 +6,7 @@
 /*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 01:12:37 by fbenkaci          #+#    #+#             */
-/*   Updated: 2025/05/13 09:35:53 by fbenkaci         ###   ########.fr       */
+/*   Updated: 2025/05/13 09:49:40 by fbenkaci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ int	build_from_tokens(t_pipex *data, t_struct *tok)
 
 	count = 1; // jcommence à 1 prcq ya minimum une commande
 	cur = tok;
-    // Tu compte le nombre de commande 
+	// Tu compte le nombre de commande
 	while (cur)
 	{
 		if (cur->type == PIPE)
@@ -35,17 +35,22 @@ int	build_from_tokens(t_pipex *data, t_struct *tok)
 		cur = cur->next;
 	}
 	data->nb_cmds = count;
-	// la j'alloue dla mémoire pour les structures qui contiendront des info sur chaquie comande  
-    data->cmds = malloc(sizeof(char **) * count); // Contient les arguments pour chaque comment 
-	data->in_files = malloc(sizeof(char *) * count); // Chaque élément représente un fichier d'entrée
-	data->out_files = malloc(sizeof(char *) * count); // Contient les fichiers de sortie 
-	data->modes = malloc(sizeof(int) * count); // Chque elmt represnt un mode d'ouverture
-	data->here_doc = malloc(sizeof(int) * count); // sert a savoir si une comande est ui herdoc
+	// la j'alloue dla mémoire pour les structures qui contiendront des info sur chaquie comande
+	data->cmds = malloc(sizeof(char **) * count);    
+		// Contient les arguments pour chaque comment
+	data->in_files = malloc(sizeof(char *) * count); 
+		// Chaque élément représente un fichier d'entrée
+	data->out_files = malloc(sizeof(char *) * count);
+		// Contient les fichiers de sortie
+	data->modes = malloc(sizeof(int) * count);       
+		// Chque elmt represnt un mode d'ouverture
+	data->here_doc = malloc(sizeof(int) * count);    
+		// sert a savoir si une comande est ui herdoc
 	if (!data->cmds || !data->in_files || !data->out_files || !data->modes
 		|| !data->here_doc)
 		return (0);
 	i = 0;
-    // la j'init tt pr eviter les pb avec valgrind
+	// la j'init tt pr eviter les pb avec valgrind
 	while (i < count)
 	{
 		data->in_files[i] = NULL;
@@ -58,7 +63,7 @@ int	build_from_tokens(t_pipex *data, t_struct *tok)
 	idx = 0;
 	argv = NULL;
 	argc = 0;
-    // la je parcour les token pour contruire les arguments des commandes 
+	// la je parcour les token pour contruire les arguments des commandes
 	while (cur)
 	{
 		if (cur->type == WORD)
@@ -105,8 +110,6 @@ int	build_from_tokens(t_pipex *data, t_struct *tok)
 	data->cmds[idx] = argv;
 	return (1);
 }
-
-//  handle_pipex_tokens.c 
 
 int	handle_pipex_tokens(t_pipex *data, char **envp)
 {
@@ -164,8 +167,6 @@ int	handle_pipex_tokens(t_pipex *data, char **envp)
 	free_close_pipes(data);
 	return (1);
 }
-
-// ==================== pipex_utils.c ====================
 
 int	creat_pipe(t_pipex *data)
 {
@@ -269,7 +270,18 @@ void	free_pipex(t_pipex *data)
 	free(data->pids);
 }
 
-// ==================== minishell_pipex.c ====================
+void	free_token(t_struct *token)
+{
+	t_struct	*tmp;
+
+	while (token)
+	{
+		tmp = token;
+		token = token->next;
+		free(tmp->str);
+		free(tmp);
+	}
+}
 
 int	main(int argc, char **argv, char **envp)
 {
