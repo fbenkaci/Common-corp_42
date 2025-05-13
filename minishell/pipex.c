@@ -6,7 +6,7 @@
 /*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/11 17:17:22 by fbenkaci          #+#    #+#             */
-/*   Updated: 2025/05/12 18:56:48 by fbenkaci         ###   ########.fr       */
+/*   Updated: 2025/05/13 08:07:16 by fbenkaci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -188,16 +188,16 @@ int	handle_pipex(t_pipex *data, int ac, char **av, char **envp)
 	return (1);
 }
 
-int	main(int ac, char **av, char **envp)
-{
-	t_pipex	data;
+// int	main(int ac, char **av, char **envp)
+// {
+// 	t_pipex	data;
 
-	if (ac < 5)
-	{
-		ft_putstr_fd("Usage: ./pipex file1 cmd1 cmd2 ... file2\n", 2);
-		return (1);
-	}
-	if (!handle_pipex(&data, ac, av, envp))
-		return (1);
-	return (0);
-}
+// 	if (ac < 5)
+// 	{
+// 		ft_putstr_fd("Usage: ./pipex file1 cmd1 cmd2 ... file2\n", 2);
+// 		return (1);
+// 	}
+// 	if (!handle_pipex(&data, ac, av, envp))
+// 		return (1);
+// 	return (0);
+// }
