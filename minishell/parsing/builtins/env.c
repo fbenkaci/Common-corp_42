@@ -6,11 +6,11 @@
 /*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/14 17:25:08 by fbenkaci          #+#    #+#             */
-/*   Updated: 2025/05/14 19:53:47 by fbenkaci         ###   ########.fr       */
+/*   Updated: 2025/05/15 13:30:39 by fbenkaci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell2.h"
+#include "../minishell.h"
 
 void	ft_env(char **cmd, char **envp)
 {

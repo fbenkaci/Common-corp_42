@@ -6,11 +6,11 @@
 /*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 15:44:19 by fbenkaci          #+#    #+#             */
-/*   Updated: 2025/05/13 16:09:41 by fbenkaci         ###   ########.fr       */
+/*   Updated: 2025/05/15 14:44:50 by fbenkaci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell2.h"
+#include "../minishell.h"
 
 void	ft_pwd(void)
 {

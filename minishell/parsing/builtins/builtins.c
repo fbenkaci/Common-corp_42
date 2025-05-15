@@ -6,11 +6,11 @@
 /*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 14:56:23 by fbenkaci          #+#    #+#             */
-/*   Updated: 2025/05/14 19:32:00 by fbenkaci         ###   ########.fr       */
+/*   Updated: 2025/05/15 15:03:36 by fbenkaci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell2.h"
+#include "../minishell.h"
 
 int	is_builtin(char *cmd)
 {
@@ -38,7 +38,7 @@ int	exec_builtin(t_pipex *data, char **cmd, char **envp)
 	if (ft_strcmp(cmd, "echo") == 0)
 		ft_echo(cmd);
 	else if (ft_strcmp(cmd, "cd") == 0)
-		ft_cd(cmd);
+		ft_cd(cmd, envp);
 	else if (ft_strcmp(cmd, "env") == 0)
 		ft_env(cmd, envp);
 	else if (ft_strcmp(cmd, "exit") == 0)
