@@ -6,11 +6,11 @@
 /*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 15:25:02 by fbenkaci          #+#    #+#             */
-/*   Updated: 2025/05/14 17:04:45 by fbenkaci         ###   ########.fr       */
+/*   Updated: 2025/05/17 17:27:42 by fbenkaci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell2.h"
+#include "../minishell.h"
 
 // int	ft_echo(char **cmd)
 // {

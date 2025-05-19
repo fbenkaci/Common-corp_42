@@ -6,7 +6,7 @@
 /*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 14:56:23 by fbenkaci          #+#    #+#             */
-/*   Updated: 2025/05/15 15:03:36 by fbenkaci         ###   ########.fr       */
+/*   Updated: 2025/05/19 12:54:10 by fbenkaci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,23 +33,40 @@ int	is_builtin(char *cmd)
 	return (0);
 }
 
-int	exec_builtin(t_pipex *data, char **cmd, char **envp)
+int	exec_builtin(char **cmd, char **envp)
 {
-	if (ft_strcmp(cmd, "echo") == 0)
+	if (ft_strcmp(*cmd, "echo") == 0)
 		ft_echo(cmd);
-	else if (ft_strcmp(cmd, "cd") == 0)
-		ft_cd(cmd, envp);
-	else if (ft_strcmp(cmd, "env") == 0)
+	else if (ft_strcmp(*cmd, "cd") == 0)
+	{
+		if (!ft_cd(cmd, envp))
+			return (0);
+	}
+	else if (ft_strcmp(*cmd, "env") == 0)
 		ft_env(cmd, envp);
-	else if (ft_strcmp(cmd, "exit") == 0)
+	else if (ft_strcmp(*cmd, "exit") == 0)
 		ft_exit(cmd);
-	else if (ft_strcmp(cmd, "export") == 0)
-		ft_export(cmd);
-	else if (ft_strcmp(cmd, "pwd") == 0)
+	else if (ft_strcmp(*cmd, "export") == 0)
+		ft_export(cmd, envp);
+	else if (ft_strcmp(*cmd, "pwd") == 0)
 		ft_pwd();
-	else if (ft_strcmp(cmd, "unset") == 0)
-		ft_unset(cmd);
+	// else if (ft_strcmp(*cmd, "unset") == 0)
+	// 	ft_unset(cmd);
 	else
 		return (0);
 	return (1);
 }
+
+// int main(int ac, char **av, char **envp)
+// {
+// 	(void)ac;
+// 	(void)av;
+// 	// t_pipex *data = NULL;
+// 	char **cmd = malloc(1000);
+	
+// 	cmd[0] = "exit";
+// 	cmd[1] = "exit";
+	
+// 	exec_builtin(cmd, envp);
+// 	return (0);	
+// }
