@@ -6,7 +6,7 @@
 /*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 14:56:23 by fbenkaci          #+#    #+#             */
-/*   Updated: 2025/05/19 12:54:10 by fbenkaci         ###   ########.fr       */
+/*   Updated: 2025/05/20 11:40:26 by fbenkaci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,8 +50,8 @@ int	exec_builtin(char **cmd, char **envp)
 		ft_export(cmd, envp);
 	else if (ft_strcmp(*cmd, "pwd") == 0)
 		ft_pwd();
-	// else if (ft_strcmp(*cmd, "unset") == 0)
-	// 	ft_unset(cmd);
+	else if (ft_strcmp(*cmd, "unset") == 0)
+		ft_unset(envp, cmd);
 	else
 		return (0);
 	return (1);
