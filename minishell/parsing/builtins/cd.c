@@ -6,13 +6,13 @@
 /*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 16:11:03 by fbenkaci          #+#    #+#             */
-/*   Updated: 2025/05/19 11:27:55 by fbenkaci         ###   ########.fr       */
+/*   Updated: 2025/05/21 15:08:27 by fbenkaci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-char	*update_env(char **envp, char *var, char *new_val_var)
+char	*update_env(t_struct *data, char *var, char *new_val_var)
 {
 	char	*new_string;
 	int		len_var;
@@ -21,18 +21,18 @@ char	*update_env(char **envp, char *var, char *new_val_var)
 	len_var = ft_strlen(var);
 	new_string = NULL;
 	i = 0;
-	while (envp[i])
+	while (data->env[i])
 	{
-		if (ft_strncmp(var, envp[i], len_var) == 0)
+		if (ft_strncmp(var, data->env[i], len_var) == 0)
 		{
 			new_string = ft_strjoin(var, new_val_var);
 			if (!new_string)
 				return (NULL);
-			envp[i] = new_string;
+			data->env[i] = new_string;
 			if (ft_strcmp(var, "OLDPWD=") == 0)
-				ft_printf("final old_pwd == %s\n", envp[i]);
+				ft_printf("final old_pwd == %s\n", data->env[i]);
 			else
-				ft_printf("final new_pwd == %s\n", envp[i]);
+				ft_printf("final new_pwd == %s\n", data->env[i]);
 			return (new_string);
 		}
 		i++;
@@ -40,7 +40,7 @@ char	*update_env(char **envp, char *var, char *new_val_var)
 	return (NULL);
 }
 
-char	*get_env_value(char **envp, char *key)
+char	*get_env_value(t_struct *data, char *key)
 {
 	int		len_key;
 	char	*str;
@@ -49,11 +49,11 @@ char	*get_env_value(char **envp, char *key)
 	len_key = ft_strlen(key);
 	str = NULL;
 	i = 0;
-	while (envp[i])
+	while (data->env[i])
 	{
-		if (ft_strncmp(key, envp[i], len_key) == 0)
+		if (ft_strncmp(key, data->env[i], len_key) == 0)
 		{
-			str = envp[i] + len_key;
+			str = data->env[i] + len_key;
 			return (str);
 		}
 		i++;
@@ -61,7 +61,7 @@ char	*get_env_value(char **envp, char *key)
 	return (NULL);
 }
 
-int	update_pwd_vars(char **envp, char *oldpwd)
+int	update_pwd_vars(t_struct *data, char *oldpwd)
 {
 	char	*new_pwd;
 	char	*env_new;
@@ -73,8 +73,8 @@ int	update_pwd_vars(char **envp, char *oldpwd)
 		free(oldpwd);
 		return (perror("getcwd"), 0);
 	}
-	env_old = update_env(envp, "OLDPWD=", oldpwd);
-	env_new = update_env(envp, "PWD=", new_pwd);
+	env_old = update_env(data->env, "OLDPWD=", oldpwd);
+	env_new = update_env(data->env, "PWD=", new_pwd);
 	if (!env_old || !env_new)
 	{
 		free_all(new_pwd, oldpwd, env_old, env_new);
@@ -84,7 +84,7 @@ int	update_pwd_vars(char **envp, char *oldpwd)
 	return (1);
 }
 
-int	cd_without_arg(char **envp)
+int	cd_without_arg(t_struct *data)
 {
 	char	*home;
 	char	*oldpwd;
@@ -94,7 +94,7 @@ int	cd_without_arg(char **envp)
 	oldpwd = getcwd(NULL, 0);
 	if (!oldpwd)
 		return (perror("getcwd"), 0);
-	home = get_env_value(envp, "HOME=");
+	home = get_env_value(data->env, "HOME=");
 	if (!home)
 	{
 		free(oldpwd);
@@ -105,19 +105,19 @@ int	cd_without_arg(char **envp)
 		free(oldpwd);
 		return (perror("chdir"), 0);
 	}
-	if (!update_pwd_vars(envp, oldpwd))
+	if (!update_pwd_vars(data->env, oldpwd))
 		return (0);
 	return (1);
 }
 
-int	ft_cd(char **cmd, char **envp)
+int	ft_cd(t_struct *data, char **cmd)
 {
 	if (!cmd[1])
 	{
-		if (!cd_without_arg(envp))
+		if (!cd_without_arg(data->env))
 			return (0);
 	}
-	else if (!cd_path(envp, cmd[1]))
+	else if (!cd_path(data->env, cmd[1]))
 		return (0);
 	return (1);
 }
