@@ -1,27 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pwd.c                                              :+:      :+:    :+:   */
+/*   ft_putnbrbase_x_maj.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/13 15:44:19 by fbenkaci          #+#    #+#             */
-/*   Updated: 2025/05/15 14:44:50 by fbenkaci         ###   ########.fr       */
+/*   Created: 2024/12/05 18:20:15 by fbenkaci          #+#    #+#             */
+/*   Updated: 2025/05/10 16:21:14 by fbenkaci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "ft_printf.h"
 
-void	ft_pwd(void)
+int	ft_putnbrbase_x_maj(unsigned int nb, const unsigned int base)
 {
-	char	*cwd;
+	int		count;
+	char	*base_16;
 
-	cwd = getcwd(NULL, 0);
-	if (cwd)
+	count = 0;
+	base_16 = "0123456789ABCDEF";
+	if (nb < base)
 	{
-		ft_printf("%s\n", cwd);
-		free(cwd);
+		count += ft_putchar(base_16[nb]);
+		return (count);
 	}
 	else
-		perror("getcwd");
+	{
+		count += ft_putnbrbase_x_maj((nb / base), base);
+		count += ft_putnbrbase_x_maj((nb % base), base);
+	}
+	return (count);
 }

@@ -6,7 +6,7 @@
 /*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 11:24:49 by fbenkaci          #+#    #+#             */
-/*   Updated: 2024/11/26 11:07:46 by fbenkaci         ###   ########.fr       */
+/*   Updated: 2025/05/17 13:28:33 by fbenkaci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,9 @@ int	ft_strncmp(const char *s1, const char *s2, size_t n)
 	i = 0;
 	if (n == 0)
 		return (0);
-	while (i < n && s1[i] && s2[i] && s1[i] == s2[i])
+	while (i < n && s1[i] == s2[i] && s1[i] && s2[i])
 		i++;
 	if (i == n)
 		return (0);
-	return ((unsigned const char)s1[i] - (unsigned const char)s2[i]);
+	return ((unsigned char)s1[i] - (unsigned char)s2[i]);
 }

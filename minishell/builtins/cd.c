@@ -6,11 +6,11 @@
 /*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 16:11:03 by fbenkaci          #+#    #+#             */
-/*   Updated: 2025/05/21 15:08:27 by fbenkaci         ###   ########.fr       */
+/*   Updated: 2025/05/22 16:23:37 by fbenkaci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "builtins.h"
 
 char	*update_env(t_struct *data, char *var, char *new_val_var)
 {
@@ -28,11 +28,12 @@ char	*update_env(t_struct *data, char *var, char *new_val_var)
 			new_string = ft_strjoin(var, new_val_var);
 			if (!new_string)
 				return (NULL);
+			free(data->env[i]);
 			data->env[i] = new_string;
 			if (ft_strcmp(var, "OLDPWD=") == 0)
-				ft_printf("final old_pwd == %s\n", data->env[i]);
+				ft_printf("Avant cd == %s\n", data->env[i]);
 			else
-				ft_printf("final new_pwd == %s\n", data->env[i]);
+				ft_printf("Apres cd == %s\n", data->env[i]);
 			return (new_string);
 		}
 		i++;
@@ -73,8 +74,8 @@ int	update_pwd_vars(t_struct *data, char *oldpwd)
 		free(oldpwd);
 		return (perror("getcwd"), 0);
 	}
-	env_old = update_env(data->env, "OLDPWD=", oldpwd);
-	env_new = update_env(data->env, "PWD=", new_pwd);
+	env_old = update_env(data, "OLDPWD=", oldpwd);
+	env_new = update_env(data, "PWD=", new_pwd);
 	if (!env_old || !env_new)
 	{
 		free_all(new_pwd, oldpwd, env_old, env_new);
@@ -94,7 +95,7 @@ int	cd_without_arg(t_struct *data)
 	oldpwd = getcwd(NULL, 0);
 	if (!oldpwd)
 		return (perror("getcwd"), 0);
-	home = get_env_value(data->env, "HOME=");
+	home = get_env_value(data, "HOME=");
 	if (!home)
 	{
 		free(oldpwd);
@@ -105,7 +106,7 @@ int	cd_without_arg(t_struct *data)
 		free(oldpwd);
 		return (perror("chdir"), 0);
 	}
-	if (!update_pwd_vars(data->env, oldpwd))
+	if (!update_pwd_vars(data, oldpwd))
 		return (0);
 	return (1);
 }
@@ -114,47 +115,31 @@ int	ft_cd(t_struct *data, char **cmd)
 {
 	if (!cmd[1])
 	{
-		if (!cd_without_arg(data->env))
+		if (!cd_without_arg(data))
 			return (0);
 	}
-	else if (!cd_path(data->env, cmd[1]))
+	else if (!cd_path(data, cmd[1]))
 		return (0);
 	return (1);
 }
 
 // int	main(int ac, char **av, char **envp)
 // {
-// 	char	**cmd;
+// 	t_struct	*data;
+// 	char		**cmd;
 
+// 	data = malloc(sizeof(t_struct));
+// 	if (!cpy_env(data, envp))
+// 		return (0);
 // 	cmd = malloc(10000);
 // 	(void)ac;
 // 	(void)av;
 // 	cmd[0] = "cd";
-// 	// cmd[1] = "hello/ok";
-// 	ft_cd(cmd, envp);
+// 	cmd[1] = "hello/o";
+// 	ft_cd(data, cmd);
 // 	free(cmd);
+// 	ft_free_array(data->env);
+// 	free(data);
 // 	return (0);
 // }
 
-// #include <stdio.h>
-
-// // chdir function is declared
-// // inside this header
-// #include <unistd.h>
-
-// int	main(void)
-// {
-// 	char s[100];
-
-// 	// printing current working directory
-// 	printf("%s\n", getcwd(s, 100));
-
-// 	// using the command
-// 	chdir("/home/fbenkaci/Common-corp_42/minishell");
-
-// 	// printing current working directory
-// 	printf("%s\n", getcwd(s, 100));
-// 	ft_pwd();
-// 	// after chdir is executed
-// 	return (0);
-// }

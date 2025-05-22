@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cd_relative_path.c                                 :+:      :+:    :+:   */
+/*   cd_path.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/17 16:30:40 by fbenkaci          #+#    #+#             */
-/*   Updated: 2025/05/17 19:57:11 by fbenkaci         ###   ########.fr       */
+/*   Updated: 2025/05/22 16:17:11 by fbenkaci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "builtins.h"
 
 // A la fin faudra tout free c.a.d env_new et env_old
 
@@ -39,7 +39,7 @@ void	free_env(char **envp)
 	free(envp);
 }
 
-int	cd_path(char **envp, const char *path)
+int	cd_path(t_struct *data, const char *path)
 {
 	char	*old_pwd;
 
@@ -51,7 +51,7 @@ int	cd_path(char **envp, const char *path)
 		perror("chdir");
 		return (free(old_pwd), 0);
 	}
-	if (!update_pwd_vars(envp, old_pwd))
+	if (!update_pwd_vars(data, old_pwd))
 		return (0);
 	return (1);
 }

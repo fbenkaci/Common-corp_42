@@ -1,26 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   exit.c                                             :+:      :+:    :+:   */
+/*   ft_putstr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/19 11:29:08 by fbenkaci          #+#    #+#             */
-/*   Updated: 2025/05/19 12:24:43 by fbenkaci         ###   ########.fr       */
+/*   Created: 2024/11/27 14:19:42 by fbenkaci          #+#    #+#             */
+/*   Updated: 2025/05/15 17:09:13 by fbenkaci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "ft_printf.h"
 
-int	ft_exit(char **cmd)
+int	ft_putstr(const char *str)
 {
-	if (!cmd[1])
-    {
-        ft_printf("exit\n");
-        // ICI, il faut free tout ce qui a ete malloc et fermer tous les fd 
-        exit(0);
-    }
-    else
-        return (ft_putstr_fd("Error.Enter exit with no args\n", 2), 0);
-}
+	int	count;
 
+	count = 0;
+	if (!str)
+	{
+		ft_putstr("(null)");
+		return (6);
+	}
+	while (*str)
+	{
+		count += ft_putchar(*str);
+		str++;
+	}
+	return (count);
+}

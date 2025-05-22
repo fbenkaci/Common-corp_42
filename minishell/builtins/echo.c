@@ -6,11 +6,11 @@
 /*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 15:25:02 by fbenkaci          #+#    #+#             */
-/*   Updated: 2025/05/17 17:27:42 by fbenkaci         ###   ########.fr       */
+/*   Updated: 2025/05/22 17:06:00 by fbenkaci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "builtins.h"
 
 // int	ft_echo(char **cmd)
 // {
@@ -96,11 +96,11 @@ int	ft_echo(char **cmd)
 
 // 	cmd = malloc(sizeof(char) * 100);
 // 	cmd[0] = "echo";
-// 	cmd[1] = "-n";
-// 	cmd[2] = "comment";
-// 	cmd[3] = "ça";
+// 	cmd[1] = "comment";
+// 	cmd[2] = "-nnnnnnn";
+// 	// cmd[2] = "ça";
 // 	// cmd[2] = "-nnnnnwn";
 // 	// cmd[3] = "-a";
-// 	cmd[4] = "va";
+// 	// cmd[3] = "va";
 // 	ft_echo(cmd);
 // }

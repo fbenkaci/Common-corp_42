@@ -1,28 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_free_array.c                                    :+:      :+:    :+:   */
+/*   ft_putchar.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/12 17:07:30 by fbenkaci          #+#    #+#             */
-/*   Updated: 2025/05/19 17:02:15 by fbenkaci         ###   ########.fr       */
+/*   Created: 2024/11/27 11:24:24 by fbenkaci          #+#    #+#             */
+/*   Updated: 2025/01/04 12:09:41 by fbenkaci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "ft_printf.h"
 
-void	ft_free_array(char **array)
+int ft_putchar(int c)
 {
-	int	i;
+	int count;
 
-	if (!array)
-		return ;
-	i = 0;
-	while (array[i])
-	{
-		free(array[i]);
-		i++;
-	}
-	free(array);
+	count = 0;
+	count += write(1, &c, 1);
+	return (count);
 }

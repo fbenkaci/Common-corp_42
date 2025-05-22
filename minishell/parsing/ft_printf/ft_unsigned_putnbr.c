@@ -1,28 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_free_array.c                                    :+:      :+:    :+:   */
+/*   ft_unsigned_putnbr.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/12 17:07:30 by fbenkaci          #+#    #+#             */
-/*   Updated: 2025/05/19 17:02:15 by fbenkaci         ###   ########.fr       */
+/*   Created: 2024/11/30 16:07:51 by fbenkaci          #+#    #+#             */
+/*   Updated: 2024/12/10 11:05:29 by fbenkaci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "ft_printf.h"
 
-void	ft_free_array(char **array)
+int	ft_unsigned_putnbr(unsigned int nb)
 {
-	int	i;
+	long	nbr;
+	int		count;
 
-	if (!array)
-		return ;
-	i = 0;
-	while (array[i])
+	nbr = nb;
+	count = 0;
+	if (nbr >= 0 && nbr <= 9)
 	{
-		free(array[i]);
-		i++;
+		ft_putchar(nbr + 48);
+		count++;
 	}
-	free(array);
+	else
+	{
+		count += ft_unsigned_putnbr(nbr / 10);
+		count += ft_unsigned_putnbr(nbr % 10);
+	}
+	return (count);
 }

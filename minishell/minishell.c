@@ -6,13 +6,11 @@
 /*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 01:12:37 by fbenkaci          #+#    #+#             */
-/*   Updated: 2025/05/13 09:49:40 by fbenkaci         ###   ########.fr       */
+/*   Updated: 2025/05/22 17:03:40 by fbenkaci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-// ==================== build_from_tokens.c
-#include "minishell2.h"
-#include <fcntl.h>
+#include "my_minishell.h"
 
 int	build_from_tokens(t_pipex *data, t_struct *tok)
 {
@@ -36,16 +34,16 @@ int	build_from_tokens(t_pipex *data, t_struct *tok)
 	}
 	data->nb_cmds = count;
 	// la j'alloue dla mémoire pour les structures qui contiendront des info sur chaquie comande
-	data->cmds = malloc(sizeof(char **) * count);    
-		// Contient les arguments pour chaque comment
-	data->in_files = malloc(sizeof(char *) * count); 
-		// Chaque élément représente un fichier d'entrée
+	data->cmds = malloc(sizeof(char **) * count);
+	// Contient les arguments pour chaque comment
+	data->in_files = malloc(sizeof(char *) * count);
+	// Chaque élément représente un fichier d'entrée
 	data->out_files = malloc(sizeof(char *) * count);
-		// Contient les fichiers de sortie
-	data->modes = malloc(sizeof(int) * count);       
-		// Chque elmt represnt un mode d'ouverture
-	data->here_doc = malloc(sizeof(int) * count);    
-		// sert a savoir si une comande est ui herdoc
+	// Contient les fichiers de sortie
+	data->modes = malloc(sizeof(int) * count);
+	// Chque elmt represnt un mode d'ouverture
+	data->here_doc = malloc(sizeof(int) * count);
+	// sert a savoir si une comande est ui herdoc
 	if (!data->cmds || !data->in_files || !data->out_files || !data->modes
 		|| !data->here_doc)
 		return (0);
@@ -66,6 +64,7 @@ int	build_from_tokens(t_pipex *data, t_struct *tok)
 	// la je parcour les token pour contruire les arguments des commandes
 	while (cur)
 	{
+		// SELON LE TYPE J'EXECUTE UN CODE 
 		if (cur->type == WORD)
 		{
 			tmp = malloc(sizeof(char *) * (argc + 2));
@@ -111,6 +110,7 @@ int	build_from_tokens(t_pipex *data, t_struct *tok)
 	return (1);
 }
 
+// LA JE NAVIGUE DANS TES TOKENS ET J'EXECUTE
 int	handle_pipex_tokens(t_pipex *data, char **envp)
 {
 	int		i;
@@ -118,13 +118,16 @@ int	handle_pipex_tokens(t_pipex *data, char **envp)
 	int		k;
 	char	*path;
 
+	// JE CREE LE NOMBRES PIPES QU'IL FAUT
 	if (!creat_pipe(data))
 		return (0);
 	i = 0;
 	while (i < data->nb_cmds)
 	{
+		// SI C'EST UN HERE_DOC JE LANCE MA FONCTION HERE_DOC// LA FONCTION here_doc n'ext pas prete
 		if (data->here_doc[i])
 			data->inputfd = here_doc_input(data->in_files[i]);
+		// SINON J'OUVRE L'OUTFILE
 		else if (data->in_files[i])
 			data->inputfd = open(data->in_files[i], data->modes[i], 0644);
 		else if (i > 0)
@@ -140,9 +143,11 @@ int	handle_pipex_tokens(t_pipex *data, char **envp)
 		}
 		else
 			data->outputfd = data->pipes[i * 2 + 1];
+		// JE CREE LES PROCESSUS ENFANTS
 		pid = fork();
 		if (pid == 0)
 		{
+			// FERMETURE DES PIPES NON NECESSAIRE 
 			k = 0;
 			while (k < (data->nb_cmds - 1) * 2)
 			{
@@ -150,13 +155,16 @@ int	handle_pipex_tokens(t_pipex *data, char **envp)
 					close(data->pipes[k]);
 				k++;
 			}
-			dup2(data->inputfd, 0);
-			dup2(data->outputfd, 1);
-			path = command_loc(envp, data->cmds[i][0]);
+			// CHANGEMENT D'ENTREE ET SORTIT
+			dup2(data->inputfd, 0); // IL VA LIRE A PARTIR DE MON INPUT
+			dup2(data->outputfd, 1); // LA SORTIE SERA STOCKER DANS L'OUTPUT
+			path = command_loc(envp, data->cmds[i][0]); // JE CHERCHE LA COMMANDE POUR POUVOIR L'EXECUTER
+			// J'EXECUTE
 			execve(path, data->cmds[i], envp);
 			perror("execve");
 			exit(EXIT_FAILURE);
 		}
+		// J'AI FINIS JE FERME LES PIPES QUE J'AI UTILISER
 		data->pids[i] = pid;
 		if (i > 0)
 			close(data->pipes[(i - 1) * 2]);
@@ -285,47 +293,59 @@ void	free_token(t_struct *token)
 
 int	main(int argc, char **argv, char **envp)
 {
-	t_struct *ctx;
-	char *line;
-	char *path_env;
-	// char **paths;
-
+	t_struct	*data;
+	t_struct	*tmp;
+	
 	(void)argv;
+	if (!cpy_env(data, envp))
+		return (ft_putstr_fd("Error: copy of env failed\n", 2), 0);
 	if (argc != 1)
-		return (fprintf(stderr, "Usage: %s\n", argv[0]), 1);
-
-	path_env = getenv("PATH");
-	if (!path_env)
-		return (fprintf(stderr, "PATH not set\n"), 1);
-	// paths = ft_split(path_env, ':');
-	// if (!paths)
-	// 	perror("ft_split"), exit(1);
-
-	ctx = malloc(sizeof(*ctx));
-	ctx->env = envp;
-	// ctx->paths = paths;
-
+	{
+		printf("Error: need only one argument\n");
+		return (1);
+	}
+	data = (t_struct *)malloc(sizeof(t_struct));
+	if (!data)
+	{
+		perror("Error allocating memory");
+		return (1);
+	}
 	while (1)
 	{
-		line = readline("💻 minishell > ");
-		if (!line)
+		data->str = readline("💻 minishell > ");
+		if (data->str == NULL)
 			break ;
-		if (*line)
+		if (ft_strlen(data->str) > 0)
 		{
-			add_history(line);
-			t_struct *tokens = parsing(data);
-			if (tokens)
+			add_history(data->str);
+			if (parsing(data))
 			{
-				t_pipex pipex;
-				if (build_from_tokens(&pipex, tokens))
-					handle_pipex_tokens(&pipex, envp);
-				free_pipex(&pipex);
-				free_tokens(tokens);
+				tmp = data->next;
+				while (tmp)
+				{
+					printf("{%d -> '%s'}\n", tmp->type, tmp->str);
+					tmp = tmp->next;
+				}
+			}
+			// LA SI C'EST UN BUILTINS J'EXECUTE LES BUILTINS 
+			if (is_builtin(data->str))
+			{
+				// C'EST PAS PRES POUR L'INSTANT
+				return (exec_builtin(data, NULL));
+			}
+			// SINON JE FAIS UNE EXECUTION NORMAL
+			else
+			{
+				// C'EST PAS ENCORE PRES 
+				if (build_from_tokens(NULL, NULL))
+					handle_pipex_tokens(NULL, NULL);
+				
 			}
 		}
-		free(line);
+		free(data->str);
 	}
-	// free_paths(paths);
-	free(ctx);
+	free(data);
 	return (0);
 }
+
+

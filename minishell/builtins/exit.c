@@ -1,28 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_free_array.c                                    :+:      :+:    :+:   */
+/*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/12 17:07:30 by fbenkaci          #+#    #+#             */
-/*   Updated: 2025/05/19 17:02:15 by fbenkaci         ###   ########.fr       */
+/*   Created: 2025/05/19 11:29:08 by fbenkaci          #+#    #+#             */
+/*   Updated: 2025/05/22 16:17:00 by fbenkaci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "builtins.h"
 
-void	ft_free_array(char **array)
+int	ft_exit(char **cmd)
 {
-	int	i;
-
-	if (!array)
-		return ;
-	i = 0;
-	while (array[i])
-	{
-		free(array[i]);
-		i++;
-	}
-	free(array);
+	if (!cmd[1])
+    {
+        ft_printf("exit\n");
+        // ICI, il faut free tout ce qui a ete malloc et fermer tous les fd 
+        exit(0);
+    }
+    else
+        return (ft_putstr_fd("Error.Enter exit with no args\n", 2), 0);
 }
+

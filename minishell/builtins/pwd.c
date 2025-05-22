@@ -1,28 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_free_array.c                                    :+:      :+:    :+:   */
+/*   pwd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/12 17:07:30 by fbenkaci          #+#    #+#             */
-/*   Updated: 2025/05/19 17:02:15 by fbenkaci         ###   ########.fr       */
+/*   Created: 2025/05/13 15:44:19 by fbenkaci          #+#    #+#             */
+/*   Updated: 2025/05/22 16:17:27 by fbenkaci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "builtins.h"
 
-void	ft_free_array(char **array)
+void	ft_pwd(void)
 {
-	int	i;
+	char	*cwd;
 
-	if (!array)
-		return ;
-	i = 0;
-	while (array[i])
+	cwd = getcwd(NULL, 0);
+	if (cwd)
 	{
-		free(array[i]);
-		i++;
+		ft_printf("%s\n", cwd);
+		free(cwd);
 	}
-	free(array);
+	else
+		perror("getcwd");
 }

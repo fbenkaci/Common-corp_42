@@ -1,28 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_free_array.c                                    :+:      :+:    :+:   */
+/*   ft_putnbrbase_x.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/12 17:07:30 by fbenkaci          #+#    #+#             */
-/*   Updated: 2025/05/19 17:02:15 by fbenkaci         ###   ########.fr       */
+/*   Created: 2024/12/05 16:20:46 by fbenkaci          #+#    #+#             */
+/*   Updated: 2024/12/10 11:05:57 by fbenkaci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "ft_printf.h"
 
-void	ft_free_array(char **array)
+int	ft_putnbrbase_x(unsigned int nb, unsigned int base)
 {
-	int	i;
+	int		count;
+	char	*base_16;
 
-	if (!array)
-		return ;
-	i = 0;
-	while (array[i])
+	count = 0;
+	base_16 = "0123456789abcdef";
+	if (nb < base)
 	{
-		free(array[i]);
-		i++;
+		count += ft_putchar(base_16[nb]);
+		return (count);
 	}
-	free(array);
+	else
+	{
+		count += ft_putnbrbase_x((nb / base), base);
+		count += ft_putnbrbase_x((nb % base), base);
+	}
+	return (count);
 }

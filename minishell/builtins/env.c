@@ -6,11 +6,11 @@
 /*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/14 17:25:08 by fbenkaci          #+#    #+#             */
-/*   Updated: 2025/05/22 16:17:09 by fbenkaci         ###   ########.fr       */
+/*   Updated: 2025/05/22 17:07:46 by fbenkaci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "builtins.h"
+#include "../my_minishell.h"
 
 void	ft_env(t_struct *data, char **cmd)
 {
@@ -36,7 +36,7 @@ void	ft_env(t_struct *data, char **cmd)
 
 // int	main(int ac, char **av, char **envp)
 // {
-// 	t_struct *data = malloc(sizeof(t_struct));
+// 	t_minishell *data = malloc(sizeof(t_minishell));
 // 	char	**cmd;
 
 // 	cpy_env(data, envp);

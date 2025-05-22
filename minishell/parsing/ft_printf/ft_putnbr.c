@@ -1,28 +1,39 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_free_array.c                                    :+:      :+:    :+:   */
+/*   ft_putnbr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/12 17:07:30 by fbenkaci          #+#    #+#             */
-/*   Updated: 2025/05/19 17:02:15 by fbenkaci         ###   ########.fr       */
+/*   Created: 2024/11/27 14:10:48 by fbenkaci          #+#    #+#             */
+/*   Updated: 2024/12/10 11:05:21 by fbenkaci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "ft_printf.h"
 
-void	ft_free_array(char **array)
+int	ft_putnbr(int nb)
 {
-	int	i;
+	long int	nbr;
+	int			count;
 
-	if (!array)
-		return ;
-	i = 0;
-	while (array[i])
+	count = 0;
+	nbr = nb;
+	if (nbr < 0)
 	{
-		free(array[i]);
-		i++;
+		nbr *= -1;
+		ft_putchar('-');
+		count++;
 	}
-	free(array);
+	if (nbr >= 0 && nbr <= 9)
+	{
+		ft_putchar(nbr + 48);
+		count++;
+	}
+	else
+	{
+		count += ft_putnbr(nbr / 10);
+		count += ft_putnbr(nbr % 10);
+	}
+	return (count);
 }
