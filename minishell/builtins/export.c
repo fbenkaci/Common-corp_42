@@ -6,7 +6,7 @@
 /*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 12:23:12 by fbenkaci          #+#    #+#             */
-/*   Updated: 2025/05/22 16:17:43 by fbenkaci         ###   ########.fr       */
+/*   Updated: 2025/06/03 16:36:50 by fbenkaci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void	print_export(char **cpy_env)
 	while (cpy_env[i])
 	{
 		if (ft_strncmp(cpy_env[i], "_=", 2) != 0)
-			ft_printf("declare -x %s\n", cpy_env[i]);
+			ft_printf("declare -x \"%s\"\n", cpy_env[i]);
 		i++;
 	}
 }
@@ -62,10 +62,10 @@ int	is_valid_export(char *cmd)
 		ft_putstr_fd("': ", 2);
 		return (ft_putstr_fd("not a valid identifier\n", 2), 0);
 	}
-	i = 1;
-	while (!cmd && cmd[i] != '=')
+	i = 0;
+	while (cmd[i] && cmd[i] != '=')
 	{
-		ft_printf("%c\n", cmd[i]);
+		// ft_printf("%c\n", cmd[i]);
 		if (!ft_isalnum(cmd[i]))
 		{
 			ft_putstr_fd("export: ", 2);
@@ -81,28 +81,28 @@ int	is_valid_export(char *cmd)
 
 int	export_without_args(t_struct *data)
 {
-	char	**cpy_env;
-	int		len_env;
-	int		i;
+	// char	**cpy_env;
+	// int		len_env;
+	// int		i;
 
-	i = 0;
-	len_env = 0;
-	while (data->env[len_env])
-		len_env++;
-	cpy_env = malloc(sizeof(char *) * (len_env + 1));
-	if (!cpy_env)
-		return (0);
-	while (data->env[i])
-	{
-		cpy_env[i] = ft_strdup(data->env[i]);
-		if (!cpy_env[i])
-			return (ft_free_array(cpy_env), 0);
-		i++;
-	}
-	cpy_env[len_env] = NULL;
-	sorted_export(cpy_env, len_env);
-	print_export(cpy_env);
-	ft_free_array(cpy_env);
+	// i = 0;
+	// len_env = 0;
+	// while (data->env[len_env])
+	// 	len_env++;
+	// cpy_env = malloc(sizeof(char *) * (len_env + 1));
+	// if (!cpy_env)
+	// 	return (0);
+	// while (data->env[i])
+	// {
+	// 	cpy_env[i] = ft_strdup(data->env[i]);
+	// 	if (!cpy_env[i])
+	// 		return (ft_free_array(cpy_env), 0);
+	// 	i++;
+	// }
+	// cpy_env[len_env] = NULL;
+	// sorted_export(cpy_env, len_env);
+	print_export(data->env);
+	// ft_free_array(cpy_env);
 	return (1);
 }
 
@@ -124,7 +124,9 @@ int	ft_export(t_struct *data, char **cmd)
 			if (is_valid_export(cmd[i]))
 			{
 				if (!add_or_replace_env_var(data, cmd[i]))
+				{
 					return (0);
+				}
 			}
 			i++;
 		}

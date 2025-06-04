@@ -6,13 +6,13 @@
 /*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/14 17:25:08 by fbenkaci          #+#    #+#             */
-/*   Updated: 2025/05/22 17:07:46 by fbenkaci         ###   ########.fr       */
+/*   Updated: 2025/05/31 17:04:26 by fbenkaci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../my_minishell.h"
+#include "builtins.h"
 
-void	ft_env(t_struct *data, char **cmd)
+int	ft_env(t_struct *data, char **cmd)
 {
 	int	i;
 
@@ -23,7 +23,7 @@ void	ft_env(t_struct *data, char **cmd)
 		ft_putstr_fd(cmd[1], 2);
 		ft_putstr_fd("‘", 2);
 		ft_putstr_fd(": No such file or directory\n", 2);
-		return ;
+		return 0;
 	}
 	i = 0;
 	while (data->env[i])
@@ -32,6 +32,7 @@ void	ft_env(t_struct *data, char **cmd)
 			ft_printf("%s\n", data->env[i]);
 		i++;
 	}
+	return (1);
 }
 
 // int	main(int ac, char **av, char **envp)

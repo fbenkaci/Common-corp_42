@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   minishell.h                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/02 16:54:23 by wlarbi-a          #+#    #+#             */
+/*   Updated: 2025/06/04 17:01:08 by fbenkaci         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
@@ -5,10 +17,10 @@
 # include <fcntl.h>
 # include <readline/history.h>
 # include <readline/readline.h>
+# include <signal.h>
 # include <sys/types.h>
-// #include "../pipex/pipex.h"
+# include <sys/wait.h>
 
-/* types de tokens */
 typedef enum e_token
 {
 	NONE = -1,
@@ -21,95 +33,126 @@ typedef enum e_token
 	APPEND,
 	HEREDOC,
 	PARENTHESIS,
-	SPACES
+	SPACES,
+	WORD_D_QUOTES,
+	WORD_S_QUOTES,
 }					t_token;
-
-/* liste chaînée de tokens */
-typedef struct s_pipex
-{
-	int				nb_cmds;
-	char			***cmds;
-	char			**in_files;
-	char			**out_files;
-	int				*modes;
-	int				*here_doc;
-	int				*pipes;
-	pid_t			*pids;
-	int				inputfd;
-	int				outputfd;
-}					t_pipex;
 
 typedef struct s_struct
 {
 	t_token			type;
 	char			*str;
+	int				prev;
+	char **env; // POUR L'EXEC
 	struct s_struct	*next;
-	char			**env;
-	char			**paths;
+
 }					t_struct;
 
-/*------------------builtin-----------------*/
-void				ft_env(t_struct *data, char **cmd);
-int					ft_echo(char **cmd);
-void				ft_pwd(void);
-int					ft_cd(t_struct *data, char **cmd);
-int					ft_exit(char **cmd);
-int					ft_unset(t_struct *data, char *var_name);
-int					ft_export(t_struct *data, char **cmd);
+typedef struct s_cmd
+{
+	char **argv;   // liste des arguments (avec la commande)
+	char *infile;  // nom du fichier en entrée
+	char *outfile; // nom du fichier en sortie
+	int append;    // 1 si >>, 0 si >
+	int heredoc;   // 1 si "<<"
+	char			*heredoc_delim;
+	int				heredoc_fd;
+	// pour stocker le delimeut du heredoc (EOF par exemple)
+	// int **pipes;
+	struct s_cmd	*next;
+}					t_cmd;
 
-// int					exec_builtin(char **cmd, t_pipex *data);
-int					is_builtin(char *cmd);
+typedef struct s_exec
+{
+	int				pids;
+	int (*pipes)[2];
+	int nb_cmds; // Je vais l'utiliser pour creer le nombre de pipe necessaire
+	char			*path;
+	t_cmd			*cmds;
+}					t_exec;
 
-int					add_or_replace_env_var(t_struct *data, char *cmd);
-int					add_in_env(t_struct *data, char *cmd);
-int					cpy_env(t_struct *data, char **envp);
+/*-------------------- EXECUTION -----------------*/
+int					execution(t_cmd *cmd, t_exec *exec, t_struct **data);
 
-char				*update_env(t_struct *data, char *var, char *new_val_var);
-int					update_pwd_vars(t_struct *data, char *oldpwd);
-int					cd_path(t_struct *data, const char *path);
+int					command_loc(t_struct *data, t_exec *exec, char *cmd);
 
-void				free_all(char *new_pwd, char *oldpwd, char *env_old,
-						char *env_new);
+t_cmd				*create_cmd_from_tokens(t_struct **cur, char **envp);
+int					handle_in(t_struct **cur, t_cmd *cmd);
+int					handle_out_and_in(t_struct **cur, t_cmd *cmd);
+int					handle_word_and_append(t_struct **cur, t_cmd *cmd, int *i);
+
+int					create_pipe(t_exec *data);
+int					caculate_nb_cmd(t_exec *data, t_cmd *cmd);
+int					ft_lstsize_bis(t_cmd *cmd);
+void				close_unused_pipes(t_exec *data, int index);
+void				close_pipes(t_exec *data, int index, int i, int j);
+int					heredoc_input(char *delimiter);
+
+/*--------------------utils-----------------*/
+// int					ft_strlen(char *str);
+// int					ft_strcmp(const char *s1, const char *s2);
+// char				**ft_split(const char *s, char c);
+// char				*ft_strchr(char *str, int n);
+// char				*ft_strdup(char *src);
+// size_t				ft_strcpy(char *dst, char *src);
+size_t				ft_strcat(char *dst, char *src);
+// size_t				ft_strlcpy(char *dst, char *src, size_t size);
 
 /*------------------parsing-----------------*/
 
-void				parsing(t_struct *data);
+int					parsing(t_struct *data);
 void				is_token(t_struct *data);
+int					identify_special_token(t_struct *data, int i);
+int					identify_redirection(t_struct *data, int i);
 
 /*--------------parsing pipe----------------*/
 
 int					utils_parse_pipe(t_struct *data, int i, int *found_pipe);
-void				parse_error_pipe(t_struct *data);
+int					parse_error_pipe(t_struct *data);
 
 /*--------------parsing redir----------------*/
 
-void				parse_redir(t_struct *data);
+int					parse_redir(t_struct *data);
 int					utils_parse_redir(t_struct *data, int i, int *found_redir);
 int					handle_redir(t_struct *data, int i, int *found_redir);
 
 /*---------------parsing quote---------------*/
 
-void				parsing_quote(t_struct *data);
+int					parsing_quote(t_struct *data);
 
-/*---------------special tokens-------------*/
-void				token_append(t_struct *data);
-/* parsing principal : renvoie tête de liste de tokens */
+/*--------------------path------------------*/
 
-void				free_tokens(t_struct *tokens);
+char				*find_path(char *cmd, char **paths);
 void				free_paths(char **paths);
 
-/* utilitaires */
-char				**ft_split(const char *s, char c);
-size_t				ft_strlen(const char *s);
-char				*ft_strjoin(const char *s1, const char *s2);
-char				*ft_strdup(const char *s);
-int					ft_strncmp(const char *s1, const char *s2, size_t n);
+/*---------------special tokens-------------*/
 
-int					build_from_tokens(t_pipex *data, t_struct *tok);
-int					handle_pipex_tokens(t_pipex *data, char **envp);
-int					creat_pipe(t_pipex *data);
-int					here_doc_input(char *limiter);
-char				*command_loc(char **envp, char *cmd);
-void				free_close_pipes(t_pipex *data);
-void				free_pipex(t_pipex *data);
-#endif // MINISHELL_H
+void				free_token_list(t_struct *start);
+t_struct			*create_token(const char *str, int len, t_token type);
+int					token_init(t_struct *data);
+void				tokenize_string(t_struct *data, int i);
+void				token_append(t_struct *data);
+
+/*-----------------handle------------------*/
+
+void				handle_space_token(char *s, int *i, t_struct **cur);
+void				handle_word_token(char *s, int *i, t_struct **cur);
+void				handle_special_tokens(char *s, int *i, t_struct **cur);
+void				append_and_advance(t_struct **cur, t_struct *new);
+void				handle_redir_token(char *s, int *i, t_struct **cur);
+void				handle_quotes(char *s, int *i, t_struct **cur);
+/*-----------------word quote------------------*/
+
+void				word_quote(t_struct *data, int *i, t_struct **cur);
+void				handle_word_d_quotes(t_struct *data, int *i,
+						t_struct **cur);
+void				handle_word_s_quotes(t_struct *data, int *i,
+						t_struct **cur);
+
+/*-----------------fusion token------------------*/
+
+void				echo_fusion(t_struct *data);
+
+# include "../builtins/builtins.h"
+
+#endif

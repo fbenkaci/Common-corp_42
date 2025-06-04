@@ -6,7 +6,7 @@
 /*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 16:11:03 by fbenkaci          #+#    #+#             */
-/*   Updated: 2025/05/22 16:23:37 by fbenkaci         ###   ########.fr       */
+/*   Updated: 2025/06/04 17:13:13 by fbenkaci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,10 +30,10 @@ char	*update_env(t_struct *data, char *var, char *new_val_var)
 				return (NULL);
 			free(data->env[i]);
 			data->env[i] = new_string;
-			if (ft_strcmp(var, "OLDPWD=") == 0)
-				ft_printf("Avant cd == %s\n", data->env[i]);
-			else
-				ft_printf("Apres cd == %s\n", data->env[i]);
+			// if (ft_strcmp(var, "OLDPWD=") == 0)
+			// 	ft_printf("Avant cd == %s\n", data->env[i]);
+			// else
+			// 	ft_printf("Apres cd == %s\n", data->env[i]);
 			return (new_string);
 		}
 		i++;

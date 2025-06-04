@@ -1,33 +1,27 @@
-# **************************************************************************** #
-#                                                                              #
-#                                                         :::      ::::::::    #
-#    Makefile                                           :+:      :+:    :+:    #
-#                                                     +:+ +:+         +:+      #
-#    By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+         #
-#                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2025/02/24 11:15:59 by fbenkaci          #+#    #+#              #
-#    Updated: 2025/05/22 16:54:42 by fbenkaci         ###   ########.fr        #
-#                                                                              #
-# **************************************************************************** #
 
-NAME = minishell
+SOURCE = parsing/minishell.c  parsing/utils.c  parsing/parsing.c  parsing/parsing_pipe.c  parsing/parsing_redir.c \
+parsing/parsing_quote.c  parsing/path.c  parsing/utils2.c  parsing/special_tokens.c  parsing/handle.c  parsing/word_quote.c parsing/fusion_token.c  parsing/utils3.c \
+execution/exec_utils_1.c execution/exec_utils_2.c execution/minishell_exec.c  execution/token_to_cmd_1.c execution/token_to_cmd_2.c    builtins/builtins.c  builtins/cd.c builtins/cd_path.c builtins/env.c builtins/exit.c builtins/pwd.c builtins/export_utils.c builtins/unset.c builtins/echo.c builtins/export.c
+#expand.c
+OBJ = ${SOURCE:.c=.o}
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -g
-SRCS =  builtins/builtins.c builtins/cd.c builtins/cd_path.c builtins/echo.c builtins/env.c builtins/export.c builtins/export_utils.c builtins/pwd.c builtins/unset.c builtins/exit.c
-#util.c pipex.c path.c minishell.c
-# main.c path.c handle_pipex.c handle_heredoc.c check_files.c 
-OBJS = $(SRCS:.c=.o)
+NAME = minishell
+CFLAGS = -Wall -Wextra -Werror 
 
-all: $(NAME)
 
-$(NAME): $(OBJS)
-	$(CC) $(CFLAGS) $(OBJS)  ft_printf/libftprintf.a  get_next_line/get_next_line.c libft/libft.a -o $(NAME)
+all : $(NAME)
+
+%.o: %.c
+	@$(CC) $(CFLAGS) -c $< -o $@
+
+$(NAME) : $(OBJ)
+	@$(CC) $(CFLAGS) $(OBJ) -o $@ -lreadline ft_printf/libftprintf.a  get_next_line/get_next_line.c libft/libft.a
 
 clean:
-	rm -rf $(OBJS)
+	@rm -f $(OBJ)
 	
 fclean: clean
-	rm -f $(NAME)
+	@rm -f $(NAME)
 
 re: fclean all
 

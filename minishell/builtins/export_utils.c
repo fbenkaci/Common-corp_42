@@ -6,7 +6,7 @@
 /*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 11:56:57 by fbenkaci          #+#    #+#             */
-/*   Updated: 2025/05/22 16:17:32 by fbenkaci         ###   ########.fr       */
+/*   Updated: 2025/06/01 16:29:45 by fbenkaci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,18 +20,24 @@ int	add_or_replace_env_var(t_struct *data, char *cmd)
 
 	len = 0;
 	i = 0;
-	while (cmd[len] != '=')
+	while (cmd[len] && cmd[len] != '=')
 		len++;
 	var_name = ft_substr(cmd, 0, len);
+	// ft_printf("var name == %s\n", var_name);
 	if (!var_name)
 		return (0);
+	// ft_printf("%d\n", len);
 	while (data->env[i])
 	{
-		if (ft_strncmp(data->env[i], var_name, len) == 0 && var_name[len] == '=')
+		if (ft_strncmp(data->env[i], var_name, len) == 0
+			&& data->env[i][len] == '=')
 		{
-            ft_printf("var name %s\n\n", var_name);
+			// ft_printf(" %s\n\n", data->env[i]);
+			// ft_printf(" %s\n\n", cmd);
 			free(data->env[i]);
 			data->env[i] = ft_strdup(cmd);
+			// while (data->env[i])
+			// 	ft_printf("%s\n", data->env[i++]);
 			free(var_name);
 			return (1);
 		}
@@ -65,5 +71,8 @@ int	add_in_env(t_struct *data, char *cmd)
 	cpy_env[i + 1] = NULL;
 	ft_free_array(data->env);
 	data->env = cpy_env;
+	// i = 0;
+	// while (data->env[i])
+	// 	ft_printf("%s\n", data->env[i++]);
 	return (1);
 }

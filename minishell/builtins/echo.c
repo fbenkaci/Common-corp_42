@@ -6,7 +6,7 @@
 /*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 15:25:02 by fbenkaci          #+#    #+#             */
-/*   Updated: 2025/05/22 17:06:00 by fbenkaci         ###   ########.fr       */
+/*   Updated: 2025/06/04 20:16:31 by fbenkaci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,8 +71,8 @@ int	ft_echo(char **cmd)
 
 	flag_n = 0;
 	i = 1;
-	if (!cmd[1])
-		return (ft_printf("\n"), 0);
+	// if (!cmd[1] || cmd[1][0] == )
+	// 	return (ft_printf("\n"), 0);
 	while (cmd[i] && cmd[i][0] == '-' && cmd[i][1] == 'n' && is_flag_n(cmd[i]))
 	{
 		flag_n = 1;
@@ -81,7 +81,7 @@ int	ft_echo(char **cmd)
 	while (cmd[i])
 	{
 		ft_printf("%s", cmd[i]);
-		if (cmd[i + 1])
+		if (cmd[i + 1] && cmd[i + 1][0] != '\0')
 			ft_printf(" ");
 		i++;
 	}

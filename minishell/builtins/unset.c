@@ -6,7 +6,7 @@
 /*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 11:33:46 by fbenkaci          #+#    #+#             */
-/*   Updated: 2025/05/22 16:53:39 by fbenkaci         ###   ########.fr       */
+/*   Updated: 2025/06/03 15:17:05 by fbenkaci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,7 @@ void	copy_env_excluding(t_struct *data, char **new_env, char *var_name)
 	j = 0;
 	while (data->env[i])
 	{
-		if (!(ft_strncmp(data->env[i], var_name, len) == 0
-				&& data->env[i][len] == '='))
+		if (!(ft_strncmp(data->env[i], var_name, len) == 0 && data->env[i][len] == '='))
 			new_env[j++] = data->env[i];
 		else
 			free(data->env[i]);
@@ -71,14 +70,14 @@ int	cpy_env(t_struct *data, char **envp)
 		len++;
 	data->env = malloc(sizeof(char *) * (len + 1));
 	if (!data->env)
-		return (0);
+		return (-1);
 	while (envp[i])
 	{
 		data->env[i] = ft_strdup(envp[i]);
 		if (!data->env[i])
 		{
 			ft_free_array(data->env);
-			return (0);
+			return (-1);
 		}
 		i++;
 	}

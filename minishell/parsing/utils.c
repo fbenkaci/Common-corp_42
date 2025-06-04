@@ -5,36 +5,36 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/13 01:16:09 by fbenkaci          #+#    #+#             */
-/*   Updated: 2025/05/13 01:16:17 by fbenkaci         ###   ########.fr       */
+/*   Created: 2025/05/02 16:53:18 by wlarbi-a          #+#    #+#             */
+/*   Updated: 2025/06/03 15:48:33 by fbenkaci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	ft_strlen(char *str)
-{
-	int	i;
+// int	ft_strlen(char *str)
+// {
+// 	int	i;
 
-	i = 0;
-	while (str[i])
-	{
-		i++;
-	}
-	return (i);
-}
+// 	i = 0;
+// 	while (str[i])
+// 	{
+// 		i++;
+// 	}
+// 	return (i);
+// }
 
-int	ft_strcmp(const char *s1, const char *s2)
-{
-	size_t	i;
+// int	ft_strcmp(const char *s1, const char *s2)
+// {
+// 	size_t	i;
 
-	i = 0;
-	while (s1[i] && s2[i] && s2[i] == s1[i])
-	{
-		i++;
-	}
-	return ((unsigned char)s1[i] - (unsigned char)s2[i]);
-}
+// 	i = 0;
+// 	while (s1[i] && s2[i] && s2[i] == s1[i])
+// 	{
+// 		i++;
+// 	}
+// 	return ((unsigned char)s1[i] - (unsigned char)s2[i]);
+// }
 
 static int	strlen_split(const char *s, char c)
 {

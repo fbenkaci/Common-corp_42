@@ -6,41 +6,66 @@
 /*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 14:56:23 by fbenkaci          #+#    #+#             */
-/*   Updated: 2025/05/22 17:15:09 by fbenkaci         ###   ########.fr       */
+/*   Updated: 2025/06/01 16:06:24 by fbenkaci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtins.h"
 
+int	echo_error(char *cmd)
+{
+	if (ft_strcmp(cmd, "echo ") == 0)
+	{
+		ft_putstr_fd("Command 'echo ' not found, ", 2);
+		ft_putstr_fd("did you mean: command 'echo'\n", 2);
+		return (0);
+	}
+	else if (ft_strcmp(cmd, " echo") == 0)
+	{
+		ft_putstr_fd("Command ' echo' not found, ", 2);
+		ft_putstr_fd("did you mean: command 'echo'\n", 2);
+		return (0);
+	}
+	else
+	{
+		ft_putstr_fd(cmd, 2);
+		ft_putstr_fd(": command not found\n", 2);
+		return (0);
+	}
+	return (1);
+}
 int	is_builtin(char *cmd)
 {
 	if (!cmd)
 		return (0);
 	if (ft_strcmp(cmd, "echo") == 0)
 		return (1);
+	// if (!echo_error(cmd))
+	// 	return (0);
 	if (ft_strcmp(cmd, "cd") == 0)
 		return (1);
 	if (ft_strcmp(cmd, "env") == 0)
 		return (1);
-	if (ft_strcmp(cmd, "exit") == 0)
-		return (1);
 	if (ft_strcmp(cmd, "export") == 0)
+		return (1);
+	if (ft_strcmp(cmd, "exit") == 0)
 		return (1);
 	if (ft_strcmp(cmd, "pwd") == 0)
 		return (1);
 	if (ft_strcmp(cmd, "unset") == 0)
 		return (1);
+	
 	return (0);
 }
 
 int	exec_builtin(t_struct *data, char **cmd)
 {
 	if (ft_strcmp(*cmd, "echo") == 0)
-		ft_echo(cmd);
+		return (ft_echo(cmd));
 	else if (ft_strcmp(*cmd, "cd") == 0)
 		return (ft_cd(data, cmd));
 	else if (ft_strcmp(*cmd, "env") == 0)
-		ft_env(data, cmd);
+		return (ft_env(data, cmd));
 	else if (ft_strcmp(*cmd, "exit") == 0)
 		return (ft_exit(cmd));
 	else if (ft_strcmp(*cmd, "export") == 0)
@@ -54,28 +79,28 @@ int	exec_builtin(t_struct *data, char **cmd)
 	return (1);
 }
 
-int	main(int ac, char **av, char **envp)
-{
-	t_struct	*data;
-	char		**cmd;
+// int	main(int ac, char **av, char **envp)
+// {
+// 	t_struct	*data;
+// 	char		**cmd;
 
-	(void)ac;
-	(void)av;
-	data = malloc(sizeof(t_struct));
-	cmd = malloc(1000);
-	if (!cpy_env(data, envp))
-		return (0);
-	cmd[0] = "cd";
-	// cmd[1] = "VAR1";
-	cmd[1] = NULL;
-	
-	exec_builtin(data, cmd);
-	
-	ft_free_array(data->env);
-	free(cmd);
-	free(data);
-	return (0);
-}
+// 	(void)ac;
+// 	(void)av;
+// 	data = malloc(sizeof(t_struct));
+// 	cmd = malloc(1000);
+// 	if (!cpy_env(data, envp))
+// 		return (0);
+// 	cmd[0] = "cd";
+// 	// cmd[1] = "VAR1";
+// 	cmd[1] = NULL;
+
+// 	exec_builtin(data, cmd);
+
+// 	ft_free_array(data->env);
+// 	free(cmd);
+// 	free(data);
+// 	return (0);
+// }
 
 // -------------- POUR UNSET ---------------
 
@@ -98,7 +123,7 @@ int	main(int ac, char **av, char **envp)
 // 	if (!cpy_env(data, envp))
 // 		return (0);
 // 	i = 0;
-	
+
 // 	ft_printf("------------ avant unset ------------\n");
 // 	while (data->env[i])
 // 	{
@@ -119,11 +144,8 @@ int	main(int ac, char **av, char **envp)
 // 	return (0);
 // }
 
-
-
-
 // ------------- POUR EXPORT ----------------
-				
+
 // int	main(int ac, char **av, char **envp)
 // {
 // 	t_struct	*data;
@@ -167,12 +189,8 @@ int	main(int ac, char **av, char **envp)
 // 	return (0);
 // }
 
-
-
-
-
 // ----------- POUR ECHO ----------
-// Avec le "-n" il n'y pas de saut a la ligne a la fin 
+// Avec le "-n" il n'y pas de saut a la ligne a la fin
 
 // int	main(void)
 // {
@@ -189,10 +207,7 @@ int	main(int ac, char **av, char **envp)
 // 	ft_echo(cmd);
 // }
 
-
-
-
-// ------------------- POUR ENV --------------- 
+// ------------------- POUR ENV ---------------
 
 // int	main(int ac, char **av, char **envp)
 // {
@@ -211,10 +226,6 @@ int	main(int ac, char **av, char **envp)
 // 	free(cmd);
 // 	return (0);
 // }
-
-
-
-
 
 // ---------- POUR PWD -----------
 

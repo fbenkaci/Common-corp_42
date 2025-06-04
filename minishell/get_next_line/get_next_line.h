@@ -6,7 +6,7 @@
 /*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 12:07:39 by fbenkaci          #+#    #+#             */
-/*   Updated: 2025/05/10 16:30:19 by fbenkaci         ###   ########.fr       */
+/*   Updated: 2025/05/29 15:49:00 by fbenkaci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,12 @@
 # ifndef BUFFER_SIZE
 #  define BUFFER_SIZE 42
 # endif
+
+#include "../libft/libft.h"
 # include <fcntl.h>  // for O_RONLY, O_RDWR ...
 # include <stdio.h>  // for
 # include <stdlib.h> // for malloc
 # include <unistd.h> // for write
-#include "../libft/libft.h"
 
 char	*get_next_line(int fd);
 char	*ft_strchr(const char *s, int c);

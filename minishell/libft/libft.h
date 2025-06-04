@@ -6,7 +6,7 @@
 /*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 09:00:27 by fbenkaci          #+#    #+#             */
-/*   Updated: 2025/05/12 17:09:55 by fbenkaci         ###   ########.fr       */
+/*   Updated: 2025/05/29 15:47:47 by fbenkaci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define LIBFT_H
 
 # include "../ft_printf/ft_printf.h"
+# include "../get_next_line/get_next_line.h"
 # include <stdio.h>
 # include <stdlib.h>
 # include <unistd.h>
