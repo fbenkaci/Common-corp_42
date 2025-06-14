@@ -1,0 +1,19 @@
+{
+    "files.associations": {
+        "minishell.h": "c",
+        "libft.h": "c",
+        "ft_printf.h": "c",
+        "fcntl.h": "c",
+        "stdlib.h": "c",
+        "builtins.h": "c",
+        "cmath": "c",
+        "compare": "c",
+        "concepts": "c",
+        "exception": "c",
+        "type_traits": "c",
+        "limits": "c",
+        "new": "c",
+        "typeinfo": "c",
+        "get_next_line.h": "c"
+    }
+}
