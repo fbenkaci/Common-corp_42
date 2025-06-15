@@ -6,7 +6,7 @@
 /*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 15:54:10 by fbenkaci          #+#    #+#             */
-/*   Updated: 2025/05/29 15:48:55 by fbenkaci         ###   ########.fr       */
+/*   Updated: 2025/06/15 15:54:12 by fbenkaci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,14 +88,13 @@ char	*ft_strjoin(const char *s1, const char *s2)
 // {
 // 	char	*sub_s;
 // 	size_t	i;
-	
 // 	if (!s)
 // 		return (NULL);
 // 	if (start >= ft_strlen(s))
 // 		return (ft_strdup(""));
 // 	if (len > ft_strlen(s) - start)
 // 		len = ft_strlen(s) - start;
-	
+
 // 	sub_s = malloc((len + 1) * sizeof(char));
 // 	if (!sub_s)
 // 		return (NULL);

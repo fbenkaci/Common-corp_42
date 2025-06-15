@@ -6,13 +6,13 @@
 /*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/11 15:21:25 by fbenkaci          #+#    #+#             */
-/*   Updated: 2025/06/12 13:29:54 by fbenkaci         ###   ########.fr       */
+/*   Updated: 2025/06/15 15:52:44 by fbenkaci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../parsing/minishell.h"
 
-int	open_all_heredocs(t_cmd *cmd)
+int	open_all_heredocs(t_struct **data, t_cmd *cmd)
 {
 	t_cmd	*tmp;
 
@@ -21,7 +21,7 @@ int	open_all_heredocs(t_cmd *cmd)
 	{
 		if (tmp->heredoc)
 		{
-			tmp->heredoc_fd = heredoc_input(tmp->heredoc_delim);
+			tmp->heredoc_fd = heredoc_input(data, tmp->heredoc_delim);
 			if (tmp->heredoc_fd < 0)
 				return (-1);
 		}
@@ -113,5 +113,5 @@ void	setup_redirections(t_cmd *cmd)
 		close(fd);
 	}
 	if (cmd->outfile)
-        handle_outfile(cmd);
+		handle_outfile(cmd);
 }

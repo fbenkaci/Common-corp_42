@@ -6,7 +6,7 @@
 /*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 14:56:23 by fbenkaci          #+#    #+#             */
-/*   Updated: 2025/06/11 19:42:41 by fbenkaci         ###   ########.fr       */
+/*   Updated: 2025/06/15 15:53:50 by fbenkaci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,6 @@ int	is_builtin(char *cmd)
 
 int	exec_builtin(t_struct *data, char **cmd)
 {
-	// ft_printf("%s\n", data->env[0]);
-	// ft_printf("ok\n");
 	if (ft_strcmp(*cmd, "echo") == 0)
 		return (ft_echo(cmd));
 	else if (ft_strcmp(*cmd, "cd") == 0)

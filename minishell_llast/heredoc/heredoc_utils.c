@@ -6,64 +6,11 @@
 /*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/12 16:28:44 by fbenkaci          #+#    #+#             */
-/*   Updated: 2025/06/14 20:21:58 by fbenkaci         ###   ########.fr       */
+/*   Updated: 2025/06/15 15:51:54 by fbenkaci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../parsing/minishell.h"
-
-char	*get_env_value_3(char *var_name)
-{
-	char	*value;
-
-	value = getenv(var_name);
-	if (!value)
-		return ("");
-	return (value);
-}
-
-// Structure pour passer les données entre fonctions
-typedef struct s_expand_data
-{
-	char	*result;
-	int		result_len;
-	int		j;
-}			t_expand_data;
-
-// Fonction pour initialiser le buffer de résultat
-char	*init_result_buffer(int line_len)
-{
-	char	*result;
-	int		result_len;
-
-	result_len = line_len * 2;
-	result = malloc(result_len);
-	return (result);
-}
-
-// Fonction pour redimensionner le buffer si nécessaire
-int resize_buffer_if_needed(t_expand_data *data)
-{
-    char *new_result;
-    int i;
-    
-    if (data->j >= data->result_len - 1)
-    {
-        data->result_len *= 2;
-        new_result = malloc(data->result_len);
-        if (!new_result)
-            return (0);
-        i = 0;
-        while (i < data->j)
-        {
-            new_result[i] = data->result[i];
-            i++;
-        }
-        free(data->result);
-        data->result = new_result;
-    }
-    return (1);
-}
 
 // Fonction pour extraire le nom de variable
 int	extract_var_name_2(char *line, int *i, char *var_name)
@@ -96,13 +43,13 @@ int	copy_var_value(t_expand_data *data, char *var_value)
 }
 
 // Fonction pour traiter une variable trouvée
-int	process_variable(char *line, int *i, t_expand_data *data)
+int	process_variable(t_struct **data2, char *line, int *i, t_expand_data *data)
 {
 	char	var_name[256];
 	char	*var_value;
 
 	extract_var_name_2(line, i, var_name);
-	var_value = get_env_value_3(var_name);
+	var_value = get_env_value_2(var_name, (*data2)->env);
 	if (!copy_var_value(data, var_value))
 		return (0);
 	return (1);
@@ -118,7 +65,7 @@ int	process_normal_char(char *line, int *i, t_expand_data *data)
 }
 
 // Fonction principale refactorisée
-char	*expand_variables_heredoc(char *line)
+char	*expand_variables_heredoc(t_struct **data2, char *line)
 {
 	t_expand_data	data;
 	int				i;
@@ -132,9 +79,9 @@ char	*expand_variables_heredoc(char *line)
 	while (line[i])
 	{
 		if (line[i] == '$' && line[i + 1] && (ft_isalnum(line[i + 1]) || line[i
-				+ 1] == '_'))
+					+ 1] == '_'))
 		{
-			if (!process_variable(line, &i, &data))
+			if (!process_variable(data2, line, &i, &data))
 				return (NULL);
 		}
 		else

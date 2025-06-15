@@ -6,7 +6,7 @@
 /*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/23 16:39:52 by fbenkaci          #+#    #+#             */
-/*   Updated: 2025/06/14 16:10:16 by fbenkaci         ###   ########.fr       */
+/*   Updated: 2025/06/15 15:53:13 by fbenkaci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,8 +89,8 @@ int	create_cmd_list(t_struct **cur, t_cmd *cmd, char **envp)
 {
 	t_cmd	*current;
 	int		i;
-
 	int		j;
+
 	current = cmd;
 	while (*cur)
 	{
@@ -112,7 +112,6 @@ int	create_cmd_list(t_struct **cur, t_cmd *cmd, char **envp)
 		{
 			if ((*cur)->next)
 				*cur = (*cur)->next;
-			
 			current->next = init_new_cmd(cur, envp);
 			if (!current->next)
 			{
@@ -149,9 +148,9 @@ void	free_all_cmd(t_cmd *cmd)
 
 t_cmd	*create_cmd_from_tokens(t_struct **cur, char **env)
 {
-	t_cmd		*cmd;
-	// t_struct	**tmp;
+	t_cmd	*cmd;
 
+	// t_struct	**tmp;
 	cmd = init_new_cmd(cur, env);
 	if (!cmd)
 	{

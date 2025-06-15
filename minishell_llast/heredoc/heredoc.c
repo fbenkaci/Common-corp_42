@@ -6,11 +6,13 @@
 /*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/12 16:27:16 by fbenkaci          #+#    #+#             */
-/*   Updated: 2025/06/14 15:59:50 by fbenkaci         ###   ########.fr       */
+/*   Updated: 2025/06/15 15:50:09 by fbenkaci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../parsing/minishell.h"
+
+volatile sig_atomic_t	g_signal = 0;
 
 void	check_heredoc_interrupts(int line_nb, char *delimiter, int *fd)
 {
@@ -61,7 +63,8 @@ int	read_heredoc_line(char *delimiter, int line_nb, int *fd, char *buffer)
 	return (1);
 }
 
-int	process_heredoc_line(char *delimiter, int *fd, int *line_nb)
+int	process_heredoc_line(t_struct **data, char *delimiter, int *fd,
+		int *line_nb)
 {
 	char	buffer[1024];
 	char	*line;
@@ -80,14 +83,15 @@ int	process_heredoc_line(char *delimiter, int *fd, int *line_nb)
 		if (ft_strncmp(line, delimiter, ft_strlen(delimiter)) == 0
 			&& line[ft_strlen(delimiter)] == '\n')
 			return (-2);
-		expanded_line = expand_variables_heredoc(line);
+		expanded_line = expand_variables_heredoc(data, line);
 		write(fd[1], expanded_line, ft_strlen(expanded_line));
 		free(expanded_line);
 		(*line_nb)++;
 	}
 	return (1);
 }
-int	heredoc_input(char *delimiter)
+
+int	heredoc_input(t_struct **data, char *delimiter)
 {
 	int	fd[2];
 	int	line_nb;
@@ -98,7 +102,7 @@ int	heredoc_input(char *delimiter)
 		return (-1);
 	while (1)
 	{
-		ret = process_heredoc_line(delimiter, fd, &line_nb);
+		ret = process_heredoc_line(data, delimiter, fd, &line_nb);
 		if (ret == -1)
 			return (-1);
 		else if (ret == -2)
@@ -107,3 +111,12 @@ int	heredoc_input(char *delimiter)
 	close(fd[1]);
 	return (fd[0]);
 }
+
+// int handle_heredoc_signal(char *delimiter)
+// {
+// 	free(delimiter);
+// 	// ft_free_array()
+// 	g_signal = 0;
+// 	close(0);
+// 	return (-1);
+// }

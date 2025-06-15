@@ -6,7 +6,7 @@
 /*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/27 15:27:28 by fbenkaci          #+#    #+#             */
-/*   Updated: 2025/06/14 16:12:37 by fbenkaci         ###   ########.fr       */
+/*   Updated: 2025/06/15 14:52:37 by fbenkaci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	execution(t_cmd *cmd, t_exec *exec, t_struct **data)
 {
-	if (open_all_heredocs(cmd) == -1)
+	if (open_all_heredocs(data, cmd) == -1)
 		return (ft_putstr_fd("Error opening heredoc\n", 2), -1);
 	if (caculate_nb_cmd(exec, cmd) == -1)
 		return (ft_putstr_fd("Error calculating number of commands\n", 2), -1);

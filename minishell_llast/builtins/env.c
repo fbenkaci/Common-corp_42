@@ -6,7 +6,7 @@
 /*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/14 17:25:08 by fbenkaci          #+#    #+#             */
-/*   Updated: 2025/06/11 17:13:27 by fbenkaci         ###   ########.fr       */
+/*   Updated: 2025/06/15 15:52:35 by fbenkaci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 int	ft_env(t_struct *data, char **cmd)
 {
 	int	i;
+
 	if (cmd[1])
 	{
 		ft_putstr_fd("env: ", 2);

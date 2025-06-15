@@ -6,7 +6,7 @@
 /*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 17:10:18 by fbenkaci          #+#    #+#             */
-/*   Updated: 2025/06/12 15:56:58 by fbenkaci         ###   ########.fr       */
+/*   Updated: 2025/06/15 15:54:56 by fbenkaci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,7 @@ int	command_loc(t_struct *data, t_exec *exec, char *cmd)
 void	handle_cmd_error(char *cmd)
 {
 	struct stat	st;
+
 	if (stat(cmd, &st) == 0 && S_ISDIR(st.st_mode))
 	{
 		ft_putstr_fd("minishell: ", STDERR_FILENO);
@@ -111,7 +112,7 @@ int	create_pipe(t_exec *data)
 	int	i;
 
 	i = 0;
-	data->pipes = malloc((data->nb_cmds - 1) * sizeof(int [2]));
+	data->pipes = malloc((data->nb_cmds - 1) * sizeof(int[2]));
 	if (!data->pipes)
 		return (perror("malloc"), -1);
 	while (i < data->nb_cmds - 1)

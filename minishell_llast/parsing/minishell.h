@@ -6,7 +6,7 @@
 /*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 16:54:23 by wlarbi-a          #+#    #+#             */
-/*   Updated: 2025/06/14 16:48:25 by fbenkaci         ###   ########.fr       */
+/*   Updated: 2025/06/15 14:56:55 by fbenkaci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,8 +74,18 @@ typedef struct s_exec
 	t_cmd			*cmds;
 }					t_exec;
 
-/*-------------------- EXPAND -----------------*/
-char				*expand_variables_heredoc(char *line);
+/*-------------------- EXPAND_HEREDOC -----------------*/
+typedef struct s_expand_data
+{
+	char			*result;
+	int				result_len;
+	int				j;
+}					t_expand_data;
+
+char				*expand_variables_heredoc(t_struct **data, char *line);
+char				*get_env_value_3(char *var_name);
+char				*init_result_buffer(int line_len);
+int					resize_buffer_if_needed(t_expand_data *data);
 
 /*-------------------- EXPAND -----------------*/
 void				handle_sigint(int sig);
@@ -90,7 +100,7 @@ char				*get_env_value_2(char *var_name, char **envp);
 
 /*-------------------- EXECUTION -----------------*/
 int					execution(t_cmd *cmd, t_exec *exec, t_struct **data);
-int					open_all_heredocs(t_cmd *cmd);
+int					open_all_heredocs(t_struct **data, t_cmd *cmd);
 int					execute_single_builtin(t_cmd *cmd, t_struct **data);
 void				setup_redirections(t_cmd *cmd);
 void				setup_pipe_redirections(t_exec *exec, int index,
@@ -116,7 +126,7 @@ int					caculate_nb_cmd(t_exec *data, t_cmd *cmd);
 int					ft_lstsize_bis(t_cmd *cmd);
 void				close_unused_pipes(t_exec *data, int index);
 void				close_pipes(t_exec *data, int index, int i, int j);
-int					heredoc_input(char *delimiter);
+int					heredoc_input(t_struct **data, char *delimiter);
 
 /*--------------------utils-----------------*/
 // int					ft_strlen(char *str);
