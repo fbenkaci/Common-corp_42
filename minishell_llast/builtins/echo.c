@@ -6,7 +6,7 @@
 /*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 15:25:02 by fbenkaci          #+#    #+#             */
-/*   Updated: 2025/06/08 12:19:40 by fbenkaci         ###   ########.fr       */
+/*   Updated: 2025/06/18 15:25:18 by fbenkaci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ int	is_flag_n(char *str)
 	return (1);
 }
 
-int	ft_echo(char **cmd)
+int	ft_echo(t_exec *exec, char **cmd)
 {
 	int	flag_n;
 	int	i;
@@ -85,6 +85,7 @@ int	ft_echo(char **cmd)
 	}
 	if (flag_n == 0)
 		ft_printf("\n");
+	exec->last_status = 0;
 	return (1);
 }
 

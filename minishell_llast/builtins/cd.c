@@ -6,7 +6,7 @@
 /*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 16:11:03 by fbenkaci          #+#    #+#             */
-/*   Updated: 2025/06/08 12:19:19 by fbenkaci         ###   ########.fr       */
+/*   Updated: 2025/06/18 15:30:40 by fbenkaci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ int	update_pwd_vars(t_struct *data, char *oldpwd)
 	if (!new_pwd)
 	{
 		free(oldpwd);
-		return (perror("getcwd"), 0);
+		return (0);
 	}
 	env_old = update_env(data, "OLDPWD=", oldpwd);
 	env_new = update_env(data, "PWD=", new_pwd);
@@ -85,9 +85,9 @@ int	cd_without_arg(t_struct *data)
 {
 	char	*home;
 	char	*oldpwd;
-	char	*new_pwd;
 
-	new_pwd = NULL;
+	// char	*new_pwd;
+	// new_pwd = NULL;
 	oldpwd = getcwd(NULL, 0);
 	if (!oldpwd)
 		return (perror("getcwd"), 0);
@@ -100,22 +100,29 @@ int	cd_without_arg(t_struct *data)
 	if (chdir(home) == -1)
 	{
 		free(oldpwd);
-		return (perror("chdir"), 0);
+		return (0);
 	}
 	if (!update_pwd_vars(data, oldpwd))
 		return (0);
 	return (1);
 }
 
-int	ft_cd(t_struct *data, char **cmd)
+int	ft_cd(t_exec *exec, t_struct *data, char **cmd)
 {
 	if (!cmd[1])
 	{
 		if (!cd_without_arg(data))
+		{
+			exec->last_status = 1;
 			return (0);
+		}
 	}
 	else if (!cd_path(data, cmd[1]))
+	{
+		exec->last_status = 1;
 		return (0);
+	}
+	exec->last_status = 0;
 	return (1);
 }
 

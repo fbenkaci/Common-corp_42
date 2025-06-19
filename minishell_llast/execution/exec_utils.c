@@ -6,21 +6,28 @@
 /*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/11 15:21:25 by fbenkaci          #+#    #+#             */
-/*   Updated: 2025/06/15 15:52:44 by fbenkaci         ###   ########.fr       */
+/*   Updated: 2025/06/18 17:04:06 by fbenkaci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../parsing/minishell.h"
 
-int	open_all_heredocs(t_struct **data, t_cmd *cmd)
+int	open_all_heredocs(t_exec *exec, t_struct **data, t_cmd *cmd)
 {
 	t_cmd	*tmp;
-
+	// int		heredoc_status;
+	(void)exec;
 	tmp = cmd;
 	while (tmp)
 	{
 		if (tmp->heredoc)
 		{
+			// heredoc_status = heredoc_input(data, tmp->heredoc_delim);
+			// if (heredoc_status == 130)
+			// {
+			// 	exec->last_status = 130;
+			// 	return (130);
+			// }
 			tmp->heredoc_fd = heredoc_input(data, tmp->heredoc_delim);
 			if (tmp->heredoc_fd < 0)
 				return (-1);
@@ -30,18 +37,21 @@ int	open_all_heredocs(t_struct **data, t_cmd *cmd)
 	return (1);
 }
 
-int	execute_single_builtin(t_cmd *cmd, t_struct **data)
+int	execute_single_builtin(t_exec *exec, t_cmd *cmd, t_struct **data)
 {
 	int	saved_stdin;
+	int builtin_status;
 
 	saved_stdin = 0;
 	if (cmd->heredoc)
 	{
 		saved_stdin = dup(STDIN_FILENO);
 		dup2(cmd->heredoc_fd, STDIN_FILENO);
+		close(saved_stdin);
 		free(cmd->heredoc_delim);
 	}
-	if (exec_builtin(*data, cmd->argv) == 1)
+	builtin_status = exec_builtin(exec, *data, cmd->argv);
+	if (builtin_status == 1)
 	{
 		if (cmd->heredoc)
 		{
@@ -54,9 +64,10 @@ int	execute_single_builtin(t_cmd *cmd, t_struct **data)
 	else
 	{
 		ft_putstr_fd("minishell: ", STDERR_FILENO);
-		return (ft_putstr_fd("Command not found\n", STDERR_FILENO), -1);
+		ft_putstr_fd("Command not found\n", STDERR_FILENO);
+		exec->last_status = 127;
 	}
-	return (1);
+	return (builtin_status);
 }
 
 void	handle_outfile(t_cmd *cmd)

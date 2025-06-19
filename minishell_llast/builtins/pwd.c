@@ -6,13 +6,13 @@
 /*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 15:44:19 by fbenkaci          #+#    #+#             */
-/*   Updated: 2025/05/22 16:17:27 by fbenkaci         ###   ########.fr       */
+/*   Updated: 2025/06/18 16:00:13 by fbenkaci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtins.h"
 
-void	ft_pwd(void)
+int	ft_pwd(t_exec *exec)
 {
 	char	*cwd;
 
@@ -21,7 +21,11 @@ void	ft_pwd(void)
 	{
 		ft_printf("%s\n", cwd);
 		free(cwd);
+		exec->last_status = 0;
+		ft_printf("last_status: %d\n", exec->last_status);
+		return (1);
 	}
 	else
-		perror("getcwd");
+		exec->last_status = 1;
+	return (0);
 }

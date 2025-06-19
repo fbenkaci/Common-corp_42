@@ -6,7 +6,7 @@
 /*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/23 16:39:52 by fbenkaci          #+#    #+#             */
-/*   Updated: 2025/06/15 15:53:13 by fbenkaci         ###   ########.fr       */
+/*   Updated: 2025/06/17 16:29:47 by fbenkaci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ int	create_cmd_list(t_struct **cur, t_cmd *cmd, char **envp)
 {
 	t_cmd	*current;
 	int		i;
-	int		j;
+	// int		j;
 
 	current = cmd;
 	while (*cur)
@@ -99,14 +99,14 @@ int	create_cmd_list(t_struct **cur, t_cmd *cmd, char **envp)
 		{
 			return (-1); // free tout
 		}
-		j = 0;
-		while (current->argv[j] != NULL)
-		{
-			printf("ARGV[%d] == %s\n", j, current->argv[j]);
-			j++;
-		}
-		printf("INFILE == %s\n", current->infile);
-		printf("OUTFILE == %s\n\n", current->outfile);
+		// j = 0;
+		// while (current->argv[j] != NULL)
+		// {
+		// 	printf("ARGV[%d] == %s\n", j, current->argv[j]);
+		// 	j++;
+		// }
+		// printf("INFILE == %s\n", current->infile);
+		// printf("OUTFILE == %s\n\n", current->outfile);
 		current->argv[i] = NULL;
 		if (*cur && (*cur)->type == PIPE)
 		{
@@ -146,27 +146,22 @@ void	free_all_cmd(t_cmd *cmd)
 	}
 }
 
-t_cmd	*create_cmd_from_tokens(t_struct **cur, char **env)
+t_cmd	*create_cmd_from_tokens(t_struct **cur, char **env, t_exec *exec)
 {
 	t_cmd	*cmd;
 
 	// t_struct	**tmp;
 	cmd = init_new_cmd(cur, env);
 	if (!cmd)
-	{
-		// free_all_cmd(cmd);
 		return (NULL);
-	}
+
+	t_struct *tmp = *cur;
+	while (tmp)
+	{
+		tmp->exec = exec;
+        tmp = tmp->next;
+    }
 	if (create_cmd_list(cur, cmd, (*cur)->env) == -1)
-	{
-		// free_all_cmd(cmd);
-		// if (cmd->outfile)
-		// 	free(cmd->outfile);
-		// if (cmd->infile)
-		// 	free(cmd->infile);
-		// free(cmd->argv);
-		// free(cmd);
 		return (NULL);
-	}
 	return (cmd);
 }

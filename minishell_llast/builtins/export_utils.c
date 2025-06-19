@@ -6,7 +6,7 @@
 /*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 11:56:57 by fbenkaci          #+#    #+#             */
-/*   Updated: 2025/06/11 19:49:20 by fbenkaci         ###   ########.fr       */
+/*   Updated: 2025/06/18 15:52:25 by fbenkaci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,4 +66,10 @@ int	add_in_env(t_struct *data, char *cmd)
 	ft_free_array(data->env);
 	data->env = cpy_env;
 	return (1);
+}
+
+void	actualize_last_status(t_exec *exec, int *flag)
+{
+	exec->last_status = 1;
+	*flag = 1;
 }

@@ -6,7 +6,7 @@
 /*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 14:56:23 by fbenkaci          #+#    #+#             */
-/*   Updated: 2025/06/15 15:53:50 by fbenkaci         ###   ########.fr       */
+/*   Updated: 2025/06/18 16:01:44 by fbenkaci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,22 +33,22 @@ int	is_builtin(char *cmd)
 	return (0);
 }
 
-int	exec_builtin(t_struct *data, char **cmd)
+int	exec_builtin(t_exec *exec, t_struct *data, char **cmd)
 {
 	if (ft_strcmp(*cmd, "echo") == 0)
-		return (ft_echo(cmd));
+		return (ft_echo(exec ,cmd));
 	else if (ft_strcmp(*cmd, "cd") == 0)
-		return (ft_cd(data, cmd));
+		return (ft_cd(exec, data, cmd));
 	else if (ft_strcmp(*cmd, "env") == 0)
-		return (ft_env(data, cmd));
-	else if (ft_strcmp(*cmd, "exit") == 0)
-		return (ft_exit(cmd));
+		return (ft_env(exec, data, cmd));
+	// else if (ft_strcmp(*cmd, "exit") == 0)
+	// 	return (ft_exit(cmd));
 	else if (ft_strcmp(*cmd, "export") == 0)
-		return (ft_export(data, cmd));
+		return (ft_export(exec, data, cmd));
 	else if (ft_strcmp(*cmd, "pwd") == 0)
-		ft_pwd();
+		return (ft_pwd(exec));
 	else if (ft_strcmp(*cmd, "unset") == 0)
-		return (ft_unset(data, cmd));
+		return (ft_unset(exec, data, cmd));
 	else
 		return (0);
 	return (1);

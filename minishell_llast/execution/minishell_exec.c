@@ -6,7 +6,7 @@
 /*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/27 15:27:28 by fbenkaci          #+#    #+#             */
-/*   Updated: 2025/06/15 14:52:37 by fbenkaci         ###   ########.fr       */
+/*   Updated: 2025/06/18 17:04:31 by fbenkaci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,21 @@
 
 int	execution(t_cmd *cmd, t_exec *exec, t_struct **data)
 {
-	if (open_all_heredocs(data, cmd) == -1)
+	int	builtin_ret;
+	int heredoc_status;
+	
+	heredoc_status = open_all_heredocs(exec, data, cmd);
+	// if (heredoc_status == 130)
+	// 	return (130);
+	if (heredoc_status == -1)
 		return (ft_putstr_fd("Error opening heredoc\n", 2), -1);
 	if (caculate_nb_cmd(exec, cmd) == -1)
 		return (ft_putstr_fd("Error calculating number of commands\n", 2), -1);
 	if (exec->nb_cmds == 1 && is_builtin(cmd->argv[0]) && !cmd->outfile
 		&& !cmd->infile)
 	{
-		if (execute_single_builtin(cmd, data) == -1)
+		builtin_ret = execute_single_builtin(exec, cmd, data);
+		if (builtin_ret == 0)
 			return (-1);
 		return (1);
 	}

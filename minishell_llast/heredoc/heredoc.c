@@ -6,7 +6,7 @@
 /*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/12 16:27:16 by fbenkaci          #+#    #+#             */
-/*   Updated: 2025/06/15 15:50:09 by fbenkaci         ###   ########.fr       */
+/*   Updated: 2025/06/18 17:04:12 by fbenkaci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,23 +91,41 @@ int	process_heredoc_line(t_struct **data, char *delimiter, int *fd,
 	return (1);
 }
 
+// void handle_signal_heredoc(int sig)
+// {
+// 	(void)sig;
+//     g_signal = 1;
+//     close(0);  // Ferme l'entrée standard
+//     write(1, "\n", 1);
+// }
+
 int	heredoc_input(t_struct **data, char *delimiter)
 {
 	int	fd[2];
 	int	line_nb;
 	int	ret;
 
+	// signal(SIGINT, handle_signal_heredoc);
 	line_nb = 1;
 	if (init_heredoc_pipe(fd) == -1)
 		return (-1);
 	while (1)
 	{
+		// si j ai recu un control c { return ; }
+		// if (g_signal)
+		// {
+		// 	close(fd[0]);
+		// 	close(fd[1]);
+		// 	return (130);
+		// }
 		ret = process_heredoc_line(data, delimiter, fd, &line_nb);
 		if (ret == -1)
 			return (-1);
 		else if (ret == -2)
 			break ;
 	}
+	// signal(SIGINT, fonction de base qui affiche le prompt a nouveau)
+	// signal(SIGINT, handle_sigint);
 	close(fd[1]);
 	return (fd[0]);
 }

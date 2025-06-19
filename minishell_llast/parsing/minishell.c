@@ -6,7 +6,7 @@
 /*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 16:23:24 by wlarbi-a          #+#    #+#             */
-/*   Updated: 2025/06/14 13:10:12 by fbenkaci         ###   ########.fr       */
+/*   Updated: 2025/06/18 16:39:59 by fbenkaci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,18 +29,19 @@ void	free_tokens(t_struct *tokens)
 int	main(int argc, char **argv, char **envp)
 {
 	t_struct	*data;
-	t_struct	*tmp;
+	// t_struct	*tmp;
 	t_cmd		*cmd;
 	t_exec		*exec;
 
 	// int			flag;
 	// t_cmd *prev_cmd = NULL;
 	(void)argv;
-	tmp = NULL;
+	// tmp = NULL;
 	data = NULL;
 	exec = malloc(sizeof(t_exec));
 	if (!exec)
 		return (1);
+	// exec->last_status = 0;
 	if (argc != 1)
 	{
 		printf("Error: need only one argument\n");
@@ -60,6 +61,8 @@ int	main(int argc, char **argv, char **envp)
 		free(data);
 		return (1);
 	}
+	data->exec = exec;
+	exec->last_status = 0;
 	while (1)
 	{
 		signal(SIGINT, handle_sigint);
@@ -84,7 +87,7 @@ int	main(int argc, char **argv, char **envp)
 				// 	printf("{%d -> %s}\n", tmp->type, tmp->str);
 				// 	tmp = tmp->next;
 				// }
-				cmd = create_cmd_from_tokens(&data->next, data->env);
+				cmd = create_cmd_from_tokens(&data->next, data->env, exec);
 				if (!cmd)
 				{
 					free_tokens(data->next);

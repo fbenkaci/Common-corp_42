@@ -6,7 +6,7 @@
 /*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/17 16:30:40 by fbenkaci          #+#    #+#             */
-/*   Updated: 2025/05/22 16:17:11 by fbenkaci         ###   ########.fr       */
+/*   Updated: 2025/06/18 15:30:04 by fbenkaci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,10 +45,9 @@ int	cd_path(t_struct *data, const char *path)
 
 	old_pwd = getcwd(NULL, 0);
 	if (!old_pwd)
-		return (perror("getcwd"), 0);
+		return (0);
 	if (chdir(path) == -1)
 	{
-		perror("chdir");
 		return (free(old_pwd), 0);
 	}
 	if (!update_pwd_vars(data, old_pwd))

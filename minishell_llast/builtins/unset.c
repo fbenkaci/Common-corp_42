@@ -6,7 +6,7 @@
 /*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 11:33:46 by fbenkaci          #+#    #+#             */
-/*   Updated: 2025/06/11 17:14:42 by fbenkaci         ###   ########.fr       */
+/*   Updated: 2025/06/18 16:34:26 by fbenkaci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ void	copy_env_excluding(t_struct *data, char **new_env, char *var_name)
 	data->env = new_env;
 }
 
-int	ft_unset(t_struct *data, char **cmd)
+int	ft_unset(t_exec *exec, t_struct *data, char **cmd)
 {
 	char	*var_name;
 	char	**new_env;
@@ -57,6 +57,7 @@ int	ft_unset(t_struct *data, char **cmd)
 		copy_env_excluding(data, new_env, var_name);
 		i++;
 	}
+	exec->last_status = 0;
 	return (1);
 }
 

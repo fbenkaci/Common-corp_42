@@ -137,7 +137,7 @@ char	*replace_variable(char *str, int dollar_pos, char *var_name,
 	i = copy_before_dollar(new_str, str, dollar_pos);
 	// Copier la valeur de la variable (si elle existe)
 	i = copy_variable_value(var_value, new_str, i);
-	ft_printf("%s\n", new_str);
+	// ft_printf("%s\n", new_str);
 	var_name_len = ft_strlen(var_name);
 	// Copier la partie après la variable
 	j = dollar_pos + var_name_len + 1; // +1 pour le $
