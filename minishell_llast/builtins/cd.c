@@ -6,7 +6,7 @@
 /*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 16:11:03 by fbenkaci          #+#    #+#             */
-/*   Updated: 2025/06/18 15:30:40 by fbenkaci         ###   ########.fr       */
+/*   Updated: 2025/06/19 15:29:38 by fbenkaci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,6 +119,7 @@ int	ft_cd(t_exec *exec, t_struct *data, char **cmd)
 	}
 	else if (!cd_path(data, cmd[1]))
 	{
+		ft_printf("ok\n");
 		exec->last_status = 1;
 		return (0);
 	}

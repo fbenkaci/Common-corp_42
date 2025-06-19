@@ -6,7 +6,7 @@
 /*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/07 17:12:39 by fbenkaci          #+#    #+#             */
-/*   Updated: 2025/06/15 17:06:56 by fbenkaci         ###   ########.fr       */
+/*   Updated: 2025/06/19 15:04:32 by fbenkaci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,7 +137,6 @@ char	*replace_variable(char *str, int dollar_pos, char *var_name,
 	i = copy_before_dollar(new_str, str, dollar_pos);
 	// Copier la valeur de la variable (si elle existe)
 	i = copy_variable_value(var_value, new_str, i);
-	// ft_printf("%s\n", new_str);
 	var_name_len = ft_strlen(var_name);
 	// Copier la partie après la variable
 	j = dollar_pos + var_name_len + 1; // +1 pour le $

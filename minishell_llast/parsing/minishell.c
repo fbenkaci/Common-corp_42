@@ -6,7 +6,7 @@
 /*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 16:23:24 by wlarbi-a          #+#    #+#             */
-/*   Updated: 2025/06/18 16:39:59 by fbenkaci         ###   ########.fr       */
+/*   Updated: 2025/06/19 16:38:27 by fbenkaci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@ void	free_tokens(t_struct *tokens)
 
 	while (tokens)
 	{
+		if (tokens->env)
+			ft_free_array(tokens->env);
 		tmp = tokens->next;
 		if (tokens->str)
 			free(tokens->str);
@@ -29,7 +31,7 @@ void	free_tokens(t_struct *tokens)
 int	main(int argc, char **argv, char **envp)
 {
 	t_struct	*data;
-	// t_struct	*tmp;
+	t_struct	*tmp;
 	t_cmd		*cmd;
 	t_exec		*exec;
 
@@ -81,12 +83,12 @@ int	main(int argc, char **argv, char **envp)
 			add_history(data->str);
 			if (parsing(data))
 			{
-				// tmp = data->next;
-				// while (tmp)
-				// {
-				// 	printf("{%d -> %s}\n", tmp->type, tmp->str);
-				// 	tmp = tmp->next;
-				// }
+				tmp = data->next;
+				while (tmp)
+				{
+					printf("{%d -> %s}\n", tmp->type, tmp->str);
+					tmp = tmp->next;
+				}
 				cmd = create_cmd_from_tokens(&data->next, data->env, exec);
 				if (!cmd)
 				{
@@ -100,7 +102,6 @@ int	main(int argc, char **argv, char **envp)
 				execution(cmd, exec, &data);
 				free_all_cmd(cmd);
 				free_tokens(data->next);
-				// free(data->str);
 			}
 		}
 	}
@@ -108,6 +109,5 @@ int	main(int argc, char **argv, char **envp)
 	free(data->str);
 	free(exec);
 	free(data);
-	// free(data);
 	return (0);
 }

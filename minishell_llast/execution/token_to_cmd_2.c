@@ -6,7 +6,7 @@
 /*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 19:16:07 by fbenkaci          #+#    #+#             */
-/*   Updated: 2025/06/18 17:26:41 by fbenkaci         ###   ########.fr       */
+/*   Updated: 2025/06/19 16:17:17 by fbenkaci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,58 +77,13 @@ int	handle_out_and_in(t_struct **cur, t_cmd *cmd)
 	return (0);
 }
 
-// int	expand_variable(t_struct **cur, char *var, char **envp)
-// {
-// 	char	*equal_sign;
-// 	int		len;
-// 	int		i;
-
-// 	// char	**cpy_env;
-// 	// cpy_env = (*cur)->env;
-// 	if (!(*cur)->env)
-// 		return (-1);
-// 	var++;
-// 	len = ft_strlen(var);
-// 	i = 0;
-// 	while ((*cur)->env[i])
-// 	{
-// 		if (ft_strncmp((*cur)->env[i], var, len) == 0
-// 			&& (*cur)->env[i][len] == '=')
-// 		{
-// 			equal_sign = ft_strchr((*cur)->env[i], '=');
-// 			if (equal_sign)
-// 			{
-// 				if ((*cur)->str)
-// 					free((*cur)->str);
-// 				if (equal_sign[1])
-// 				{
-// 					(*cur)->str = ft_strdup(equal_sign + 1);
-// 				}
-// 				else
-// 				{
-// 					(*cur)->str = ft_strdup("");
-// 				}
-// 				if (!(*cur)->str)
-// 					return (-1);
-// 				return (1);
-// 			}
-// 		}
-// 		i++;
-// 	}
-// 	if ((*cur)->str)
-// 		free((*cur)->str);
-// 	(*cur)->str = ft_strdup("");
-// 	if (!(*cur)->str)
-// 		return (-1);
-// 	return (1);
-// }
-
 int	handle_word_and_expand(t_struct **cur, t_cmd *cmd, int *i, char **envp)
 {
 	if (*cur && ((*cur)->type == WORD || (*cur)->type == WORD_D_QUOTES
 			|| (*cur)->type == WORD_S_QUOTES))
 	{
-		if (ft_strchr((*cur)->str, '$'))
+		if (ft_strchr((*cur)->str, '$') && (*cur)->type != WORD_S_QUOTES)
+			// jai rajouter cette condion (*cur)->type != WORD_S_QUOTES
 		{
 			if (expand_variable(cur, (*cur)->str, envp) == -1)
 				return (-1);

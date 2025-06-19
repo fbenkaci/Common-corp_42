@@ -6,7 +6,7 @@
 /*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/11 15:21:25 by fbenkaci          #+#    #+#             */
-/*   Updated: 2025/06/18 17:04:06 by fbenkaci         ###   ########.fr       */
+/*   Updated: 2025/06/19 15:35:25 by fbenkaci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,9 +63,10 @@ int	execute_single_builtin(t_exec *exec, t_cmd *cmd, t_struct **data)
 	}
 	else
 	{
-		ft_putstr_fd("minishell: ", STDERR_FILENO);
-		ft_putstr_fd("Command not found\n", STDERR_FILENO);
-		exec->last_status = 127;
+		handle_cmd_error(cmd->argv[0]);
+		// ft_putstr_fd("minishell: ", STDERR_FILENO);
+		// ft_putstr_fd("Command not found\n", STDERR_FILENO);
+		// exec->last_status = 127;
 	}
 	return (builtin_status);
 }
@@ -89,7 +90,7 @@ void	handle_outfile(t_cmd *cmd)
 				free_all_cmd(cmd);
 				// free_token(data);
 				// faut que rajoute t_struct a ton prototype
-				exit(126);
+				exit(127);
 			}
 			ft_putstr_fd("minishell: Error opening file\n", STDERR_FILENO);
 			exit(1);

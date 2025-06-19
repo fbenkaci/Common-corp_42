@@ -6,7 +6,7 @@
 /*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 16:54:23 by wlarbi-a          #+#    #+#             */
-/*   Updated: 2025/06/18 16:27:10 by fbenkaci         ###   ########.fr       */
+/*   Updated: 2025/06/19 16:34:29 by fbenkaci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,10 +70,16 @@ typedef struct s_struct
 	char			*str;
 	// int				prev;
 	char			**env;
-	t_exec          *exec;
+	t_exec			*exec;
 	struct s_struct	*next;
 }					t_struct;
 
+typedef struct s_garbage
+{
+	t_cmd			*cmd;
+	t_struct		*data;
+	t_exec			*exec;
+}					t_garbage;
 
 /*-------------------- EXPAND_HEREDOC -----------------*/
 typedef struct s_expand_data
@@ -101,8 +107,10 @@ char				*get_env_value_2(char *var_name, char **envp);
 
 /*-------------------- EXECUTION -----------------*/
 int					execution(t_cmd *cmd, t_exec *exec, t_struct **data);
-int					open_all_heredocs(t_exec *exec, t_struct **data, t_cmd *cmd);
-int					execute_single_builtin(t_exec *exec, t_cmd *cmd, t_struct **data);
+int					open_all_heredocs(t_exec *exec, t_struct **data,
+						t_cmd *cmd);
+int					execute_single_builtin(t_exec *exec, t_cmd *cmd,
+						t_struct **data);
 void				setup_redirections(t_cmd *cmd);
 void				setup_pipe_redirections(t_exec *exec, int index,
 						t_cmd *cmd);
@@ -113,10 +121,12 @@ int					fork_and_execute_commands(t_struct **data, t_exec *exec,
 void				handle_cmd_error(char *cmd);
 
 void				free_all_cmd(t_cmd *cmd);
+void				free_tokens(t_struct *tokens);
 
 int					command_loc(t_struct *data, t_exec *exec, char *cmd);
 
-t_cmd				*create_cmd_from_tokens(t_struct **cur, char **env, t_exec *exec);
+t_cmd				*create_cmd_from_tokens(t_struct **cur, char **env,
+						t_exec *exec);
 int					handle_in(t_struct **cur, t_cmd *cmd);
 int					handle_out_and_in(t_struct **cur, t_cmd *cmd);
 int					handle_word_and_append(t_struct **cur, t_cmd *cmd, int *i,
