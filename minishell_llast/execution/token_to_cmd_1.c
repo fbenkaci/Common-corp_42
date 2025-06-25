@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   token_to_cmd_1.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
+/*   By: wlarbi-a <wlarbi-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/23 16:39:52 by fbenkaci          #+#    #+#             */
-/*   Updated: 2025/06/17 16:29:47 by fbenkaci         ###   ########.fr       */
+/*   Updated: 2025/06/23 20:20:33 by wlarbi-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,8 +89,8 @@ int	create_cmd_list(t_struct **cur, t_cmd *cmd, char **envp)
 {
 	t_cmd	*current;
 	int		i;
-	// int		j;
 
+	// int		j;
 	current = cmd;
 	while (*cur)
 	{
@@ -132,9 +132,7 @@ void	free_all_cmd(t_cmd *cmd)
 		// ft_printf("%s\n", cmd->argv[0]);
 		tmp = cmd->next;
 		if (cmd->argv)
-		{
 			ft_free_array(cmd->argv);
-		}
 		if (cmd->infile)
 			free(cmd->infile);
 		if (cmd->outfile)
@@ -148,19 +146,19 @@ void	free_all_cmd(t_cmd *cmd)
 
 t_cmd	*create_cmd_from_tokens(t_struct **cur, char **env, t_exec *exec)
 {
-	t_cmd	*cmd;
+	t_cmd		*cmd;
+	t_struct	*tmp;
 
 	// t_struct	**tmp;
 	cmd = init_new_cmd(cur, env);
 	if (!cmd)
 		return (NULL);
-
-	t_struct *tmp = *cur;
+	tmp = *cur;
 	while (tmp)
 	{
 		tmp->exec = exec;
-        tmp = tmp->next;
-    }
+		tmp = tmp->next;
+	}
 	if (create_cmd_list(cur, cmd, (*cur)->env) == -1)
 		return (NULL);
 	return (cmd);

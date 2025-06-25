@@ -6,7 +6,7 @@
 /*   By: wlarbi-a <wlarbi-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 14:42:59 by wlarbi-a          #+#    #+#             */
-/*   Updated: 2025/05/23 20:53:21 by wlarbi-a         ###   ########.fr       */
+/*   Updated: 2025/06/23 17:27:01 by wlarbi-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,26 +69,44 @@ int	process_quote_chars(char *str, char *clean)
 	return (j);
 }
 
-void	clean_quotes(t_struct *token)
-{
-	char	*clean;
-	int		clean_len;
+// void	clean_quotes(t_struct *token)
+// {
+// 	char	*clean;
+// 	int		clean_len;
 
-	if (!token || !token->str)
-		return ;
-	clean = NULL;
-	if (token->str)
-	{
-		clean = malloc(ft_strlen(token->str) + 1);
-		if (!clean)
-			return ;
-	}
-	else
-		return ;
-	clean_len = process_quote_chars(token->str, clean);
-	clean[clean_len] = '\0';
-	free(token->str);
-	token->str = clean;
+// 	if (!token || !token->str)
+// 		return ;
+// 	clean = NULL;
+// 	if (token->str)
+// 	{
+// 		clean = malloc(ft_strlen(token->str) + 1);
+// 		if (!clean)
+// 			return ;
+// 	}
+// 	else
+// 		return ;
+// 	clean_len = process_quote_chars(token->str, clean);
+// 	clean[clean_len] = '\0';
+// 	free(token->str);
+// 	token->str = clean;
+// }
+
+
+void clean_quotes(t_struct *token)
+{
+    char *clean;
+    int clean_len;
+
+    if (!token || !token->str)
+        return;
+    clean = malloc(ft_strlen(token->str) + 1);
+    if (!clean)
+        return;
+    clean_len = process_quote_chars(token->str, clean);
+    clean[clean_len] = '\0';
+	
+    free(token->str);
+    token->str = clean;
 }
 
 void	echo_fusion(t_struct *data)
@@ -107,7 +125,8 @@ void	echo_fusion(t_struct *data)
 	current = data;
 	while (current)
 	{
-		if (current->type == WORD_D_QUOTES || current->type == WORD_S_QUOTES)
+		// Apply clean_quotes to ALL word types
+		if (current->type == WORD || current->type == WORD_D_QUOTES || current->type == WORD_S_QUOTES)
 			clean_quotes(current);
 		current = current->next;
 	}

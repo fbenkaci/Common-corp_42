@@ -3,14 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
+/*   By: wlarbi-a <wlarbi-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 16:23:24 by wlarbi-a          #+#    #+#             */
-/*   Updated: 2025/06/19 16:38:27 by fbenkaci         ###   ########.fr       */
+/*   Updated: 2025/06/23 20:22:21 by wlarbi-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+volatile sig_atomic_t	g_signal_status = 0;
 
 void	free_tokens(t_struct *tokens)
 {
@@ -31,34 +33,35 @@ void	free_tokens(t_struct *tokens)
 int	main(int argc, char **argv, char **envp)
 {
 	t_struct	*data;
-	t_struct	*tmp;
 	t_cmd		*cmd;
 	t_exec		*exec;
 
-	// int			flag;
-	// t_cmd *prev_cmd = NULL;
+	// t_garbage	gc;
+	// t_struct	*tmp;
 	(void)argv;
-	// tmp = NULL;
 	data = NULL;
+	// init_garbage(&gc);
 	exec = malloc(sizeof(t_exec));
+	// exec = gc_malloc(sizeof(t_exec), &gc);
 	if (!exec)
 		return (1);
-	// exec->last_status = 0;
 	if (argc != 1)
 	{
 		printf("Error: need only one argument\n");
-		free(exec);
+		// free_garbage(&gc);
 		return (1);
 	}
-	data = (t_struct *)malloc(sizeof(t_struct));
+	data = malloc(sizeof(t_struct));
 	if (!data)
 	{
 		perror("Error allocating memory");
+		// free_garbage(&gc);
 		free(exec);
-		return (1);
+		return (1); // Ajoutez cette fonction à la fin du fichier
 	}
 	if (cpy_env(data, envp) == -1)
 	{
+		// free_garbage(&gc);
 		free(exec);
 		free(data);
 		return (1);
@@ -67,15 +70,16 @@ int	main(int argc, char **argv, char **envp)
 	exec->last_status = 0;
 	while (1)
 	{
+		// exec->last_status = g_signal_status;
+		g_signal_status = 0;
 		signal(SIGINT, handle_sigint);
-		// signal(SIGQUIT, handle_sigquit);
-		// data->str = readline("💻 minishell > ");
+		// Je remplace le comportement de ctrl+c par le mien
+		signal(SIGQUIT, SIG_IGN);
+		// je capture le signal quit et je lui dis de l'ignore dans le parent pour éviter le core dumped. Mon shell ne doit pas crasher.
 		data->str = readline("💻 minishell > ");
 		if (data->str == NULL)
 		{
-			// ft_free_array(data->env);
-			// free(exec);
-			// free(data);
+			ft_putstr_fd("exit\n", STDOUT_FILENO);
 			break ;
 		}
 		if (ft_strlen(data->str) > 0)
@@ -83,31 +87,35 @@ int	main(int argc, char **argv, char **envp)
 			add_history(data->str);
 			if (parsing(data))
 			{
-				tmp = data->next;
-				while (tmp)
-				{
-					printf("{%d -> %s}\n", tmp->type, tmp->str);
-					tmp = tmp->next;
-				}
+				// tmp = data->next;
+				// while (tmp)
+				// {
+				// 	printf("{%d -> %s}\n", tmp->type, tmp->str);
+				// 	tmp = tmp->next;
+				// }
 				cmd = create_cmd_from_tokens(&data->next, data->env, exec);
 				if (!cmd)
 				{
+					// free_garbage(&gc);
 					free_tokens(data->next);
-					ft_free_array(data->env);
-					free(data->str);
 					free(exec);
 					free(data);
 					return (1);
 				}
+				// gc.cmd = cmd;
 				execution(cmd, exec, &data);
 				free_all_cmd(cmd);
-				free_tokens(data->next);
+				// free_tokens(data->next);
+				// free(exec->pipes);
 			}
 		}
 	}
-	ft_free_array(data->env);
-	free(data->str);
+	free_tokens(data);
+	// ft_free_array(data->env);
+	// free(data->str);
+	// data->str = NULL;
 	free(exec);
-	free(data);
+	// free(data);
+	// free_garbage(&gc);
 	return (0);
 }

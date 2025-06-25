@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_utils_1.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
+/*   By: wlarbi-a <wlarbi-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/11 20:09:40 by fbenkaci          #+#    #+#             */
-/*   Updated: 2025/06/18 16:38:36 by fbenkaci         ###   ########.fr       */
+/*   Updated: 2025/06/23 20:27:20 by wlarbi-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,35 +26,62 @@ void	setup_pipe_redirections(t_exec *exec, int index, t_cmd *cmd)
 	}
 }
 
+// void free_all(t_struct **data, t_exec *exec, t_cmd *cmd)
+// {
+// 	free_all_cmd(cmd);
+// 	free_tokens((*data));
+// 	ft_free_array((*data)->env);
+// 	free((*data)->str);
+// 	free(exec->pipes);
+// 	free(exec);
+// 	free(*data);
+// }
+
 void	run_command(t_struct **data, t_exec *exec, t_cmd *cmd)
 {
 	if (is_builtin(cmd->argv[0]))
 	{
 		exec_builtin(exec, *data, cmd->argv);
+		free_all_cmd(cmd);
+		free_tokens((*data));
+		free(exec->pipes);
+		free(exec);
 		exit(0);
 	}
 	else
 	{
 		if (!command_loc(*data, exec, cmd->argv[0]))
 		{
-			handle_cmd_error(cmd->argv[0]);
+			// ft_putstr_fd("minishell: ", 2);
+			// ft_putstr_fd(cmd->argv[0], 2);
+			// ft_putstr_fd(": command not found\n", 2);
 			exec->last_status = 127;
+			free_all_cmd(cmd);
+			free_tokens(*data);
+			free(exec->pipes);
+			free(exec);
 			exit(127);
 		}
 		execve(exec->path, cmd->argv, (*data)->env);
-		ft_putstr_fd("minishell: ", STDERR_FILENO);
-		ft_putstr_fd(cmd->argv[0], STDERR_FILENO);
-		ft_putstr_fd(": ", STDERR_FILENO);
-		ft_putstr_fd(strerror(errno), STDERR_FILENO);
-		ft_putstr_fd("\n", STDERR_FILENO);
+		handle_cmd_error(cmd->argv[0]);
 		if (errno == ENOENT)
 		{
 			exec->last_status = 127;
+			free_all_cmd(cmd);
+			free_tokens(*data);
+			free(exec->pipes);
+			free(exec->path);
+			free(exec);
 			exit(127);
 		}
 		else if (errno == EACCES)
 		{
 			exec->last_status = 126;
+			free_all_cmd(cmd);
+			free_tokens(*data);
+			free(exec->pipes);
+			free(exec->path);
+			free(exec);
 			exit(126);
 		}
 		exec->last_status = 1;
@@ -104,6 +131,8 @@ int	fork_and_execute_commands(t_struct **data, t_exec *exec, t_cmd *cmd)
 		}
 		if (exec->pids == 0)
 		{
+			signal(SIGINT, SIG_DFL);  // Comportement par défaut (Terminated)
+			signal(SIGQUIT, SIG_DFL); // Comportement par défaut (Quit)
 			close_unused_pipes(exec, index);
 			if (index > 0 || !cmd->outfile)
 				setup_pipe_redirections(exec, index, cmd);

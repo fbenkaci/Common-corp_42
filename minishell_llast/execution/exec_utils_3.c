@@ -16,6 +16,7 @@ int	split_path(t_exec *exec, char *path, char *cmd)
 {
 	char	**dossier;
 	char	*tmp;
+	char *full_path;
 	int		i;
 
 	i = 0;
@@ -27,17 +28,25 @@ int	split_path(t_exec *exec, char *path, char *cmd)
 		tmp = ft_strjoin(dossier[i], "/");
 		if (!tmp)
 			return (ft_free_array(dossier), 0);
-		free(dossier[i]);
-		dossier[i] = tmp;
-		exec->path = ft_strjoin(dossier[i], cmd);
-		if (!exec->path)
+		// free(dossier[i]);
+		// dossier[i] = tmp;
+		full_path = ft_strjoin(tmp, cmd);
+		free(tmp);
+		if (!full_path)
 			return (ft_free_array(dossier), 0);
-		if (access(exec->path, X_OK) == 0)
-			return (ft_free_array(dossier), 1);
-		free(exec->path);
+		if (access(full_path, X_OK) == 0)
+		{
+			exec->path = full_path;
+			ft_free_array(dossier);
+			return (1);
+		}
+		free(full_path);
 		i++;
 	}
 	ft_free_array(dossier);
+	ft_putstr_fd("minishell: ", 2);
+	ft_putstr_fd(cmd, 2);
+	ft_putstr_fd(": command not found\n", 2);
 	return (0);
 }
 
@@ -60,25 +69,37 @@ char	*search_path(char **env)
 	return (path);
 }
 
+int is_path(char *cmd)
+{
+	return (ft_strchr(cmd, '/') != NULL);
+}
+
 int	command_loc(t_struct *data, t_exec *exec, char *cmd)
 {
 	char	*path;
+	struct stat	sb;
 
 	exec->path = NULL;
-	if (cmd[0] == '/')
+	if (is_path(cmd))
 	{
-		if (access(cmd, X_OK) == -1)
+		if (stat(cmd, &sb) == -1)
+			return (0);
+		if (S_ISDIR(sb.st_mode))
 		{
+			errno = EISDIR;
+			handle_cmd_error(cmd);
 			return (0);
 		}
+		if (access(cmd, X_OK) == -1)
+			return (0);
 		exec->path = ft_strdup(cmd);
+		if (!exec->path)
+			return (0);
 		return (1);
 	}
 	path = search_path(data->env);
 	if (!path)
-	{
 		return (0);
-	}
 	if (!split_path(exec, path, cmd))
 		return (0);
 	return (1);
@@ -86,24 +107,33 @@ int	command_loc(t_struct *data, t_exec *exec, char *cmd)
 
 void	handle_cmd_error(char *cmd)
 {
-	struct stat	st;
+	// struct stat	st;
 
-	if (stat(cmd, &st) == 0 && S_ISDIR(st.st_mode))
+	if (errno == ENOENT)
 	{
-		ft_putstr_fd("minishell: ", STDERR_FILENO);
-		ft_putstr_fd(cmd, STDERR_FILENO);
-		ft_putstr_fd(": Is a directory\n", STDERR_FILENO);
+		ft_putstr_fd("minishell: ", 2);
+		ft_putstr_fd(cmd, 2);
+		ft_putstr_fd(": No such file or directory\n", 2);
 	}
-	else if (ft_strchr(cmd, '/'))
+	else if (errno == EACCES)
 	{
-		ft_putstr_fd("minishell: ", STDERR_FILENO);
-		ft_putstr_fd(cmd, STDERR_FILENO);
-		ft_putstr_fd(": No such file or directory\n", STDERR_FILENO);
+		ft_putstr_fd("minishell: ", 2);
+		ft_putstr_fd(cmd, 2);
+		ft_putstr_fd(": Permission denied\n", 2);
+	}
+	else if (errno == EISDIR)
+	{
+		ft_putstr_fd("minishell: ", 2);
+		ft_putstr_fd(cmd, 2);
+		ft_putstr_fd(": Is a directory\n", 2);
 	}
 	else
 	{
-		ft_putstr_fd(cmd, STDERR_FILENO);
-		ft_putstr_fd(": command not found\n", STDERR_FILENO);
+		ft_putstr_fd("minishell: ", 2);
+		ft_putstr_fd(cmd, 2);
+		ft_putstr_fd(": ", 2);
+		ft_putstr_fd(strerror(errno), 2);
+		ft_putstr_fd("\n", 2);
 	}
 }
 

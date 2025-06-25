@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   special_tokens.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
+/*   By: wlarbi-a <wlarbi-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 17:43:07 by wlarbi-a          #+#    #+#             */
-/*   Updated: 2025/06/11 16:44:46 by fbenkaci         ###   ########.fr       */
+/*   Updated: 2025/06/23 18:54:12 by wlarbi-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,9 +25,8 @@ void	free_token_list(t_struct *start)
 	}
 }
 
-t_struct	*create_token(const char *str, int len, t_token type)
+t_struct	*create_token(const char *str, int len, t_token type, t_struct *new)
 {
-	t_struct	*new;
 	int			i;
 
 	new = malloc(sizeof(t_struct));
