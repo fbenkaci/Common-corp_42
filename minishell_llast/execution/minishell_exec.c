@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell_exec.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wlarbi-a <wlarbi-a@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/27 15:27:28 by fbenkaci          #+#    #+#             */
-/*   Updated: 2025/06/23 20:27:00 by wlarbi-a         ###   ########.fr       */
+/*   Updated: 2025/06/25 17:16:24 by fbenkaci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 int	execution(t_cmd *cmd, t_exec *exec, t_struct **data)
 {
 	int	builtin_ret;
-	int heredoc_status;
+	int	heredoc_status;
 
 	heredoc_status = open_all_heredocs(exec, data, cmd);
 	if (heredoc_status == 130)
@@ -42,7 +42,7 @@ int	execution(t_cmd *cmd, t_exec *exec, t_struct **data)
 		ft_putstr_fd("Error executing commands\n", 2);
 		return (-1);
 	}
-	signal(SIGINT, handle_sigint_exec); 
+	signal(SIGINT, handle_sigint_exec);
 	close_pipes_and_wait(exec);
 	free(exec->pipes);
 	return (1);

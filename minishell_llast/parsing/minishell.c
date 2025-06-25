@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wlarbi-a <wlarbi-a@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 16:23:24 by wlarbi-a          #+#    #+#             */
-/*   Updated: 2025/06/23 20:22:21 by wlarbi-a         ###   ########.fr       */
+/*   Updated: 2025/06/25 20:33:07 by fbenkaci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,20 +14,21 @@
 
 volatile sig_atomic_t	g_signal_status = 0;
 
-void	free_tokens(t_struct *tokens)
+void	free_tokens(t_struct *data)
 {
 	t_struct	*tmp;
-
-	while (tokens)
+	
+	while (data)
 	{
-		if (tokens->env)
-			ft_free_array(tokens->env);
-		tmp = tokens->next;
-		if (tokens->str)
-			free(tokens->str);
-		free(tokens);
-		tokens = tmp;
+		if (data->env)
+				ft_free_array(data->env);
+		tmp = data->next;
+		if (data->str)
+			free(data->str);
+		data = tmp;
+		free(data);
 	}
+	// free(data);
 }
 
 int	main(int argc, char **argv, char **envp)
@@ -96,14 +97,16 @@ int	main(int argc, char **argv, char **envp)
 				cmd = create_cmd_from_tokens(&data->next, data->env, exec);
 				if (!cmd)
 				{
-					// free_garbage(&gc);
+					// free_garbage(&gc)
 					free_tokens(data->next);
 					free(exec);
 					free(data);
 					return (1);
 				}
+				// ft_printf("%d\n", exec->last_status);
 				// gc.cmd = cmd;
 				execution(cmd, exec, &data);
+				// ft_printf("%d\n", exec->last_status);
 				free_all_cmd(cmd);
 				// free_tokens(data->next);
 				// free(exec->pipes);

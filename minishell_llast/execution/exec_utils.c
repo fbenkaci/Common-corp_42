@@ -6,7 +6,7 @@
 /*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/11 15:21:25 by fbenkaci          #+#    #+#             */
-/*   Updated: 2025/06/23 15:04:10 by fbenkaci         ###   ########.fr       */
+/*   Updated: 2025/06/25 19:42:06 by fbenkaci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ int	open_all_heredocs(t_exec *exec, t_struct **data, t_cmd *cmd)
 int	execute_single_builtin(t_exec *exec, t_cmd *cmd, t_struct **data)
 {
 	int	saved_stdin;
-	int builtin_status;
+	int	builtin_status;
 
 	saved_stdin = 0;
 	if (cmd->heredoc)
@@ -78,6 +78,7 @@ void	handle_outfile(t_cmd *cmd)
 	fd2 = 0;
 	if (cmd->outfile)
 	{
+		// ft_printf("%s\n", cmd->outfile);
 		if (cmd->append)
 			fd2 = open(cmd->outfile, O_APPEND | O_CREAT | O_WRONLY, 0644);
 		else
@@ -86,11 +87,15 @@ void	handle_outfile(t_cmd *cmd)
 		{
 			if (errno == EACCES) // Error Access
 			{
-				ft_putstr_fd("minishell: Permission denied\n", STDERR_FILENO);
+				// ft_putstr_fd("minishell: Permission denied\n",
+					// STDER`R_FILENO);
+				handle_cmd_error(cmd->outfile);
 				// faut que rajoute t_struct a ton prototype
 				exit(1);
 			}
-			ft_putstr_fd("minishell: Error opening file\n", STDERR_FILENO);
+			// ft_putstr_fd("minishell: Error opening file\n", STDERR_FILENO);
+			handle_cmd_error(cmd->outfile);
+			
 			exit(1);
 		}
 		dup2(fd2, STDOUT_FILENO);

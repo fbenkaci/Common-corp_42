@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wlarbi-a <wlarbi-a@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/07 17:11:27 by fbenkaci          #+#    #+#             */
-/*   Updated: 2025/06/23 20:37:56 by wlarbi-a         ###   ########.fr       */
+/*   Updated: 2025/06/25 17:07:16 by fbenkaci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,12 +81,17 @@ int	process_variable_expansion(t_struct **cur, char *str, char **envp, int i)
 	char	*var_value;
 	char	*new_str;
 
+	// (*cur)->exec->last_status = 0;
+	// ft_printf("%d\n", (*cur)->exec->last_status);
 	var_name = extract_var_name(str, i + 1);
 	if (!var_name)
+	{
 		return (-1);
+	}
 	var_value = get_env_value_2(var_name, envp);
 	if (!var_value)
 	{
+		// ft_printf("OK\n");
 		free((*cur)->str);
 		(*cur)->str = ft_strdup("");
 		free(var_name);
@@ -95,6 +100,7 @@ int	process_variable_expansion(t_struct **cur, char *str, char **envp, int i)
 	new_str = replace_variable(str, i, var_name, var_value);
 	if (!new_str)
 	{
+		// ft_printf("OK1\n");
 		free(var_name);
 		return (-1);
 	}
@@ -109,15 +115,18 @@ int	expand_variable(t_struct **cur, char *str, char **envp)
 	int		result;
 	char	*new_str;
 	char *exit_status_str;
-
+	
+	// (*cur)->exec->last_status = 0;
 	exit_status_str = NULL;
 	new_str = NULL;
 	current_str = str;
 	i = 0;
+	// ft_printf("%d\n", (*cur)->exec->last_status);
 	while (current_str[i])
 	{
 		if (current_str[i] == '$' && current_str[i + 1] == '?')
 		{
+			// ft_printf("%d\n", (*cur)->exec->last_status);
 			exit_status_str = ft_itoa((*cur)->exec->last_status);
 			if (!exit_status_str)
 				return (-1);
@@ -139,5 +148,6 @@ int	expand_variable(t_struct **cur, char *str, char **envp)
 		}
 		i++;
 	}
+	// ft_printf("%d\n", (*cur)->exec->last_status);
 	return (0);
 }

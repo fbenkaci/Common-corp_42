@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_pipe.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wlarbi-a <wlarbi-a@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 19:48:22 by wlarbi-a          #+#    #+#             */
-/*   Updated: 2025/05/15 12:28:15 by wlarbi-a         ###   ########.fr       */
+/*   Updated: 2025/06/25 20:07:30 by fbenkaci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,13 +49,15 @@ int	parse_error_pipe(t_struct *data)
 		i++;
 	if (data->str[i] == '|')
 	{
-		printf("Syntax error near: unexpected token '|'\n");
+		ft_putstr_fd(" syntax error near unexpected token `|'\n", 2);
+		data->exec->last_status = 2;
 		return (0);
 	}
 	i = utils_parse_pipe(data, i, &found_pipe);
 	if (found_pipe > 0)
 	{
-		printf("Syntax error near: unexpected token '|'\n");
+		ft_putstr_fd(" syntax error near unexpected token `|'\n", 2);
+		data->exec->last_status = 2;
 		return (0);
 	}
 	return (1);

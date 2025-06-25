@@ -6,7 +6,7 @@
 /*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 17:10:18 by fbenkaci          #+#    #+#             */
-/*   Updated: 2025/06/15 15:54:56 by fbenkaci         ###   ########.fr       */
+/*   Updated: 2025/06/25 20:26:05 by fbenkaci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,8 @@
 int	split_path(t_exec *exec, char *path, char *cmd)
 {
 	char	**dossier;
+	char	*full_path;
 	char	*tmp;
-	char *full_path;
 	int		i;
 
 	i = 0;
@@ -28,8 +28,6 @@ int	split_path(t_exec *exec, char *path, char *cmd)
 		tmp = ft_strjoin(dossier[i], "/");
 		if (!tmp)
 			return (ft_free_array(dossier), 0);
-		// free(dossier[i]);
-		// dossier[i] = tmp;
 		full_path = ft_strjoin(tmp, cmd);
 		free(tmp);
 		if (!full_path)
@@ -69,29 +67,36 @@ char	*search_path(char **env)
 	return (path);
 }
 
-int is_path(char *cmd)
+int	is_path(char *cmd)
 {
 	return (ft_strchr(cmd, '/') != NULL);
 }
 
 int	command_loc(t_struct *data, t_exec *exec, char *cmd)
 {
-	char	*path;
+	char		*path;
 	struct stat	sb;
 
 	exec->path = NULL;
 	if (is_path(cmd))
 	{
 		if (stat(cmd, &sb) == -1)
+		{
+			handle_cmd_error(cmd);
 			return (0);
+		}
 		if (S_ISDIR(sb.st_mode))
 		{
 			errno = EISDIR;
 			handle_cmd_error(cmd);
 			return (0);
 		}
-		if (access(cmd, X_OK) == -1)
+		if (access(cmd, F_OK) == -1 || access(cmd, X_OK) == -1)
+		{
+			handle_cmd_error(cmd);
+			exec->last_status = 126;
 			return (0);
+		}
 		exec->path = ft_strdup(cmd);
 		if (!exec->path)
 			return (0);
@@ -107,8 +112,6 @@ int	command_loc(t_struct *data, t_exec *exec, char *cmd)
 
 void	handle_cmd_error(char *cmd)
 {
-	// struct stat	st;
-
 	if (errno == ENOENT)
 	{
 		ft_putstr_fd("minishell: ", 2);

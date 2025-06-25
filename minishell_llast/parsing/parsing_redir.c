@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_redir.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wlarbi-a <wlarbi-a@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 20:11:40 by wlarbi-a          #+#    #+#             */
-/*   Updated: 2025/05/18 19:16:47 by wlarbi-a         ###   ########.fr       */
+/*   Updated: 2025/06/25 20:00:50 by fbenkaci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,8 +75,8 @@ int	parse_redir(t_struct *data)
 	i = utils_parse_redir(data, i, &found_redir);
 	if (i == -1)
 	{
-		printf("syntax error near unexpected token '>'\n");
-		return (0);
+		ft_putstr_fd("syntax error near unexpected token `>'\n", 2);
+		exit(2);
 	}
 	return (1);
 }
