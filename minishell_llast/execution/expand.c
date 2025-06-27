@@ -6,7 +6,7 @@
 /*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/07 17:11:27 by fbenkaci          #+#    #+#             */
-/*   Updated: 2025/06/25 17:07:16 by fbenkaci         ###   ########.fr       */
+/*   Updated: 2025/06/27 20:57:29 by fbenkaci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,7 @@ int	update_current_string(t_struct **cur, char *original, char *new_str)
 		free(new_str);
 		return (-1);
 	}
+	free(new_str);
 	return (0);
 }
 
@@ -92,8 +93,8 @@ int	process_variable_expansion(t_struct **cur, char *str, char **envp, int i)
 	if (!var_value)
 	{
 		// ft_printf("OK\n");
-		free((*cur)->str);
-		(*cur)->str = ft_strdup("");
+		// free((*cur)->str);
+		// (*cur)->str = ft_strdup("");
 		free(var_name);
 		return (1);
 	}

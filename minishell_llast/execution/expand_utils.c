@@ -6,7 +6,7 @@
 /*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/07 17:12:39 by fbenkaci          #+#    #+#             */
-/*   Updated: 2025/06/19 15:04:32 by fbenkaci         ###   ########.fr       */
+/*   Updated: 2025/06/27 20:40:22 by fbenkaci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,10 +63,10 @@ char	*extract_var_name(char *str, int start)
 		i++;
 	}
 	if (len == 0)
-		return (NULL);
+	return (NULL);
 	var_name = malloc(len + 1);
 	if (!var_name)
-		return (NULL);
+	return (NULL);
 	ft_strncpy(var_name, &str[start], len);
 	var_name[len] = '\0';
 	return (var_name);

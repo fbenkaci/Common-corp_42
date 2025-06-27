@@ -6,7 +6,7 @@
 /*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 19:16:07 by fbenkaci          #+#    #+#             */
-/*   Updated: 2025/06/25 16:18:10 by fbenkaci         ###   ########.fr       */
+/*   Updated: 2025/06/27 20:39:18 by fbenkaci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,7 @@ int	handle_word_and_expand(t_struct **cur, t_cmd *cmd, int *i, char **envp)
 			{
 				return (1);
 			}
-			cmd->argv[*i] = ft_strdup((*cur)->str);
+			cmd->argv[*i] = (*cur)->str;
 			if (!cmd->argv[*i])
 				return (ft_free_array(cmd->argv), -1);
 		}

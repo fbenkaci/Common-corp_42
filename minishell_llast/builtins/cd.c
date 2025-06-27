@@ -6,7 +6,7 @@
 /*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 16:11:03 by fbenkaci          #+#    #+#             */
-/*   Updated: 2025/06/21 16:43:19 by fbenkaci         ###   ########.fr       */
+/*   Updated: 2025/06/27 20:19:10 by fbenkaci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,6 +126,9 @@ int	ft_cd(t_exec *exec, t_struct *data, char **cmd)
 	else if (!cd_path(data, cmd[1]))
 	{
 		exec->last_status = 1;
+		ft_putstr_fd("minishell: cd: ", 2);
+		ft_putstr_fd(cmd[1], 2);
+		ft_putstr_fd(": No such file or directory\n", 2);
 		return (0);
 	}
 	exec->last_status = 0;

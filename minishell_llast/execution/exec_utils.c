@@ -6,7 +6,7 @@
 /*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/11 15:21:25 by fbenkaci          #+#    #+#             */
-/*   Updated: 2025/06/25 19:42:06 by fbenkaci         ###   ########.fr       */
+/*   Updated: 2025/06/27 19:23:44 by fbenkaci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ int	execute_single_builtin(t_exec *exec, t_cmd *cmd, t_struct **data)
 		close(saved_stdin);
 		free(cmd->heredoc_delim);
 	}
-	builtin_status = exec_builtin(exec, *data, cmd->argv);
+	builtin_status = exec_builtin(exec, *data, cmd);
 	if (builtin_status == 1)
 	{
 		if (cmd->heredoc)
@@ -61,13 +61,13 @@ int	execute_single_builtin(t_exec *exec, t_cmd *cmd, t_struct **data)
 			free(cmd->heredoc_delim);
 		}
 	}
-	else
-	{
-		// handle_cmd_error(cmd->argv[0]);
-		// ft_putstr_fd("minishell: ", STDERR_FILENO);
-		// ft_putstr_fd("Command not found\n", STDERR_FILENO);
-		// exec->last_status = 127;
-	}
+	// else
+	// {
+	// 	// handle_cmd_error(cmd->argv[0]);
+	// 	// ft_putstr_fd("minishell: ", STDERR_FILENO);
+	// 	// ft_putstr_fd("Command not found\n", STDERR_FILENO);
+	// 	// exec->last_status = 127;
+	// }
 	return (builtin_status);
 }
 

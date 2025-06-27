@@ -6,7 +6,7 @@
 /*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 16:23:24 by wlarbi-a          #+#    #+#             */
-/*   Updated: 2025/06/25 20:33:07 by fbenkaci         ###   ########.fr       */
+/*   Updated: 2025/06/27 17:22:39 by fbenkaci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,15 +20,14 @@ void	free_tokens(t_struct *data)
 	
 	while (data)
 	{
+		tmp = data->next;
 		if (data->env)
 				ft_free_array(data->env);
-		tmp = data->next;
 		if (data->str)
 			free(data->str);
 		data = tmp;
 		free(data);
 	}
-	// free(data);
 }
 
 int	main(int argc, char **argv, char **envp)
@@ -43,6 +42,8 @@ int	main(int argc, char **argv, char **envp)
 	data = NULL;
 	// init_garbage(&gc);
 	exec = malloc(sizeof(t_exec));
+	exec->pipes = 0;
+	exec->path = NULL;
 	// exec = gc_malloc(sizeof(t_exec), &gc);
 	if (!exec)
 		return (1);
@@ -60,6 +61,9 @@ int	main(int argc, char **argv, char **envp)
 		free(exec);
 		return (1); // Ajoutez cette fonction à la fin du fichier
 	}
+	data->env = NULL;
+	data->str = NULL;
+	data->next = NULL;
 	if (cpy_env(data, envp) == -1)
 	{
 		// free_garbage(&gc);
@@ -114,6 +118,7 @@ int	main(int argc, char **argv, char **envp)
 		}
 	}
 	free_tokens(data);
+	free(data);
 	// ft_free_array(data->env);
 	// free(data->str);
 	// data->str = NULL;

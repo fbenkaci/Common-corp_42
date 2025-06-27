@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   token_to_cmd_1.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wlarbi-a <wlarbi-a@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/23 16:39:52 by fbenkaci          #+#    #+#             */
-/*   Updated: 2025/06/23 20:20:33 by wlarbi-a         ###   ########.fr       */
+/*   Updated: 2025/06/27 20:47:25 by fbenkaci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,7 +107,7 @@ int	create_cmd_list(t_struct **cur, t_cmd *cmd, char **envp)
 		// }
 		// printf("INFILE == %s\n", current->infile);
 		// printf("OUTFILE == %s\n\n", current->outfile);
-		current->argv[i] = NULL;
+		// current->argv[i] = NULL;
 		if (*cur && (*cur)->type == PIPE)
 		{
 			if ((*cur)->next)

@@ -6,7 +6,7 @@
 /*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/08 12:18:51 by fbenkaci          #+#    #+#             */
-/*   Updated: 2025/06/18 16:01:33 by fbenkaci         ###   ########.fr       */
+/*   Updated: 2025/06/27 16:00:54 by fbenkaci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,10 +23,10 @@ int		ft_unset(t_exec *exec, t_struct *data, char **cmd);
 int		ft_env(t_exec *exec, t_struct *data, char **cmd);
 int		ft_cd(t_exec *exec, t_struct *data, char **cmd);
 int		ft_echo(t_exec *exec, char **cmd);
-// int		ft_exit(char **cmd);
+int		ft_exit(t_exec *exec, t_struct *data, t_cmd *cmd);
 int		ft_pwd(t_exec *exec);
 
-int		exec_builtin(t_exec *exec, t_struct *data, char **cmd);
+int		exec_builtin(t_exec *exec, t_struct *data, t_cmd *cmd);
 int		is_builtin(char *cmd);
 
 int		add_or_replace_env_var(t_struct *data, char *cmd);

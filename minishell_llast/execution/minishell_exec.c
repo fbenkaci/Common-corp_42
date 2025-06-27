@@ -6,7 +6,7 @@
 /*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/27 15:27:28 by fbenkaci          #+#    #+#             */
-/*   Updated: 2025/06/25 17:16:24 by fbenkaci         ###   ########.fr       */
+/*   Updated: 2025/06/27 20:48:19 by fbenkaci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,10 @@ int	execution(t_cmd *cmd, t_exec *exec, t_struct **data)
 	}
 	signal(SIGINT, handle_sigint_exec);
 	close_pipes_and_wait(exec);
-	free(exec->pipes);
+	if (exec->pipes)
+	{
+		free(exec->pipes);
+		exec->pipes = NULL;
+	}
 	return (1);
 }

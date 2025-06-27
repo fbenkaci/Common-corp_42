@@ -6,7 +6,7 @@
 /*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/11 20:09:40 by fbenkaci          #+#    #+#             */
-/*   Updated: 2025/06/25 20:34:47 by fbenkaci         ###   ########.fr       */
+/*   Updated: 2025/06/27 20:56:47 by fbenkaci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,64 +26,45 @@ void	setup_pipe_redirections(t_exec *exec, int index, t_cmd *cmd)
 	}
 }
 
-// void free_all(t_struct **data, t_exec *exec, t_cmd *cmd)
-// {
-// 	free_all_cmd(cmd);
-// 	free_tokens((*data));
-// 	ft_free_array((*data)->env);
-// 	free((*data)->str);
-// 	free(exec->pipes);
-// 	free(exec);
-// 	free(*data);
-// }
+void	free_all_shell(t_struct **data, t_exec *exec, t_cmd *cmd)
+{
+	free_all_cmd(cmd);
+	free_tokens((*data));
+	free(*data);
+	if (exec->pipes != NULL)
+		free(exec->pipes);
+	if (exec->path)
+		free(exec->path);
+	free(exec);
+}
 
 void	run_command(t_struct **data, t_exec *exec, t_cmd *cmd)
 {
-	// int tmp;
+	// if (cmd->argv[0] == "")
+	// 	exit
 	if (is_builtin(cmd->argv[0]))
 	{
-		exec_builtin(exec, *data, cmd->argv);
-		free_all_cmd(cmd);
-		free_tokens((*data));
-		free(exec->pipes);
-		free(exec);
+		exec_builtin(exec, *data, cmd);
+		free_all_shell(data, exec, cmd);
 		exit(0);
 	}
 	else
 	{
 		if (!command_loc(*data, exec, cmd->argv[0]))
 		{
-			// ft_putstr_fd("minishell: ", 2);
-			// ft_putstr_fd(cmd->argv[0], 2);
-			// ft_putstr_fd(": command not found\n", 2);
-			// handle_cmd_error(cmd->argv[0]);
 			exec->last_status = 126;
 			if (errno == ENOENT)
 			{
 				exec->last_status = 127;
-				free_all_cmd(cmd);
-				free_tokens(*data);
-				free(exec->pipes);
-				free(exec->path);
-				free(exec);
+				free_all_shell(data, exec, cmd);
 				exit(127);
 			}
 			else if (errno == EACCES)
 			{
 				exec->last_status = 126;
-				free_all_cmd(cmd);
-				free_tokens(*data);
-				free(exec->pipes);
-				free(exec->path);
-				free(exec);
+				free_all_shell(data, exec, cmd);
 				exit(126);
 			}
-			// free_all_cmd(cmd);
-			// free_tokens(*data);
-			// free(exec->pipes);
-			// free(exec->path);
-			// free(exec);
-			// tmp = exec->
 			exit(exec->last_status);
 		}
 		execve(exec->path, cmd->argv, (*data)->env);
@@ -91,24 +72,15 @@ void	run_command(t_struct **data, t_exec *exec, t_cmd *cmd)
 		if (errno == ENOENT)
 		{
 			exec->last_status = 127;
-			free_all_cmd(cmd);
-			free_tokens(*data);
-			free(exec->pipes);
-			free(exec->path);
-			free(exec);
+			free_all_shell(data, exec, cmd);
 			exit(127);
 		}
 		else if (errno == EACCES)
 		{
 			exec->last_status = 126;
-			free_all_cmd(cmd);
-			free_tokens(*data);
-			free(exec->pipes);
-			free(exec->path);
-			free(exec);
+			free_all_shell(data, exec, cmd);
 			exit(126);
 		}
-		// exec->last_status = 1;
 		exit(126);
 	}
 }
@@ -119,7 +91,6 @@ void	close_pipes_and_wait(t_exec *exec)
 	int	status;
 
 	i = 0;
-	// ft_printf("9- %d\n", exec->last_status);
 	while (i < exec->nb_cmds - 1)
 	{
 		close(exec->pipes[i][0]);
@@ -133,10 +104,7 @@ void	close_pipes_and_wait(t_exec *exec)
 		if (i == exec->nb_cmds - 1)
 		{
 			if (WIFEXITED(status))
-			{
 				exec->last_status = WEXITSTATUS(status);
-				// ft_printf("9- %d\n", exec->last_status);
-			}
 			else if (WIFSIGNALED(status))
 				exec->last_status = 0;
 		}
@@ -151,6 +119,11 @@ int	fork_and_execute_commands(t_struct **data, t_exec *exec, t_cmd *cmd)
 	index = 0;
 	while (cmd)
 	{
+		// if (cmd->argv[0] == NULL)
+		// {
+		// 	cmd = cmd->next;
+		// 	continue ;
+		// }
 		exec->pids = fork();
 		if (exec->pids == -1)
 		{

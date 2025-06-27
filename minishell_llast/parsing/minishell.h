@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wlarbi-a <wlarbi-a@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 16:54:23 by wlarbi-a          #+#    #+#             */
-/*   Updated: 2025/06/23 17:33:57 by wlarbi-a         ###   ########.fr       */
+/*   Updated: 2025/06/27 17:24:40 by fbenkaci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,7 +134,7 @@ int								open_all_heredocs(t_exec *exec, t_struct **data,
 									t_cmd *cmd);
 int								execute_single_builtin(t_exec *exec, t_cmd *cmd,
 									t_struct **data);
-void						setup_redirections(t_cmd *cmd);
+void							setup_redirections(t_cmd *cmd);
 void							setup_pipe_redirections(t_exec *exec, int index,
 									t_cmd *cmd);
 void							run_command(t_struct **data, t_exec *exec,
@@ -146,6 +146,8 @@ void							handle_cmd_error(char *cmd);
 
 void							free_all_cmd(t_cmd *cmd);
 void							free_tokens(t_struct *tokens);
+void							free_all_shell(t_struct **data, t_exec *exec,
+									t_cmd *cmd);
 
 int								command_loc(t_struct *data, t_exec *exec,
 									char *cmd);
