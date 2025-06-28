@@ -61,6 +61,7 @@ int	execute_single_builtin(t_exec *exec, t_cmd *cmd, t_struct **data)
 			free(cmd->heredoc_delim);
 		}
 	}
+	free((*data)->str);
 	// else
 	// {
 	// 	// handle_cmd_error(cmd->argv[0]);

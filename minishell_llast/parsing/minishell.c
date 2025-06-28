@@ -25,8 +25,8 @@ void	free_tokens(t_struct *data)
 				ft_free_array(data->env);
 		if (data->str)
 			free(data->str);
-		data = tmp;
 		free(data);
+		data = tmp;
 	}
 }
 
@@ -109,6 +109,7 @@ int	main(int argc, char **argv, char **envp)
 				}
 				// ft_printf("%d\n", exec->last_status);
 				// gc.cmd = cmd;
+				// free_tokens(data->next);
 				execution(cmd, exec, &data);
 				// ft_printf("%d\n", exec->last_status);
 				free_all_cmd(cmd);
@@ -118,7 +119,7 @@ int	main(int argc, char **argv, char **envp)
 		}
 	}
 	free_tokens(data);
-	free(data);
+	// free(data);
 	// ft_free_array(data->env);
 	// free(data->str);
 	// data->str = NULL;

@@ -129,7 +129,6 @@ void	free_all_cmd(t_cmd *cmd)
 
 	while (cmd)
 	{
-		// ft_printf("%s\n", cmd->argv[0]);
 		tmp = cmd->next;
 		if (cmd->argv)
 			ft_free_array(cmd->argv);
@@ -149,7 +148,6 @@ t_cmd	*create_cmd_from_tokens(t_struct **cur, char **env, t_exec *exec)
 	t_cmd		*cmd;
 	t_struct	*tmp;
 
-	// t_struct	**tmp;
 	cmd = init_new_cmd(cur, env);
 	if (!cmd)
 		return (NULL);
@@ -160,6 +158,9 @@ t_cmd	*create_cmd_from_tokens(t_struct **cur, char **env, t_exec *exec)
 		tmp = tmp->next;
 	}
 	if (create_cmd_list(cur, cmd, (*cur)->env) == -1)
+	{
+		free_all_cmd(cmd);
 		return (NULL);
+	}
 	return (cmd);
 }

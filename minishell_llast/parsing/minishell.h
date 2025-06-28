@@ -241,6 +241,7 @@ void							handle_word_s_quotes(t_struct *data, int *i,
 /*-----------------fusion token------------------*/
 
 void							echo_fusion(t_struct *data);
+void							debug_tokens(t_struct *data);
 
 # include "../builtins/builtins.h"
 

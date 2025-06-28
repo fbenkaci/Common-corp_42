@@ -78,6 +78,11 @@ int	command_loc(t_struct *data, t_exec *exec, char *cmd)
 	struct stat	sb;
 
 	exec->path = NULL;
+	if (!cmd || cmd[0] == '\0')
+	{
+		exec->last_status = 0;
+		return (0);
+	}
 	if (is_path(cmd))
 	{
 		if (stat(cmd, &sb) == -1)

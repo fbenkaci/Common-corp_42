@@ -120,6 +120,7 @@ int	copy_variable_value(char *var_value, char *new_str, int start_pos)
 	}
 	return (i);
 }
+
 // Fonction pour remplacer une variable dans une chaîne
 char	*replace_variable(char *str, int dollar_pos, char *var_name,
 		char *var_value)
@@ -146,6 +147,7 @@ char	*replace_variable(char *str, int dollar_pos, char *var_name,
 		i++;
 		j++;
 	}
-	new_str[i] = '\0';
+new_str[i] = '\0';
+	printf("new_str: %p\n", new_str);
 	return (new_str);
 }

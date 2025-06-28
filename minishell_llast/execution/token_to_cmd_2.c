@@ -83,7 +83,6 @@ int	handle_word_and_expand(t_struct **cur, t_cmd *cmd, int *i, char **envp)
 			|| (*cur)->type == WORD_S_QUOTES))
 	{
 		if (ft_strchr((*cur)->str, '$') && (*cur)->type != WORD_S_QUOTES)
-			// jai rajouter cette condion (*cur)->type != WORD_S_QUOTES
 		{
 			if (expand_variable(cur, (*cur)->str, envp) == -1)
 				return (-1);
@@ -91,7 +90,7 @@ int	handle_word_and_expand(t_struct **cur, t_cmd *cmd, int *i, char **envp)
 			{
 				return (1);
 			}
-			cmd->argv[*i] = (*cur)->str;
+			cmd->argv[*i] = ft_strdup((*cur)->str);
 			if (!cmd->argv[*i])
 				return (ft_free_array(cmd->argv), -1);
 		}

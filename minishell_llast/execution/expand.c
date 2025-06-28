@@ -82,8 +82,6 @@ int	process_variable_expansion(t_struct **cur, char *str, char **envp, int i)
 	char	*var_value;
 	char	*new_str;
 
-	// (*cur)->exec->last_status = 0;
-	// ft_printf("%d\n", (*cur)->exec->last_status);
 	var_name = extract_var_name(str, i + 1);
 	if (!var_name)
 	{
@@ -92,16 +90,19 @@ int	process_variable_expansion(t_struct **cur, char *str, char **envp, int i)
 	var_value = get_env_value_2(var_name, envp);
 	if (!var_value)
 	{
-		// ft_printf("OK\n");
-		// free((*cur)->str);
-		// (*cur)->str = ft_strdup("");
+		free((*cur)->str);
+		(*cur)->str = ft_strdup("");
+		if (!(*cur)->str)
+		{
+			free(var_name);
+			return (-1);
+		}
 		free(var_name);
 		return (1);
 	}
 	new_str = replace_variable(str, i, var_name, var_value);
 	if (!new_str)
 	{
-		// ft_printf("OK1\n");
 		free(var_name);
 		return (-1);
 	}

@@ -29,7 +29,11 @@ int	execution(t_cmd *cmd, t_exec *exec, t_struct **data)
 	{
 		builtin_ret = execute_single_builtin(exec, cmd, data);
 		if (builtin_ret == 0)
+		{
+			// free_all_shell(data, exec, cmd);
 			return (-1);
+		}
+		// free_all_shell(data, exec, cmd);
 		return (1);
 	}
 	if (create_pipe(exec) == -1)

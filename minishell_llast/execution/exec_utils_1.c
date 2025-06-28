@@ -28,9 +28,10 @@ void	setup_pipe_redirections(t_exec *exec, int index, t_cmd *cmd)
 
 void	free_all_shell(t_struct **data, t_exec *exec, t_cmd *cmd)
 {
-	free_all_cmd(cmd);
-	free_tokens((*data));
-	free(*data);
+	if (cmd)
+		free_all_cmd(cmd);
+	if (*data)
+		free_tokens((*data));
 	if (exec->pipes != NULL)
 		free(exec->pipes);
 	if (exec->path)
@@ -40,8 +41,13 @@ void	free_all_shell(t_struct **data, t_exec *exec, t_cmd *cmd)
 
 void	run_command(t_struct **data, t_exec *exec, t_cmd *cmd)
 {
-	// if (cmd->argv[0] == "")
-	// 	exit
+	// Vérifier si la commande est vide après expansion
+	if (!cmd->argv[0] || cmd->argv[0][0] == '\0')
+	{
+		exec->last_status = 0;
+		free_all_shell(data, exec, cmd);
+		exit(0);
+	}
 	if (is_builtin(cmd->argv[0]))
 	{
 		exec_builtin(exec, *data, cmd);
@@ -98,6 +104,7 @@ void	close_pipes_and_wait(t_exec *exec)
 		i++;
 	}
 	i = 0;
+	status = 0;
 	while (i < exec->nb_cmds)
 	{
 		waitpid(-1, &status, 0);
@@ -119,11 +126,13 @@ int	fork_and_execute_commands(t_struct **data, t_exec *exec, t_cmd *cmd)
 	index = 0;
 	while (cmd)
 	{
-		// if (cmd->argv[0] == NULL)
-		// {
-		// 	cmd = cmd->next;
-		// 	continue ;
-		// }
+		// Vérifier si la commande est vide après expansion
+		if (!cmd->argv[0] || cmd->argv[0][0] == '\0')
+		{
+			cmd = cmd->next;
+			index++;
+			continue ;
+		}
 		exec->pids = fork();
 		if (exec->pids == -1)
 		{
