@@ -6,7 +6,7 @@
 /*   By: wlarbi-a <wlarbi-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 17:43:07 by wlarbi-a          #+#    #+#             */
-/*   Updated: 2025/06/23 18:54:12 by wlarbi-a         ###   ########.fr       */
+/*   Updated: 2025/06/29 17:15:12 by wlarbi-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,19 +25,20 @@ void	free_token_list(t_struct *start)
 	}
 }
 
-t_struct	*create_token(const char *str, int len, t_token type, t_struct *new)
+t_struct	*create_token(const char *str, int len, t_token type,
+		t_struct *data)
 {
+	t_struct	*new;
 	int			i;
 
-	new = malloc(sizeof(t_struct));
+	if (!data || !data->token_pool)
+		return (NULL);
+	new = get_token_from_pool(data->token_pool);
 	if (!new)
 		return (NULL);
 	new->str = malloc(len + 1);
 	if (!new->str)
-	{
-		free(new);
 		return (NULL);
-	}
 	i = 0;
 	while (i < len)
 	{
@@ -47,22 +48,21 @@ t_struct	*create_token(const char *str, int len, t_token type, t_struct *new)
 	new->str[i] = '\0';
 	new->type = type;
 	new->next = NULL;
+	new->env = NULL;
+	new->exec = NULL;
+	new->token_pool = data->token_pool;
 	return (new);
 }
 
 int	token_init(t_struct *data)
 {
-	int		i;
-	char	*copy;
+	int	i;
 
 	i = 0;
 	if (!data || !data->str)
 		return (-1);
-	copy = ft_strdup(data->str);
-	if (!copy)
-		return (-1);
-	data->str = copy;
 	data->next = NULL;
+	data->type = NONE;
 	while (data->str[i] && data->str[i] != ' ' && data->str[i] != '<'
 		&& data->str[i] != '>' && data->str[i] != '|' && data->str[i] != '('
 		&& data->str[i] != ')' && data->str[i] != '\'' && data->str[i] != '\"')
@@ -89,8 +89,10 @@ void	tokenize_string(t_struct *data, int i)
 		else if (data->str[i] == '|' || data->str[i] == '('
 			|| data->str[i] == ')')
 			handle_special_tokens(data->str, &i, &cur);
-		else if (data->str[i])
+		else
 			handle_word_token(data->str, &i, &cur);
+		if (i >= (int)ft_strlen(data->str))
+			break ;
 	}
 }
 

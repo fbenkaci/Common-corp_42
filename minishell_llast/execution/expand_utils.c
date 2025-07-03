@@ -3,49 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   expand_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
+/*   By: wlarbi-a <wlarbi-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/07 17:12:39 by fbenkaci          #+#    #+#             */
-/*   Updated: 2025/06/27 20:40:22 by fbenkaci         ###   ########.fr       */
+/*   Updated: 2025/07/01 17:35:17 by wlarbi-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../parsing/minishell.h"
-#include <stddef.h>
-
-char	*ft_strncpy(char *dest, const char *src, size_t n)
-{
-	size_t	i;
-
-	i = 0;
-	while (i < n && src[i] != '\0')
-	{
-		dest[i] = src[i];
-		i++;
-	}
-	while (i < n)
-	{
-		dest[i] = '\0';
-		i++;
-	}
-	return (dest);
-}
-
-char	*get_env_value_2(char *var_name, char **envp)
-{
-	int	i;
-	int	len;
-
-	i = 0;
-	len = ft_strlen(var_name);
-	while (envp[i])
-	{
-		if (ft_strncmp(envp[i], var_name, len) == 0 && envp[i][len] == '=')
-			return (&envp[i][len + 1]);
-		i++;
-	}
-	return (NULL);
-}
 
 // Fonction pour extraire le nom de variable après $
 char	*extract_var_name(char *str, int start)
@@ -63,10 +28,10 @@ char	*extract_var_name(char *str, int start)
 		i++;
 	}
 	if (len == 0)
-	return (NULL);
+		return (NULL);
 	var_name = malloc(len + 1);
 	if (!var_name)
-	return (NULL);
+		return (NULL);
 	ft_strncpy(var_name, &str[start], len);
 	var_name[len] = '\0';
 	return (var_name);
@@ -147,7 +112,6 @@ char	*replace_variable(char *str, int dollar_pos, char *var_name,
 		i++;
 		j++;
 	}
-new_str[i] = '\0';
-	printf("new_str: %p\n", new_str);
+	new_str[i] = '\0';
 	return (new_str);
 }

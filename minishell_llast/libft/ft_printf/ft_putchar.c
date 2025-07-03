@@ -3,18 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   ft_putchar.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
+/*   By: wlarbi-a <wlarbi-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/27 11:24:24 by fbenkaci          #+#    #+#             */
-/*   Updated: 2025/01/04 12:09:41 by fbenkaci         ###   ########.fr       */
+/*   Updated: 2025/06/29 17:22:17 by wlarbi-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-int ft_putchar(int c)
+int	ft_putchar(int c)
 {
-	int count;
+	int	count;
 
 	count = 0;
 	count += write(1, &c, 1);

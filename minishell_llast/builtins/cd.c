@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
+/*   By: wlarbi-a <wlarbi-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 16:11:03 by fbenkaci          #+#    #+#             */
-/*   Updated: 2025/06/27 20:19:10 by fbenkaci         ###   ########.fr       */
+/*   Updated: 2025/07/01 15:38:25 by wlarbi-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,8 +86,6 @@ int	cd_without_arg(t_struct *data)
 	char	*home;
 	char	*oldpwd;
 
-	// char	*new_pwd;
-	// new_pwd = NULL;
 	oldpwd = getcwd(NULL, 0);
 	if (!oldpwd)
 		return (perror("getcwd"), 0);
@@ -126,9 +124,6 @@ int	ft_cd(t_exec *exec, t_struct *data, char **cmd)
 	else if (!cd_path(data, cmd[1]))
 	{
 		exec->last_status = 1;
-		ft_putstr_fd("minishell: cd: ", 2);
-		ft_putstr_fd(cmd[1], 2);
-		ft_putstr_fd(": No such file or directory\n", 2);
 		return (0);
 	}
 	exec->last_status = 0;

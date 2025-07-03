@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   token_to_cmd_2.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
+/*   By: wlarbi-a <wlarbi-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 19:16:07 by fbenkaci          #+#    #+#             */
-/*   Updated: 2025/06/27 20:39:18 by fbenkaci         ###   ########.fr       */
+/*   Updated: 2025/07/02 15:21:24 by wlarbi-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,17 +14,27 @@
 
 int	handle_in(t_struct **cur, t_cmd *cmd)
 {
+	t_redir	*new_redir;
+
 	if ((*cur)->next)
 	{
-		while (*cur && (*cur)->next && (*cur)->next->type == SPACES)
+		*cur = (*cur)->next;
+		while (*cur && (*cur)->type == SPACES)
 			*cur = (*cur)->next;
-		if (cmd->infile)
-			free(cmd->infile);
-		cmd->infile = ft_strdup((*cur)->next->str);
+		if (!*cur)
+			return (-1);
+		
+		if (!(*cur)->str || (*cur)->str[0] == '\0')
+		{
+			ft_putstr_fd("minishell: : No such file or directory\n", 2);
+			return (-1);
+		}
+		new_redir = create_redir_node((*cur)->str, 0);
+		if (!new_redir)
+			return (-1);
+		add_infile_to_list(cmd, new_redir, (*cur)->str);
 		if (!cmd->infile)
 			return (-1);
-		if ((*cur)->next)
-			*cur = (*cur)->next;
 		return (1);
 	}
 	return (0);
@@ -32,26 +42,26 @@ int	handle_in(t_struct **cur, t_cmd *cmd)
 
 int	handle_out(t_struct **cur, t_cmd *cmd, int fd)
 {
+	t_redir	*new_redir;
+
+	(void)fd;
 	if ((*cur)->next)
 	{
-		cmd->append = 0;
 		*cur = (*cur)->next;
 		while (*cur && (*cur)->type == SPACES)
 			*cur = (*cur)->next;
 		if (!*cur)
 			return (-1);
-		if (cmd->outfile)
+		if (!(*cur)->str || (*cur)->str[0] == '\0')
 		{
-			fd = open(cmd->outfile, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-			if (fd == -1)
-			{
-				perror(cmd->outfile);
-				return (-1);
-			}
-			close(fd);
-			free(cmd->outfile);
+			ft_putstr_fd("minishell: : No such file or directory\n", 2);
+			return (-1);
 		}
-		cmd->outfile = ft_strdup((*cur)->str);
+		new_redir = create_redir_node((*cur)->str, 0);
+		if (!new_redir)
+			return (-1);
+		add_outfile_to_list(cmd, new_redir, (*cur)->str);
+		cmd->append = 0;
 		if (!cmd->outfile)
 			return (-1);
 	}
@@ -80,19 +90,20 @@ int	handle_out_and_in(t_struct **cur, t_cmd *cmd)
 int	handle_word_and_expand(t_struct **cur, t_cmd *cmd, int *i, char **envp)
 {
 	if (*cur && ((*cur)->type == WORD || (*cur)->type == WORD_D_QUOTES
-			|| (*cur)->type == WORD_S_QUOTES))
+			|| (*cur)->type == WORD_S_QUOTES || (*cur)->type == EMPTY_QUOTES))
 	{
+		if ((*cur)->next && (*cur)->next->type == WORD && (*cur)->next->str
+			&& ft_strcmp((*cur)->next->str, "=") == 0 && ((!(*cur)->next->next)
+				|| ((*cur)->next->next && ((*cur)->next->next->type == WORD
+						|| (*cur)->next->next->type == WORD_D_QUOTES
+						|| (*cur)->next->next->type == WORD_S_QUOTES
+						|| (*cur)->next->next->type == EMPTY_QUOTES))))
+			return (handle_variable_assignment(cur, cmd, i));
 		if (ft_strchr((*cur)->str, '$') && (*cur)->type != WORD_S_QUOTES)
 		{
-			if (expand_variable(cur, (*cur)->str, envp) == -1)
+			if (process_variable_expansion2(cur, cmd, i, envp) == -1)
 				return (-1);
-			if ((*cur)->str[0] == '\0')
-			{
-				return (1);
-			}
-			cmd->argv[*i] = ft_strdup((*cur)->str);
-			if (!cmd->argv[*i])
-				return (ft_free_array(cmd->argv), -1);
+			return (1);
 		}
 		else
 		{
@@ -111,22 +122,12 @@ int	handle_word_and_append(t_struct **cur, t_cmd *cmd, int *i, char **envp)
 	{
 		if ((*cur)->next)
 		{
-			cmd->append = 1;
-			free(cmd->outfile);
-			cmd->outfile = NULL;
-			while (*cur && (*cur)->next && (*cur)->next->type == SPACES)
-				*cur = (*cur)->next;
-			if (!(*cur)->next)
+			if (handle_append_redirection(cur, cmd) == -1)
 				return (-1);
-			cmd->outfile = ft_strdup((*cur)->next->str);
-			if (!cmd->outfile)
-				return (-1);
-			if ((*cur)->next)
-				*cur = (*cur)->next;
 		}
 	}
 	else if (*cur && ((*cur)->type == WORD || (*cur)->type == WORD_D_QUOTES
-			|| (*cur)->type == WORD_S_QUOTES))
+			|| (*cur)->type == WORD_S_QUOTES || (*cur)->type == EMPTY_QUOTES))
 	{
 		if (handle_word_and_expand(cur, cmd, i, envp) == -1)
 			return (-1);

@@ -6,11 +6,13 @@
 /*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/12 16:27:16 by fbenkaci          #+#    #+#             */
-/*   Updated: 2025/06/23 13:27:09 by fbenkaci         ###   ########.fr       */
+/*   Updated: 2025/07/03 17:44:22 by fbenkaci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+// #define _XOPEN_SOURCE 700
 #include "../parsing/minishell.h"
+#include <signal.h>
 
 void	check_heredoc_interrupts(int line_nb, char *delimiter, int *fd)
 {
@@ -41,6 +43,8 @@ int	read_heredoc_line(char *delimiter, int line_nb, int *fd, char *buffer)
 	i = 0;
 	while (1)
 	{
+		if (g_signal_status == 130)
+			return (-1);
 		bytes_read = read(0, &c, 1);
 		if (bytes_read == 0)
 		{
@@ -50,7 +54,11 @@ int	read_heredoc_line(char *delimiter, int line_nb, int *fd, char *buffer)
 				continue ;
 		}
 		if (bytes_read == -1)
+		{
+			if (g_signal_status == 130)
+				return (-1);
 			return (perror("read"), close(fd[0]), close(fd[1]), -1);
+		}
 		buffer[i++] = c;
 		if (i >= 1023 || c == '\n')
 		{
@@ -70,6 +78,7 @@ int	process_heredoc_line(t_struct **data, char *delimiter, int *fd,
 	int		ret;
 
 	write(1, "> ", 2);
+	// line = readline("> ");
 	ret = read_heredoc_line(delimiter, *line_nb, fd, buffer);
 	if (ret == -1)
 		return (-1);
@@ -96,40 +105,45 @@ void	handle_sigint_heredoc(int sig)
 {
 	(void)sig;
 	g_signal_status = 130;
-	write(1, "\n", 1);
+	write(STDOUT_FILENO, "\n", 1);
 }
 
 int	heredoc_input(t_struct **data, char *delimiter)
 {
-	int	fd[2];
-	int	line_nb;
-	int	ret;
+	int					fd[2];
+	int					line_nb;
+	int					ret;
+	struct sigaction	old_sigint;
+	struct sigaction	new_sigint;
 
 	line_nb = 1;
 	if (init_heredoc_pipe(fd) == -1)
 		return (-1);
-	// Sauvegarder l'ancien handler et installer le nouveau
-	signal(SIGINT, handle_sigint_heredoc);
+	new_sigint.sa_handler = handle_sigint_heredoc;
+	sigemptyset(&new_sigint.sa_mask);
+	new_sigint.sa_flags = 0;
+	sigaction(SIGINT, &new_sigint, &old_sigint);
 	while (1)
 	{
-		// Vérifier si Ctrl+C a été reçu
-		if (g_signal_status == 130)
-		{
-			close(fd[0]);
-			close(fd[1]);
-			// signal(SIGINT, old_sigint);  // Restaurer l'ancien handler
-			return (-1);
-		}
+		// if (g_signal_status == 130)
+		// {
+		// 	close(fd[0]);
+		// 	close(fd[1]);
+		// 	sigaction(SIGINT, &old_sigint, NULL);
+		// 	return (-1);
+		// }
 		ret = process_heredoc_line(data, delimiter, fd, &line_nb);
 		if (ret == -1)
 		{
-			signal(SIGINT, handle_sigint); // Restaurer l'ancien handler
+			close(fd[0]);
+			close(fd[1]);
+			sigaction(SIGINT, &old_sigint, NULL);
 			return (-1);
 		}
 		else if (ret == -2)
 			break ;
 	}
-	signal(SIGINT, handle_sigint); // Restaurer l'ancien handler
+	sigaction(SIGINT, &old_sigint, NULL);
 	close(fd[1]);
 	return (fd[0]);
 }
