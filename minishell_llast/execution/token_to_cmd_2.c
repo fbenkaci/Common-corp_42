@@ -23,7 +23,6 @@ int	handle_in(t_struct **cur, t_cmd *cmd)
 			*cur = (*cur)->next;
 		if (!*cur)
 			return (-1);
-		
 		if (!(*cur)->str || (*cur)->str[0] == '\0')
 		{
 			ft_putstr_fd("minishell: : No such file or directory\n", 2);

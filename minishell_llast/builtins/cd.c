@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wlarbi-a <wlarbi-a@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/13 16:11:03 by fbenkaci          #+#    #+#             */
-/*   Updated: 2025/07/01 15:38:25 by wlarbi-a         ###   ########.fr       */
+/*   Created: 2025/07/05 19:47:07 by fbenkaci          #+#    #+#             */
+/*   Updated: 2025/07/05 19:49:17 by fbenkaci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ char	*update_env(t_struct *data, char *var, char *new_val_var)
 		}
 		i++;
 	}
-	return (NULL);
+	return (add_env_var(data, var, new_val_var));
 }
 
 char	*get_env_value(t_struct *data, char *key)
@@ -129,23 +129,3 @@ int	ft_cd(t_exec *exec, t_struct *data, char **cmd)
 	exec->last_status = 0;
 	return (1);
 }
-
-// int	main(int ac, char **av, char **envp)
-// {
-// 	t_struct	*data;
-// 	char		**cmd;
-
-// 	data = malloc(sizeof(t_struct));
-// 	if (!cpy_env(data, envp))
-// 		return (0);
-// 	cmd = malloc(10000);
-// 	(void)ac;
-// 	(void)av;
-// 	cmd[0] = "cd";
-// 	cmd[1] = "hello/o";
-// 	ft_cd(data, cmd);
-// 	free(cmd);
-// 	ft_free_array(data->env);
-// 	free(data);
-// 	return (0);
-// }

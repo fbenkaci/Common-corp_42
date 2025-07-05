@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wlarbi-a <wlarbi-a@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/06/08 12:18:51 by fbenkaci          #+#    #+#             */
-/*   Updated: 2025/07/01 15:38:14 by wlarbi-a         ###   ########.fr       */
+/*   Created: 2025/07/05 19:38:28 by fbenkaci          #+#    #+#             */
+/*   Updated: 2025/07/05 19:49:02 by fbenkaci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,8 @@ typedef struct s_garbage		t_garbage;
 typedef struct s_expand_data	t_expand_data;
 
 /*------------------builtin-----------------*/
-
+char							*add_env_var(t_struct *data, char *var,
+									char *new_val_var);
 int								ft_export(t_exec *exec, t_struct *data,
 									char **cmd);
 int								ft_unset(t_exec *exec, t_struct *data,
@@ -35,9 +36,7 @@ int								ft_env(t_exec *exec, t_struct *data,
 									char **cmd);
 int								ft_cd(t_exec *exec, t_struct *data, char **cmd);
 int								ft_echo(t_exec *exec, char **cmd);
-// int		ft_exit(char **cmd);
 int								ft_pwd(t_exec *exec);
-
 int								exec_builtin(t_exec *exec, t_struct *data,
 									t_cmd *cmd);
 int								is_builtin(char *cmd);
@@ -60,7 +59,6 @@ int								add_or_replace_env_var(t_struct *data,
 									char *cmd);
 int								add_in_env(t_struct *data, char *cmd);
 int								cpy_env(t_struct *data, char **envp);
-
 char							*update_env(t_struct *data, char *var,
 									char *new_val_var);
 int								update_pwd_vars(t_struct *data, char *oldpwd);

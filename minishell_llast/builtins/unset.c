@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/20 11:33:46 by fbenkaci          #+#    #+#             */
-/*   Updated: 2025/06/18 16:34:26 by fbenkaci         ###   ########.fr       */
+/*   Created: 2025/07/05 19:58:37 by fbenkaci          #+#    #+#             */
+/*   Updated: 2025/07/05 20:02:25 by fbenkaci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,36 +61,41 @@ int	ft_unset(t_exec *exec, t_struct *data, char **cmd)
 	return (1);
 }
 
-int	cpy_env(t_struct *data, char **envp)
+int	create_default_env(t_struct *data)
 {
-	char *cwd;
+	char	*cwd;
+	int		i;
+
+	i = 0;
+	cwd = getcwd(NULL, 0);
+	if (!cwd)
+		return (-1);
+	data->env = malloc(sizeof(char *) * 5);
+	if (!data->env)
+		return (free(cwd), -1);
+	data->env[i++] = ft_strjoin("PWD=", cwd);
+	if (!data->env[i - 1])
+		return (free(cwd), ft_free_array(data->env), -1);
+	data->env[i++] = ft_strjoin("OLDPWD=", cwd);
+	if (!data->env[i - 1])
+		return (free(cwd), ft_free_array(data->env), -1);
+	data->env[i++] = ft_strdup("SHLVL=1");
+	if (!data->env[i - 1])
+		return (free(cwd), ft_free_array(data->env), -1);
+	data->env[i++] = ft_strdup("_=/usr/bin/env");
+	if (!data->env[i - 1])
+		return (free(cwd), ft_free_array(data->env), -1);
+	data->env[4] = NULL;
+	return (free(cwd), 1);
+}
+
+int	copy_existing_env(t_struct *data, char **envp)
+{
 	int	len;
 	int	i;
 
 	len = 0;
 	i = 0;
-	if (!envp || !*envp)
-	{
-		cwd = getcwd(NULL, 0);
-		len = 3;
-		data->env = malloc(sizeof(char *) * (len + 1));
-		if (!data->env)
-			return (-1);
-		data->env[i] = ft_strjoin("PWD=", cwd);
-		if (!data->env[i])
-			return (ft_free_array(data->env), -1);
-		i++;
-		data->env[i] = ft_strdup("SHLVL=1");
-		if (!data->env[i])
-			return (ft_free_array(data->env), -1);
-		i++;
-		data->env[i] = ft_strdup("_=/usr/bin/env");
-		if (!data->env[i])
-			return (ft_free_array(data->env), -1);
-		data->env[len] = NULL;
-		free(cwd);
-		return (1);
-	}
 	while (envp[len])
 		len++;
 	data->env = malloc(sizeof(char *) * (len + 1));
@@ -107,3 +112,9 @@ int	cpy_env(t_struct *data, char **envp)
 	return (1);
 }
 
+int	cpy_env(t_struct *data, char **envp)
+{
+	if (!envp || !*envp)
+		return (create_default_env(data));
+	return (copy_existing_env(data, envp));
+}

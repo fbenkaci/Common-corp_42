@@ -6,7 +6,7 @@
 /*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/15 13:30:06 by fbenkaci          #+#    #+#             */
-/*   Updated: 2025/06/15 15:51:20 by fbenkaci         ###   ########.fr       */
+/*   Updated: 2025/07/05 19:03:11 by fbenkaci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,16 @@ int	resize_buffer_if_needed(t_expand_data *data)
 		}
 		free(data->result);
 		data->result = new_result;
+	}
+	return (1);
+}
+
+int	init_heredoc_pipe(int *fd)
+{
+	if (pipe(fd) == -1)
+	{
+		perror("pipe");
+		return (-1);
 	}
 	return (1);
 }

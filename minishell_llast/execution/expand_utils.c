@@ -21,7 +21,6 @@ char	*extract_var_name(char *str, int start)
 
 	i = start;
 	len = 0;
-	// Calculer la longueur du nom de variable
 	while (str[i] && (ft_isalnum(str[i]) || str[i] == '_'))
 	{
 		len++;
@@ -101,11 +100,9 @@ char	*replace_variable(char *str, int dollar_pos, char *var_name,
 	if (!new_str)
 		return (NULL);
 	i = copy_before_dollar(new_str, str, dollar_pos);
-	// Copier la valeur de la variable (si elle existe)
 	i = copy_variable_value(var_value, new_str, i);
 	var_name_len = ft_strlen(var_name);
-	// Copier la partie après la variable
-	j = dollar_pos + var_name_len + 1; // +1 pour le $
+	j = dollar_pos + var_name_len + 1;
 	while (str[j])
 	{
 		new_str[i] = str[j];

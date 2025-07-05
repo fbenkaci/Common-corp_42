@@ -78,3 +78,32 @@ int	cd_path(t_struct *data, const char *path)
 		return (0);
 	return (1);
 }
+
+char	*add_env_var(t_struct *data, char *var, char *new_val_var)
+{
+	char	**new_env;
+	char	*new_string;
+	int		len;
+	int		i;
+
+	len = 0;
+	while (data->env[len])
+		len++;
+	new_env = malloc(sizeof(char *) * (len + 2));
+	if (!new_env)
+		return (NULL);
+	i = 0;
+	while (i < len)
+	{
+		new_env[i] = data->env[i];
+		i++;
+	}
+	new_string = ft_strjoin(var, new_val_var);
+	if (!new_string)
+		return (free(new_env), NULL);
+	new_env[len] = new_string;
+	new_env[len + 1] = NULL;
+	free(data->env);
+	data->env = new_env;
+	return (new_string);
+}

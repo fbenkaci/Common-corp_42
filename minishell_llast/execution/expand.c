@@ -14,9 +14,9 @@
 
 int	process_variable_expansion(t_struct **cur, char *str, char **envp, int i)
 {
-	char *var_name;
-	char *var_value;
-	char *new_str;
+	char	*var_name;
+	char	*var_value;
+	char	*new_str;
 
 	var_name = extract_var_name(str, i + 1);
 	if (!var_name)
@@ -44,9 +44,9 @@ int	process_variable_expansion(t_struct **cur, char *str, char **envp, int i)
 static int	handle_exit_status_expansion(t_struct **cur, char *current_str,
 		int i)
 {
-	char *exit_status_str;
-	char *new_str;
-	int result;
+	char	*exit_status_str;
+	char	*new_str;
+	int		result;
 
 	exit_status_str = ft_itoa((*cur)->exec->last_status);
 	if (!exit_status_str)
@@ -66,7 +66,7 @@ static int	handle_exit_status_expansion(t_struct **cur, char *current_str,
 static int	handle_normal_variable_expansion(t_struct **cur, char *current_str,
 		char **envp, int i)
 {
-	int result;
+	int		result;
 
 	result = process_variable_expansion(cur, current_str, envp, i);
 	return (result);
@@ -76,7 +76,7 @@ static int	handle_normal_variable_expansion(t_struct **cur, char *current_str,
 static int	process_char_at_position(t_struct **cur, char **current_str,
 		char **envp, int *i)
 {
-	int result;
+	int		result;
 
 	if ((*current_str)[*i] == '$' && (*current_str)[*i + 1] == '?')
 	{
@@ -105,9 +105,9 @@ static int	process_char_at_position(t_struct **cur, char **current_str,
 // Fonction principale d'expansion des variables
 int	expand_variable(t_struct **cur, char *str, char **envp)
 {
-	char *current_str;
-	int i;
-	int result;
+	char	*current_str;
+	int		i;
+	int		result;
 
 	current_str = str;
 	i = 0;

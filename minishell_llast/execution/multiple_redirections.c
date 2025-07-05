@@ -60,7 +60,7 @@ int	handle_multiple_outfiles(t_struct *data, t_cmd *cmd, t_exec *exec)
 		if (fd < 0)
 		{
 			handle_cmd_error(current->filename);
-			return (-1);  // Retourner une erreur au lieu de faire exit(1)
+			return (-1);
 		}
 		if (current->next == NULL)
 		{
@@ -86,7 +86,7 @@ int	handle_multiple_infiles(t_struct *data, t_cmd *cmd, t_exec *exec)
 		if (fd < 0)
 		{
 			handle_cmd_error(current->filename);
-			return (-1);  // Retourner une erreur au lieu de faire exit(1)
+			return (-1);
 		}
 		if (current->next == NULL)
 		{

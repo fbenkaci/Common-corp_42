@@ -38,14 +38,7 @@ int	is_likely_parsing_fragment(char *arg, char **cmd, int current_index)
 		return (0);
 	prev_arg = cmd[current_index - 1];
 	if (prev_arg && ft_strchr(prev_arg, '='))
-	{
-		// Si l'argument précédent se termine par '=', alors cet argument
-		// est probablement la valeur (même si elle est vide)
-		// On ne doit pas le considérer comme un fragment
 		return (0);
-	}
-	// Ne pas traiter les identifiants invalides comme des fragments de parsing
-	// Ils doivent être traités pour afficher le message d'erreur approprié
 	return (0);
 }
 
@@ -57,7 +50,7 @@ int	should_process_export_arg(char *arg)
 		return (1);
 	if (is_valid_identifier(arg))
 		return (1);
-	return (1);  // Même les identifiants invalides doivent être traités pour afficher l'erreur
+	return (1);
 }
 
 static void	print_export_error(char *cmd)

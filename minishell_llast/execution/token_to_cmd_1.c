@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   token_to_cmd_1.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wlarbi-a <wlarbi-a@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/23 16:39:52 by fbenkaci          #+#    #+#             */
-/*   Updated: 2025/07/02 16:01:09 by wlarbi-a         ###   ########.fr       */
+/*   Created: 2025/07/05 20:04:41 by fbenkaci          #+#    #+#             */
+/*   Updated: 2025/07/05 20:11:26 by fbenkaci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 
 #define MAX_ARGS 100
 
-// Fonction pour traiter un token individuel
 int	process_single_token(t_struct **cur, t_cmd *cmd, int *i, char **envp)
 {
 	int	res;
@@ -42,7 +41,6 @@ int	process_single_token(t_struct **cur, t_cmd *cmd, int *i, char **envp)
 	return (1);
 }
 
-// Fonction principale
 int	fill_cmd_from_token(t_struct **cur, t_cmd *cmd, int *i, char **envp)
 {
 	int	res;
@@ -62,7 +60,7 @@ t_cmd	*init_new_cmd(t_struct **cur, char **env)
 	t_cmd	*cmd;
 
 	cmd = malloc(sizeof(t_cmd));
-	if (cmd==NULL)
+	if (cmd == NULL)
 		return (NULL);
 	cmd->heredoc_delim = NULL;
 	cmd->outfile = NULL;
@@ -73,10 +71,8 @@ t_cmd	*init_new_cmd(t_struct **cur, char **env)
 	cmd->heredoc = 0;
 	cmd->append = 0;
 	cmd->heredoc_fd = 0;
-	if((*cur))
-	{	
+	if ((*cur))
 		(*cur)->env = env;
-	}
 	cmd->argv = malloc(sizeof(char *) * (MAX_ARGS + 1));
 	if (!cmd->argv)
 	{
@@ -116,7 +112,7 @@ t_cmd	*create_cmd_from_tokens(t_struct **cur, char **env, t_exec *exec)
 {
 	t_cmd		*cmd;
 	t_struct	*tmp;
-	
+
 	reorder_command_tokens(cur);
 	cmd = init_new_cmd(cur, env);
 	if (!cmd)
@@ -127,7 +123,7 @@ t_cmd	*create_cmd_from_tokens(t_struct **cur, char **env, t_exec *exec)
 		tmp->exec = exec;
 		tmp = tmp->next;
 	}
-	if((*cur))
+	if ((*cur))
 	{
 		if (create_cmd_list(cur, cmd, (*cur)->env) == -1)
 		{
