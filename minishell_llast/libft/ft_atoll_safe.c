@@ -13,6 +13,21 @@
 #include "libft.h"
 #include <limits.h>
 
+static int	ft_skip_whitespace_and_sign(const char *str, int *i, int *sign)
+{
+	*i = 0;
+	*sign = 1;
+	while ((str[*i] >= 9 && str[*i] <= 13) || str[*i] == 32)
+		(*i)++;
+	if (str[*i] == '-' || str[*i] == '+')
+	{
+		if (str[*i] == '-')
+			*sign = -1;
+		(*i)++;
+	}
+	return (1);
+}
+
 int	ft_atoll_safe(const char *str, long long *result)
 {
 	long long	res;
@@ -20,19 +35,10 @@ int	ft_atoll_safe(const char *str, long long *result)
 	int			i;
 
 	res = 0;
-	sign = 1;
-	i = 0;
 	*result = 0;
 	if (!str)
 		return (0);
-	while ((str[i] >= 9 && str[i] <= 13) || str[i] == 32)
-		i++;
-	if (str[i] == '-' || str[i] == '+')
-	{
-		if (str[i] == '-')
-			sign = -1;
-		i++;
-	}
+	ft_skip_whitespace_and_sign(str, &i, &sign);
 	while (str[i] >= '0' && str[i] <= '9')
 	{
 		if (res > (LLONG_MAX - (str[i] - '0')) / 10)

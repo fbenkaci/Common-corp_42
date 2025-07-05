@@ -75,7 +75,7 @@ int	update_pwd_vars(t_struct *data, char *oldpwd)
 	if (!env_old || !env_new)
 	{
 		free_all(new_pwd, oldpwd, env_old, env_new);
-		return (ft_putstr_fd("error: PWD or OLDPWD dont exist.\n", 2), 0);
+		return (0);
 	}
 	free_all(new_pwd, oldpwd, NULL, NULL);
 	return (1);
