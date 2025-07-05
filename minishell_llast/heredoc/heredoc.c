@@ -6,7 +6,7 @@
 /*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/12 16:27:16 by fbenkaci          #+#    #+#             */
-/*   Updated: 2025/07/03 17:44:22 by fbenkaci         ###   ########.fr       */
+/*   Updated: 2025/07/05 12:54:59 by fbenkaci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,13 +125,6 @@ int	heredoc_input(t_struct **data, char *delimiter)
 	sigaction(SIGINT, &new_sigint, &old_sigint);
 	while (1)
 	{
-		// if (g_signal_status == 130)
-		// {
-		// 	close(fd[0]);
-		// 	close(fd[1]);
-		// 	sigaction(SIGINT, &old_sigint, NULL);
-		// 	return (-1);
-		// }
 		ret = process_heredoc_line(data, delimiter, fd, &line_nb);
 		if (ret == -1)
 		{

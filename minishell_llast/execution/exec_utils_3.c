@@ -104,7 +104,13 @@ int	command_loc(t_struct *data, t_exec *exec, char *cmd)
 	}
 	path = search_path(data->env);
 	if (!path)
+	{
+		errno = ENOENT;
+		ft_putstr_fd("minishell: ", 2);
+		ft_putstr_fd(cmd, 2);
+		ft_putstr_fd(": command not found\n", 2);
 		return (0);
+	}
 	if (!split_path(exec, path, cmd))
 		return (0);
 	return (1);

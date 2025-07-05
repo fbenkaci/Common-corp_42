@@ -68,6 +68,13 @@ int	cpy_env(t_struct *data, char **envp)
 
 	len = 0;
 	i = 0;
+	if (!envp)
+	{
+		len = 3;
+		data->env = malloc(sizeof(char *) * (len + 1));
+		if (!data->env)
+			return (-1);
+	}
 	while (envp[len])
 		len++;
 	data->env = malloc(sizeof(char *) * (len + 1));

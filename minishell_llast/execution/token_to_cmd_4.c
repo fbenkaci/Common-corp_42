@@ -111,7 +111,7 @@ void	free_all_cmd(t_cmd *cmd)
 			free_outfiles(cmd->infiles);
 		if (cmd->heredoc_delim)
 			free(cmd->heredoc_delim);
-		if (cmd->heredoc_fd)
+		if (cmd->heredoc_fd > 0)
 			close(cmd->heredoc_fd);
 		free(cmd);
 		cmd = tmp;
