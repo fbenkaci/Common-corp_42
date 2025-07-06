@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   exec_utils_55.c                                    :+:      :+:    :+:   */
+/*   exec_utils_5.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/05 20:27:21 by fbenkaci          #+#    #+#             */
-/*   Updated: 2025/07/05 20:27:25 by fbenkaci         ###   ########.fr       */
+/*   Updated: 2025/07/06 15:46:01 by fbenkaci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,4 +73,28 @@ void	setup_redirections(t_struct *data, t_cmd *cmd, t_exec *exec)
 		handle_heredoc_redirs(cmd);
 	else
 		handle_file_redirs(data, cmd, exec);
+}
+
+void	free_all_shell(t_struct **data, t_exec *exec, t_cmd *cmd)
+{
+	if (cmd)
+		free_all_cmd(cmd);
+	if (*data)
+	{
+		if ((*data)->env)
+			ft_free_array((*data)->env);
+		if ((*data)->str)
+			free((*data)->str);
+		if ((*data)->token_pool)
+			free_token_pool((*data)->token_pool);
+		free(*data);
+	}
+	if (exec)
+	{
+		if (exec->pipes != NULL)
+			free(exec->pipes);
+		if (exec->path)
+			free(exec->path);
+		free(exec);
+	}
 }

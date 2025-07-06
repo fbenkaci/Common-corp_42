@@ -19,7 +19,7 @@ int	ft_pwd(t_exec *exec)
 	cwd = getcwd(NULL, 0);
 	if (cwd)
 	{
-		ft_printf("%s\n", cwd);
+		printf("%s\n", cwd);
 		free(cwd);
 		exec->last_status = 0;
 		return (1);

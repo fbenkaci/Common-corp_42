@@ -12,43 +12,6 @@
 
 #include "builtins.h"
 
-// int	ft_echo(char **cmd)
-// {
-// 	int	flag_n;
-// 	int	i;
-
-// 	flag_n = 0;
-// 	i = 1;
-// 	if (!cmd[1])
-// 		return (ft_printf("\n"), 0);
-// 	else if (cmd[1][0] == '-')
-// 	{
-// 		while (cmd[1][i] && cmd[1][i] == 'n')
-// 		{
-// 			flag_n = 1;
-// 			i++;
-// 		}
-// 		if (cmd[1][i] != '\0' && cmd[1][i] != 'n')
-// 			flag_n = 0;
-// 		else if (cmd[1][i] == '\0' && !cmd[2])
-// 			return (0);
-// 	}
-// 	if (flag_n)
-// 		i = 2;
-// 	else
-// 		i = 1;
-// 	while (cmd[i])
-// 	{
-// 		ft_printf("%s", cmd[i]);
-// 		if (cmd[i + 1])
-// 			ft_printf(" ");
-// 		i++;
-// 	}
-// 	if (!flag_n)
-// 		ft_printf("\n");
-// 	return (1);
-// }
-
 int	is_flag_n(char *str)
 {
 	int	i;
@@ -78,13 +41,13 @@ int	ft_echo(t_exec *exec, char **cmd)
 	}
 	while (cmd[i])
 	{
-		ft_printf("%s", cmd[i]);
+		printf("%s", cmd[i]);
 		if (cmd[i + 1] && cmd[i + 1][0] != '\0')
-			ft_printf(" ");
+			printf(" ");
 		i++;
 	}
 	if (flag_n == 0)
-		ft_printf("\n");
+		printf("\n");
 	exec->last_status = 0;
 	return (1);
 }

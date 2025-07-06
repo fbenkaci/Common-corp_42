@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   exec_utilss.c                                      :+:      :+:    :+:   */
+/*   exec_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/05 20:26:10 by fbenkaci          #+#    #+#             */
-/*   Updated: 2025/07/05 20:26:15 by fbenkaci         ###   ########.fr       */
+/*   Updated: 2025/07/06 15:31:28 by fbenkaci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,15 +22,13 @@ int	open_all_heredocs(t_exec *exec, t_struct **data, t_cmd *cmd)
 		if (tmp->heredoc)
 		{
 			tmp->heredoc_fd = heredoc_input(data, tmp->heredoc_delim);
-			if (tmp->heredoc_fd < 0)
+			if (g_signal_status == 130)
 			{
-				if (g_signal_status == 130)
-				{
-					exec->last_status = 130;
-					return (130);
-				}
-				return (-1);
+				exec->last_status = 130;
+				return (130);
 			}
+			if (tmp->heredoc_fd < 0)
+				return (-1);
 		}
 		tmp = tmp->next;
 	}

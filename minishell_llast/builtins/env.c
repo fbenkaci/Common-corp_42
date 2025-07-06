@@ -30,27 +30,9 @@ int	ft_env(t_exec *exec, t_struct *data, char **cmd)
 	while (data->env[i])
 	{
 		if (ft_strchr(data->env[i], '='))
-			ft_printf("%s\n", data->env[i]);
+			printf("%s\n", data->env[i]);
 		i++;
 	}
 	exec->last_status = 0;
 	return (1);
 }
-
-// int	main(int ac, char **av, char **envp)
-// {
-// 	t_minishell *data = malloc(sizeof(t_minishell));
-// 	char	**cmd;
-
-// 	cpy_env(data, envp);
-// 	cmd = malloc(sizeof(int) * 100);
-// 	cmd[1] = "hello";
-// 	(void)av;
-// 	(void)ac;
-// 	ft_env(data, cmd);
-// 	// int i = 0;
-// 	// ft_printf("%s", envp[i]);
-// 	free(data);
-// 	free(cmd);
-// 	return (0);
-// }

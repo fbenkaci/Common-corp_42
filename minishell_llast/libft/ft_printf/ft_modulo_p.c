@@ -12,29 +12,6 @@
 
 #include "ft_printf.h"
 
-// int	ft_modulo_p(unsigned long long nb, unsigned int base)
-// {
-// 	int		count;
-// 	char	*Base;
-
-// 	count = 0;
-// 	Base = "0123456789abcdef";
-// 	if (nb == 0)
-// 		return (write(1, "(nil)", 5));
-// 	count += ft_putstr("0x");
-// 	if (nb < base)
-// 	{
-// 		ft_putchar(Base[nb]);
-// 		count++;
-// 		return (count);
-// 	}
-// 	else
-// 	{
-// 		count += ft_putNbrBase_x((nb / base), base);
-// 		count += ft_putNbrBase_x((nb % base), base);
-// 	}
-// 	return (count);
-
 int	ft_modulo_p(unsigned long long nb, unsigned int base)
 {
 	int		count;
@@ -53,15 +30,3 @@ int	ft_modulo_p(unsigned long long nb, unsigned int base)
 	count += ft_putchar(base_16[nb % base]);
 	return (count);
 }
-
-// int main(void)
-// {
-//     char    *str;
-//     char    a;
-
-//     a = 98;
-//     str = &a;
-//     ft_printf("Mon modulo p [%p]\n", str);
-//     printf("Le vrai [%p]", str);
-//     return (0);
-// }

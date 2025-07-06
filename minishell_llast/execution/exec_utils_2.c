@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/27 16:15:20 by fbenkaci          #+#    #+#             */
-/*   Updated: 2025/06/19 15:23:31 by fbenkaci         ###   ########.fr       */
+/*   Created: 2025/07/06 15:43:35 by fbenkaci          #+#    #+#             */
+/*   Updated: 2025/07/06 15:43:35 by fbenkaci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,4 +75,22 @@ int	caculate_nb_cmd(t_exec *data, t_cmd *cmd)
 		return (-1);
 	data->nb_cmds = ft_lstsize_bis(cmd);
 	return (1);
+}
+
+// Fonction pour libérer tout depuis le processus parent (inclut le token pool)
+void	free_all_shell_parent(t_struct **data, t_exec *exec, t_cmd *cmd)
+{
+	if (cmd)
+		free_all_cmd(cmd);
+	if (*data)
+	{
+		if ((*data)->token_pool)
+			free_token_pool((*data)->token_pool);
+		free_tokens((*data));
+	}
+	if (exec->pipes != NULL)
+		free(exec->pipes);
+	if (exec->path)
+		free(exec->path);
+	free(exec);
 }

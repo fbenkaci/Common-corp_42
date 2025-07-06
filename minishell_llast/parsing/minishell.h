@@ -6,7 +6,7 @@
 /*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/05 19:27:21 by fbenkaci          #+#    #+#             */
-/*   Updated: 2025/07/05 20:10:14 by fbenkaci         ###   ########.fr       */
+/*   Updated: 2025/07/06 17:00:50 by fbenkaci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -180,6 +180,13 @@ int								process_variable_expansion2(t_struct **cur,
 									t_cmd *cmd, int *i, char **envp);
 int								handle_append_redirection(t_struct **cur,
 									t_cmd *cmd);
+void							print_cmd_not_found(char *cmd);
+int								is_path(char *cmd);
+void							handle_exec_error(t_struct **data, t_exec *exec,
+									t_cmd *cmd_list);
+void							cleanup_line(t_struct *data);
+void							handle_exit(t_struct *data);
+void							handle_user_line(t_struct *data, t_exec *exec);
 
 /* ========== COMMAND CREATION ========== */
 int								reorder_command_tokens(t_struct **cur);
@@ -297,5 +304,6 @@ int								handle_multiple_infiles(t_struct *data,
 									t_cmd *cmd, t_exec *exec);
 void							free_outfiles(t_redir *outfiles);
 t_redir							*create_redir_node(char *filename, int append);
+int								is_str_only_spaces(const char *str);
 
 #endif

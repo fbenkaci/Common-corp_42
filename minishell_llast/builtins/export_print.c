@@ -14,16 +14,16 @@
 
 void	print_after_equal(char **cpy_env, int i, int j, int *flag)
 {
-	ft_printf("declare -x ");
+	printf("declare -x ");
 	while (cpy_env[i][j] != '\0')
 	{
 		if (cpy_env[i][j] == '=' && *flag == 0)
 		{
 			*flag = 1;
-			ft_printf("=\"");
+			printf("=\"");
 		}
 		else
-			ft_printf("%c", cpy_env[i][j]);
+			printf("%c", cpy_env[i][j]);
 		j++;
 	}
 }
@@ -76,10 +76,10 @@ void	print_export(t_exec *exec, char **cpy_env)
 			j = 0;
 			print_after_equal(cpy_env, i, j, &flag);
 			if (flag == 1)
-				ft_printf("\"");
+				printf("\"");
 		}
 		if (flag2 == 1)
-			ft_printf("\n");
+			printf("\n");
 		i++;
 	}
 	exec->last_status = 0;
