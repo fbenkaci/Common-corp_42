@@ -6,7 +6,7 @@
 /*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/13 12:25:02 by fbenkaci          #+#    #+#             */
-/*   Updated: 2025/07/19 19:29:39 by fbenkaci         ###   ########.fr       */
+/*   Updated: 2025/07/20 15:11:55 by fbenkaci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@ typedef struct s_philo
 	int meal_count;            // For stop the meal
 	int					has_right;
 	int					has_left;
+	pthread_mutex_t		mutex_last_meal;
 	pthread_mutex_t		mutex_state;
 	pthread_mutex_t		mutex_meal_count;
 	philo_state			state;

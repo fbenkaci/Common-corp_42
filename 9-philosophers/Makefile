@@ -1,5 +1,5 @@
 NAME = philo
-CC = cc -g3 -Wall -Wextra -Werror
+CC = cc -g3 -g -pthread -Wall -Wextra -Werror
 SRCS = philosophers.c philosophers_utils_1.c philosophers_utils_2.c
 OBJ = $(SRCS:.c=.o)
 

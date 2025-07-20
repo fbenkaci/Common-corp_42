@@ -6,7 +6,7 @@
 /*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/13 15:09:24 by fbenkaci          #+#    #+#             */
-/*   Updated: 2025/07/19 20:10:16 by fbenkaci         ###   ########.fr       */
+/*   Updated: 2025/07/20 20:22:17 by fbenkaci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,14 +41,18 @@ int	check_someone_died(t_philo *philo)
 int	check_all_philos_alive(t_philo *philo)
 {
 	long long	died_time;
+	long long current_time;
 	int			i;
 
 	i = 0;
 	// Je met un mutex car un autre thread peut etre entrain de modifier l'etat d'un philo et donc lire une valeur pas bonne
 	while (i < philo->rules->nb_of_philos)
 	{
+		pthread_mutex_lock(&philo[i].mutex_last_meal);
+		current_time = get_current_time();
 		died_time = philo[i].last_meal + philo->rules->time_to_die;
-		if (get_current_time() >= died_time)
+		pthread_mutex_unlock(&philo[i].mutex_last_meal);
+		if (current_time >= died_time)
 		{
 			pthread_mutex_lock(&philo->rules->someone_died_mutex);
 			if (!philo->rules->someone_died)
@@ -58,7 +62,7 @@ int	check_all_philos_alive(t_philo *philo)
 				philo[i].state = is_died;
 				pthread_mutex_unlock(&philo[i].mutex_state);
 				pthread_mutex_lock(&philo->rules->printf_mutex);
-				printf("%lld %d died\n", get_current_time(), philo[i].id);
+				printf("%lld %d died\n", died_time, philo[i].id);
 				pthread_mutex_unlock(&philo->rules->printf_mutex);
 			}
 			pthread_mutex_unlock(&philo->rules->someone_died_mutex);
@@ -102,22 +106,31 @@ int	can_eat(t_philo *philo)
 	pthread_mutex_lock(&philo->mutex_state);
 	philo->state = is_eating;
 	pthread_mutex_unlock(&philo->mutex_state);
+	if (!check_someone_died(philo))
+		return (0);
 	pthread_mutex_lock(&philo->rules->printf_mutex);
+	if (!check_someone_died(philo))
+	{
+		pthread_mutex_unlock(&philo->rules->printf_mutex);
+		return (0);
+	}
 	printf("%lld %d is eating\n", get_current_time(), philo->id);
 	pthread_mutex_unlock(&philo->rules->printf_mutex);
 	while (get_current_time() < stop_eating)
 	{
-		if (!check_someone_died(philo))
-			return (0);
+		// if (!check_someone_died(philo))
+		// 	return (0);
 		if (!check_all_philos_alive(philo->rules->head_philo))
 		{
-			printf("ok can eat\n");
+			// printf("ok can eat\n");
 			release_forks(philo);
 			return (0);
 		}
 		usleep(1000);
 	}
+	pthread_mutex_lock(&philo->mutex_last_meal);
 	philo->last_meal = get_current_time();
+	pthread_mutex_unlock(&philo->mutex_last_meal);
 	return (1);
 }
 
@@ -130,8 +143,16 @@ void	release_forks(t_philo *philo)
 	nb_of_philos = philo->rules->nb_of_philos;
 	fork_right = (philo->id + nb_of_philos - 1) % nb_of_philos;
 	fork_left = (philo->id + nb_of_philos - 2) % nb_of_philos;
-	pthread_mutex_unlock(&philo->rules->fork_mutex[fork_right]);
-	pthread_mutex_unlock(&philo->rules->fork_mutex[fork_left]);
+	if (philo->has_left)
+	{
+		pthread_mutex_unlock(&philo->rules->fork_mutex[fork_left]);
+		philo->has_left = 0;
+	}
+	if (philo->has_right)
+	{
+		pthread_mutex_unlock(&philo->rules->fork_mutex[fork_right]);
+		philo->has_right = 0;
+	}
 }
 
 int	take_forks(t_philo *philo)
@@ -147,41 +168,60 @@ int	take_forks(t_philo *philo)
 	fork_left = (philo->id + nb_of_philos - 2) % nb_of_philos;
 	if (philo->id % 2 == 0)
 	{
-		// printf("id == %d\n", philo->id);
 		pthread_mutex_lock(&philo->rules->fork_mutex[fork_right]);
+		if (!check_someone_died(philo))
+			return (0);
 		philo->has_right = 1;
+		pthread_mutex_lock(&philo->rules->printf_mutex);
 		if (!check_someone_died(philo))
+		{
+			pthread_mutex_unlock(&philo->rules->printf_mutex);
 			return (0);
-		printf("%lld %d has taken a right fork\n", get_current_time(),
-			philo->id);
+		}
+		printf("%lld %d has taken a fork\n", get_current_time(), philo->id);
+		pthread_mutex_unlock(&philo->rules->printf_mutex);
 		pthread_mutex_lock(&philo->rules->fork_mutex[fork_left]);
-		philo->has_left = 1;
 		if (!check_someone_died(philo))
 			return (0);
-		printf("%lld %d has taken a left fork\n", get_current_time(),
-			philo->id);
+		philo->has_left = 1;
+		pthread_mutex_lock(&philo->rules->printf_mutex);
+		if (!check_someone_died(philo))
+		{
+			pthread_mutex_unlock(&philo->rules->printf_mutex);
+			return (0);
+		}
+		printf("%lld %d has taken a fork\n", get_current_time(), philo->id);
+		pthread_mutex_unlock(&philo->rules->printf_mutex);
 	}
 	else
 	{
 		pthread_mutex_lock(&philo->rules->fork_mutex[fork_left]);
-		if (!check_someone_died(philo))
-			return (0);
 		philo->has_left = 1;
-		printf("%lld %d has taken a left fork\n", get_current_time(),
-			philo->id);
-		pthread_mutex_lock(&philo->rules->fork_mutex[fork_right]);
-		philo->has_right = 1;
 		if (!check_someone_died(philo))
 			return (0);
-		printf("%lld %d has taken a right fork\n", get_current_time(),
-			philo->id);
+		pthread_mutex_lock(&philo->rules->printf_mutex);
+		if (!check_someone_died(philo))
+		{
+			pthread_mutex_unlock(&philo->rules->printf_mutex);
+			return (0);
+		}
+		printf("%lld %d has taken a fork\n", get_current_time(), philo->id);
+		pthread_mutex_unlock(&philo->rules->printf_mutex);
+		pthread_mutex_lock(&philo->rules->fork_mutex[fork_right]);
+		if (!check_someone_died(philo))
+			return (0);
+		philo->has_right = 1;
+		pthread_mutex_lock(&philo->rules->printf_mutex);
+		if (!check_someone_died(philo))
+		{
+			pthread_mutex_unlock(&philo->rules->printf_mutex);
+			return (0);
+		}
+		printf("%lld %d has taken a fork\n", get_current_time(), philo->id);
+		pthread_mutex_unlock(&philo->rules->printf_mutex);
 	}
-	if (!check_someone_died(philo))
-		return (0);
-	pthread_mutex_lock(&philo->rules->printf_mutex);
-	pthread_mutex_unlock(&philo->rules->printf_mutex);
-	if (!check_someone_died(philo))
-		return (0);
+	// if (!check_someone_died(philo))
+	// 	return (0);
 	return (1);
 }
 
@@ -214,6 +254,11 @@ int	change_state_to_sleep(t_philo *philo)
 	pthread_mutex_lock(&philo->mutex_state);
 	philo->state = is_sleeping;
 	pthread_mutex_unlock(&philo->mutex_state);
+	if (!check_someone_died(philo))
+	{
+		// pthread_mutex_unlock(&philo->rules->printf_mutex);
+		return (0);
+	}
 	pthread_mutex_lock(&philo->rules->printf_mutex);
 	if (!check_someone_died(philo))
 	{
@@ -224,7 +269,6 @@ int	change_state_to_sleep(t_philo *philo)
 	pthread_mutex_unlock(&philo->rules->printf_mutex);
 	if (!check_someone_died(philo))
 	{
-		pthread_mutex_unlock(&philo->rules->printf_mutex);
 		return (0);
 	}
 	while (get_current_time() < final_time)
@@ -257,6 +301,11 @@ int	change_state_to_thinking(t_philo *philo)
 	pthread_mutex_lock(&philo->mutex_state);
 	philo->state = is_thinking;
 	pthread_mutex_unlock(&philo->mutex_state);
+	if (!check_someone_died(philo))
+	{
+		// pthread_mutex_unlock(&philo->rules->printf_mutex);
+		return (0);
+	}
 	pthread_mutex_lock(&philo->rules->printf_mutex);
 	if (!check_someone_died(philo))
 	{
@@ -266,10 +315,7 @@ int	change_state_to_thinking(t_philo *philo)
 	printf("%lld %d is thinking\n", get_current_time(), philo->id);
 	pthread_mutex_unlock(&philo->rules->printf_mutex);
 	if (!check_someone_died(philo))
-	{
-		pthread_mutex_unlock(&philo->rules->printf_mutex);
 		return (0);
-	}
 	return (1);
 }
 
@@ -279,26 +325,31 @@ void	*routine(void *arg)
 
 	philo = (t_philo *)arg;
 	if (philo->id % 2 != 0)
-	{
 		usleep(1000);
-	}
 	while (check_all_philos_alive(philo->rules->head_philo)
 		&& check_can_philo_eat_more(philo))
 	{
 		if (!check_someone_died(philo))
 		{
+			// printf("ok routine__1\n");
 			if (philo->has_left || philo->has_right)
 				release_forks(philo);
 			return (NULL);
 		}
 		if (!take_forks(philo))
 		{
+			// printf("ok routine__2\n");
 			if (philo->has_left || philo->has_right)
+			{
+				// printf("ok\n");
 				release_forks(philo);
+				// printf("no\n");
+			}
 			return (NULL);
 		}
 		if (!can_eat(philo))
 		{
+			// printf("ok routine__3\n");
 			if (philo->has_left || philo->has_right)
 				release_forks(philo);
 			return (NULL);
@@ -306,13 +357,18 @@ void	*routine(void *arg)
 		release_forks(philo);
 		if (!check_all_philos_alive(philo->rules->head_philo))
 		{
-			printf("ok routine\n");
+			// printf("ok routine\n");
 			if (philo->has_left || philo->has_right)
+			{
+				// printf("yes\n");
 				release_forks(philo);
+				// printf("no00\n");
+			}
 			return (NULL);
 		}
 		if (!change_state_to_sleep(philo))
 		{
+			// printf("ok routine__4\n");
 			if (philo->has_left || philo->has_right)
 				release_forks(philo);
 			return (NULL);
@@ -331,6 +387,7 @@ int	init_mutex(t_philo *philo, t_rules *rules)
 	{
 		pthread_mutex_init(&philo[i].mutex_state, NULL);
 		pthread_mutex_init(&philo[i].mutex_meal_count, NULL);
+		pthread_mutex_init(&philo[i].mutex_last_meal, NULL);
 		i++;
 	}
 	rules->fork_mutex = malloc(sizeof(pthread_mutex_t) * rules->nb_of_philos);
@@ -359,6 +416,7 @@ void	destroy_mutex(t_philo *philo, t_rules *rules)
 	{
 		pthread_mutex_destroy(&philo[i].mutex_state);
 		pthread_mutex_destroy(&philo[i].mutex_meal_count);
+		pthread_mutex_destroy(&philo[i].mutex_last_meal);
 		i++;
 	}
 	i = 0;
