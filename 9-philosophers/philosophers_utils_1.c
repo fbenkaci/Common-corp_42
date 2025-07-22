@@ -6,9 +6,11 @@
 /*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/13 15:55:52 by fbenkaci          #+#    #+#             */
-/*   Updated: 2025/07/13 15:57:40 by fbenkaci         ###   ########.fr       */
+/*   Updated: 2025/07/22 16:08:46 by fbenkaci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#include "philosophers.h"
 
 int	ft_atoi(const char *str)
 {
@@ -33,4 +35,42 @@ int	ft_atoi(const char *str)
 		i++;
 	}
 	return (result * sign);
+}
+
+int	check_philo_is_thinking(t_philo *philo)
+{
+	pthread_mutex_lock(&philo->mutex_state);
+	if (philo->state == is_thinking)
+	{
+		pthread_mutex_unlock(&philo->mutex_state);
+		return (1);
+	}
+	pthread_mutex_unlock(&philo->mutex_state);
+	return (0);
+}
+
+int	check_someone_died(t_philo *philo)
+{
+	pthread_mutex_lock(&philo->rules->someone_died_mutex);
+	if (philo->rules->someone_died)
+	{
+		pthread_mutex_unlock(&philo->rules->someone_died_mutex);
+		return (0);
+	}
+	pthread_mutex_unlock(&philo->rules->someone_died_mutex);
+	return (1);
+}
+
+int	check_can_philo_eat_more(t_philo *philo)
+{
+	if (philo->rules->nb_meals_required == -1)
+		return (1);
+	pthread_mutex_lock(&philo->mutex_meal_count);
+	if (philo->meal_count < philo->rules->nb_meals_required)
+	{
+		pthread_mutex_unlock(&philo->mutex_meal_count);
+		return (1);
+	}
+	pthread_mutex_unlock(&philo->mutex_meal_count);
+	return (0);
 }
