@@ -6,7 +6,7 @@
 /*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 15:53:14 by fbenkaci          #+#    #+#             */
-/*   Updated: 2025/07/22 16:48:47 by fbenkaci         ###   ########.fr       */
+/*   Updated: 2025/07/23 19:53:57 by fbenkaci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,27 +86,6 @@ void	destroy_mutex(t_philo *philo, t_rules *rules)
 	}
 	pthread_mutex_destroy(&rules->printf_mutex);
 	pthread_mutex_destroy(&rules->someone_died_mutex);
-}
-
-void	release_forks(t_philo *philo)
-{
-	int	nb_of_philos;
-	int	fork_right;
-	int	fork_left;
-
-	nb_of_philos = philo->rules->nb_of_philos;
-	fork_right = (philo->id + nb_of_philos - 1) % nb_of_philos;
-	fork_left = (philo->id + nb_of_philos - 2) % nb_of_philos;
-	if (philo->has_left)
-	{
-		pthread_mutex_unlock(&philo->rules->fork_mutex[fork_left]);
-		philo->has_left = 0;
-	}
-	if (philo->has_right)
-	{
-		pthread_mutex_unlock(&philo->rules->fork_mutex[fork_right]);
-		philo->has_right = 0;
-	}
 }
 
 long long	get_current_time(void)

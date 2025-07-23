@@ -1,6 +1,6 @@
 NAME = philo
 CC = cc -g3 -g -pthread -Wall -Wextra -Werror
-SRCS = philosophers.c philosophers_utils_1.c philosophers_utils_2.c philosophers_utils_3.c philosophers_utils_4.c philosophers_utils_5.c philosophers_utils_6.c 
+SRCS = philosophers.c philosophers_utils_1.c philosophers_utils_2.c philosophers_utils_3.c philosophers_utils_4.c philosophers_utils_5.c philosophers_utils_6.c philosophers_utils_7.c
 OBJ = $(SRCS:.c=.o)
 
 all: $(NAME)

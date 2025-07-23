@@ -6,7 +6,7 @@
 /*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/13 12:25:02 by fbenkaci          #+#    #+#             */
-/*   Updated: 2025/07/22 17:42:29 by fbenkaci         ###   ########.fr       */
+/*   Updated: 2025/07/23 20:21:03 by fbenkaci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ typedef enum philo_state
 	is_sleeping,
 	is_eating,
 	is_died
-}						philo_state;
+}						t_philo_state;
 
 typedef struct s_philo	t_philo;
 
@@ -48,17 +48,15 @@ typedef struct s_rules
 
 typedef struct s_philo
 {
-	int id;              // For identify philo
-	long long last_meal; // For estimate time before die
-	// long long begining_of_eat;
-	// For stop to eat when he time of eat is finish
-	int meal_count; // For stop the meal
+	int					id;
+	long long			last_meal;
+	int					meal_count;
 	int					has_right;
 	int					has_left;
 	pthread_mutex_t		mutex_last_meal;
 	pthread_mutex_t		mutex_state;
 	pthread_mutex_t		mutex_meal_count;
-	philo_state			state;
+	t_philo_state		state;
 	t_rules				*rules;
 }						t_philo;
 
@@ -88,8 +86,14 @@ int						take_even_forks(t_philo *philo, int fork_right,
 							int fork_left);
 int						take_odd_forks(t_philo *philo, int fork_right,
 							int fork_left);
+int						lock_right_fork_even(t_philo *philo, int fork_right);
+int						take_forks(t_philo *philo);
+int						can_eat(t_philo *philo);
+void					safe_release_forks(t_philo *philo);
 void					*routine(void *args);
-
+int						init_mutex_and_thread(t_philo *philos, t_rules *rules);
+int						join_and_cleanup(t_rules *rules, t_philo *philos);
+int						run_simulation(t_rules *rules, t_philo *philos);
 int						ft_atoi(const char *str);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 16:10:36 by fbenkaci          #+#    #+#             */
-/*   Updated: 2025/07/22 17:11:55 by fbenkaci         ###   ########.fr       */
+/*   Updated: 2025/07/23 19:46:47 by fbenkaci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,23 +20,20 @@ int	change_state_to_thinking(t_philo *philo)
 		pthread_mutex_unlock(&philo->rules->someone_died_mutex);
 		return (0);
 	}
-	pthread_mutex_unlock(&philo->rules->someone_died_mutex);
 	pthread_mutex_lock(&philo->mutex_state);
 	philo->state = is_thinking;
 	pthread_mutex_unlock(&philo->mutex_state);
-	if (!check_someone_died(philo))
-		return (0);
 	pthread_mutex_lock(&philo->rules->printf_mutex);
-	if (!check_someone_died(philo))
+	if (philo->rules->someone_died)
 	{
 		pthread_mutex_unlock(&philo->rules->printf_mutex);
+		pthread_mutex_unlock(&philo->rules->someone_died_mutex);
 		return (0);
 	}
 	printf("%lld %d is thinking\n", get_current_time()
 		- philo->rules->start_time, philo->id);
 	pthread_mutex_unlock(&philo->rules->printf_mutex);
-	if (!check_someone_died(philo))
-		return (0);
+	pthread_mutex_unlock(&philo->rules->someone_died_mutex);
 	return (1);
 }
 
@@ -69,17 +66,23 @@ int	check_and_set_sleep_state(t_philo *philo)
 
 int	print_sleeping_state(t_philo *philo)
 {
-	if (!check_someone_died(philo))
+	pthread_mutex_lock(&philo->rules->someone_died_mutex);
+	if (philo->rules->someone_died)
+	{
+		pthread_mutex_unlock(&philo->rules->someone_died_mutex);
 		return (0);
+	}
 	pthread_mutex_lock(&philo->rules->printf_mutex);
-	if (!check_someone_died(philo))
+	if (philo->rules->someone_died)
 	{
 		pthread_mutex_unlock(&philo->rules->printf_mutex);
+		pthread_mutex_unlock(&philo->rules->someone_died_mutex);
 		return (0);
 	}
 	printf("%lld %d is sleeping\n", get_current_time()
 		- philo->rules->start_time, philo->id);
 	pthread_mutex_unlock(&philo->rules->printf_mutex);
+	pthread_mutex_unlock(&philo->rules->someone_died_mutex);
 	return (1);
 }
 
