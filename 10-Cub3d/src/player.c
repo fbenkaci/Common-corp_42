@@ -1,45 +1,57 @@
 /* ************************************************************************** */
-/*                                                                            */
+/*     	double move_speed;  // Vitesse de déplacement
+	double rot_speed;   // Vitesse de rotation
+	double old_dir_x;   // Stockage temporaire pour la rotation
+	double old_plane_x; // Stockage temporaire pour la rotation
+	// Définition des vitesses de mouvement et de rotation
+	// Ces valeurs peuvent être ajustées pour un contrôle plus fluide
+	move_speed = 0.1;
+	rot_speed = 0.03;                                                               */
 /*                                                        :::      ::::::::   */
 /*   player.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/20 13:35:29 by fbenkaci          #+#    #+#             */
-/*   Updated: 2025/08/25 19:40:42 by fbenkaci         ###   ########.fr       */
+/*   Updated: 2025/08/28 15:59:25 by fbenkaci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/cub3d.h"
 
+/*
+** Cette fonction initialise les propriétés du joueur :
+** - Position initiale dans la carte (x, y)
+** - Vecteur de direction (dir_x, dir_y) qui indique où le joueur regarde
+** - Plan de caméra (plane_x, plane_y) qui définit le champ de vision
+** - États des touches pour le contrôle du mouvement
+*/
 void	init_player(t_player *player)
 {
-
-	player->pos_x = 22;
-	player->pos_y = 12;
-	player->map_x = (int)player->pos_x;
-	player->map_y = (int)player->pos_y;
-	player->dir_x = -1;
-	player->dir_y = 0;
-	player->plane_x = 0;
-	player->plane_y = 0.66; // champ de vision standard (~66°)
-	player->time = 0;
-	player->old_time = 0;
-
-	player->x = WIDTH / 2;
-	player->y = HEIGHT / 2;
-	player->angle = PI / 2;
-	player->key_up = false;
-	player->key_down = false;
-	player->key_right = false;
-	player->key_left = false;
-
-	player->left_rotate = false;
-	player->right_rotate = false;
+	// Position initiale du joueur dans la carte (en pixels)
+	player->x = 22 * BLOCK;
+	player->y = 12 * BLOCK;
+	// Vecteur de direction initial : le joueur regarde vers le nord
+	player->dir_x = 0;
+	player->dir_y = -1;
+	// Plan de caméra perpendiculaire au vecteur de direction
+	// La valeur 0.66 représente environ un FOV de 66 degrés
+	player->plane_x = 0.66;
+	player->plane_y = 0;
+	// Initialisation des états des touches à faux
+	player->key_up = false;    // W - Avancer
+	player->key_down = false;  // S - Reculer
+	player->key_right = false; // D - Pas à droite
+	player->key_left = false;  // A - Pas à gauche
+	// États des touches de rotation
+	player->left_rotate = false;  // Flèche gauche
+	player->right_rotate = false; // Flèche droite
 }
 
 int	key_press(int keycode, t_player *player)
 {
+	if (keycode == 65307) // ESC key
+		exit(0);
 	if (keycode == W)
 		player->key_up = true;
 	if (keycode == S)
@@ -72,43 +84,105 @@ int	key_release(int keycode, t_player *player)
 	return (0);
 }
 
-void	move_player(t_player *player)
+/*
+** Cette fonction gère tous les mouvements du joueur :
+** 1. Déplacement avant/arrière (W/S) en utilisant le vecteur de direction
+** 2. Déplacement latéral (A/D) en utilisant le vecteur du plan de caméra
+** 3. Rotation de la caméra (Flèches) en appliquant une matrice de rotation 2D
+**    aux vecteurs de direction et du plan de caméra
+*/
+void	move_player(t_player *player, t_game *game)
 {
-	int		speed;
-	float	angle_speed;
-	float	cos_angle;
-	float	sin_angle;
+	double	next_x;
+	double	next_y;
 
-	speed = 3;
-	angle_speed = 0.03;
-	cos_angle = cos(player->angle);
-	sin_angle = sin(player->angle);
-	if (player->left_rotate)
-		player->angle -= angle_speed;
-	if (player->right_rotate)
-		player->angle += angle_speed;
-	if (player->angle > 2 * PI)
-		player->angle = 0;
-	if (player->angle < 0)
-		player->angle = 2 * PI;
+	// double	next_x;
+	// double	next_y;
+	double move_speed;  // Vitesse de déplacement
+	double rot_speed;   // Vitesse de rotation
+	double old_dir_x;   // Stockage temporaire pour la rotation
+	double old_plane_x; // Stockage temporaire pour la rotation
+	// Définition des vitesses de mouvement et de rotation
+	// Ces valeurs peuvent être ajustées pour un contrôle plus fluide
+	move_speed = 5;
+	rot_speed = 0.05;
+	// Mouvement avant (W)
+	// Déplace le joueur dans la direction où il regarde
 	if (player->key_up)
 	{
-		player->x += cos_angle * speed;
-		player->y += sin_angle * speed;
+		next_x = player->x + player->dir_x * move_speed;
+		next_y = player->y + player->dir_y * move_speed;
+		// Vérifie d'abord Y puis X séparément pour permettre de glisser le long des murs
+		if (game->map[(int)(player->y / BLOCK)][(int)(next_x / BLOCK)] != '1')
+			player->x = next_x;
+		if (game->map[(int)(next_y / BLOCK)][(int)(player->x / BLOCK)] != '1')
+			player->y = next_y;
 	}
+	// Mouvement arrière (S)
+	// Déplace le joueur dans la direction opposée à où il regarde
 	if (player->key_down)
 	{
-		player->x -= cos_angle * speed;
-		player->y -= sin_angle * speed;
+		next_x = player->x - player->dir_x * move_speed;
+		next_y = player->y - player->dir_y * move_speed;
+		if (game->map[(int)(player->y / BLOCK)][(int)(next_x / BLOCK)] != '1')
+			player->x = next_x;
+		if (game->map[(int)(next_y / BLOCK)][(int)(player->x / BLOCK)] != '1')
+			player->y = next_y;
 	}
-	if (player->key_left)
-	{
-		player->x -= sin_angle * speed;
-		player->y += cos_angle * speed;
-	}
+	// Mouvement latéral droit (D)
+	// Utilise le vecteur du plan de caméra pour un déplacement perpendiculaire
 	if (player->key_right)
 	{
-		player->x += sin_angle * speed;
-		player->y -= cos_angle * speed;
+		next_x = player->x + player->plane_x * move_speed;
+		next_y = player->y + player->plane_y * move_speed;
+		if (game->map[(int)(player->y / BLOCK)][(int)(next_x / BLOCK)] != '1')
+			player->x = next_x;
+		if (game->map[(int)(next_y / BLOCK)][(int)(player->x / BLOCK)] != '1')
+			player->y = next_y;
+	}
+	// Mouvement latéral gauche (A)
+	// Utilise le vecteur du plan de caméra dans la direction opposée
+	if (player->key_left)
+	{
+		next_x = player->x - player->plane_x * move_speed;
+		next_y = player->y - player->plane_y * move_speed;
+		if (game->map[(int)(player->y / BLOCK)][(int)(next_x / BLOCK)] != '1')
+			player->x = next_x;
+		if (game->map[(int)(next_y / BLOCK)][(int)(player->x / BLOCK)] != '1')
+			player->y = next_y;
+	}
+	// Rotation vers la gauche (Flèche gauche)
+	// Applique une matrice de rotation 2D dans le sens anti-horaire
+	if (player->left_rotate)
+	{
+		// Rotation du vecteur de direction
+		old_dir_x = player->dir_x;
+		player->dir_x = player->dir_x * cos(-rot_speed) - player->dir_y
+			* sin(-rot_speed);
+		player->dir_y = old_dir_x * sin(-rot_speed) + player->dir_y
+			* cos(-rot_speed);
+		// Rotation du plan de caméra (doit rester perpendiculaire à la direction)
+		old_plane_x = player->plane_x;
+		player->plane_x = player->plane_x * cos(-rot_speed) - player->plane_y
+			* sin(-rot_speed);
+		player->plane_y = old_plane_x * sin(-rot_speed) + player->plane_y
+			* cos(-rot_speed);
+	}
+	// Rotation vers la droite (Flèche droite)
+	// Applique une matrice de rotation 2D dans le sens horaire
+	if (player->right_rotate)
+	{
+		// Rotation du vecteur de direction
+		old_dir_x = player->dir_x;
+		player->dir_x = player->dir_x * cos(rot_speed) - player->dir_y
+			* sin(rot_speed);
+		player->dir_y = old_dir_x * sin(rot_speed) + player->dir_y
+			* cos(rot_speed);
+		// Rotation du plan de caméra
+		old_plane_x = player->plane_x;
+		player->plane_x = player->plane_x * cos(rot_speed) - player->plane_y
+			* sin(rot_speed);
+		player->plane_y = old_plane_x * sin(rot_speed) + player->plane_y
+			* cos(rot_speed);
 	}
 }

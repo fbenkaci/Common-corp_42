@@ -1,6 +1,6 @@
 NAME = cub3D
 CC = cc -Wall -Wextra -Werror -g3
-SRCS = src/main.c src/main2.c src/player.c
+SRCS = src/main.c src/player.c src/draw.c src/raycasting.c
 OBJ = $(SRCS:.c=.o)
 
 all: $(NAME)
