@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_atoi.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
+/*   By: wlarbi-a <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/16 13:20:59 by fbenkaci          #+#    #+#             */
-/*   Updated: 2024/11/26 11:10:34 by fbenkaci         ###   ########.fr       */
+/*   Created: 2024/11/13 09:18:18 by wlarbi-a          #+#    #+#             */
+/*   Updated: 2024/11/13 10:32:51 by wlarbi-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,25 +14,25 @@
 
 int	ft_atoi(const char *str)
 {
-	int	result;
-	int	sign;
 	int	i;
+	int	signe;
+	int	res;
 
-	result = 0;
-	sign = 1;
+	res = 0;
+	signe = 1;
 	i = 0;
-	while ((str[i] >= 9 && str[i] <= 13) || str[i] == 32)
+	while (((str[i] >= 9 && str[i] <= 13) || str[i] == 32) && str[i] != '\0')
 		i++;
 	if (str[i] == '-' || str[i] == '+')
 	{
 		if (str[i] == '-')
-			sign *= -1;
+			signe *= -1;
 		i++;
 	}
-	while (str[i] >= '0' && str[i] <= '9')
+	while (str[i] != '\0' && ft_isdigit(str[i]))
 	{
-		result = result * 10 + (str[i] - '0');
+		res = res * 10 + str[i] - '0';
 		i++;
 	}
-	return (result * sign);
+	return (res * signe);
 }

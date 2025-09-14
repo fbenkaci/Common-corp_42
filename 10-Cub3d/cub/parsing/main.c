@@ -1,26 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   free_map.c                                         :+:      :+:    :+:   */
+/*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/27 15:23:24 by fbenkaci          #+#    #+#             */
-/*   Updated: 2025/02/27 15:24:07 by fbenkaci         ###   ########.fr       */
+/*   Created: 2025/08/10 19:11:16 by wlarbi-a          #+#    #+#             */
+/*   Updated: 2025/09/14 18:08:11 by fbenkaci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "cub3d.h"
 
-void	free_map(char **grid)
+void	print_table_of_table(char **table)
 {
 	int	i;
 
 	i = 0;
-	while (grid[i] != NULL)
-	{
-		free(grid[i]);
-		i++;
-	}
-	free(grid);
+	while (table[i])
+		ft_putendl_fd(table[i++], 1);
 }

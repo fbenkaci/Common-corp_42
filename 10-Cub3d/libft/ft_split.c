@@ -3,120 +3,82 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
+/*   By: wlarbi-a <marvin@42.f>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/19 16:43:15 by fbenkaci          #+#    #+#             */
-/*   Updated: 2025/02/25 15:19:26 by fbenkaci         ###   ########.fr       */
+/*   Created: 2025/01/25 16:20:14 by wlarbi-a          #+#    #+#             */
+/*   Updated: 2025/01/25 16:20:15 by wlarbi-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static int	count_word(char const *s, char c)
+static int	strlen_split(const char *s, char c)
 {
-	int	count;
+	int	j;
+
+	j = 0;
+	while (*s != c && *s++)
+		j++;
+	return (j);
+}
+
+static int	count_words_split(char const *s, char c)
+{
 	int	i;
 
-	count = 0;
 	i = 0;
-	while (s && s[i])
+	while (*s)
 	{
-		while (s[i] == c)
+		if ((*s != c && *(s + 1) == c) || (*s != c && *(s + 1) == '\0'))
 			i++;
-		{
-			count++;
-			while (s[i] && s[i] != c)
-				i++;
-		}
+		s++;
 	}
-	return (count);
-}
-
-static char	*extract_word(char const *s, char c, int *len)
-{
-	char	*dest;
-	int		start;
-	int		i;
-
-	i = 0;
-	start = 0;
-	while (s[start] == c)
-		start++;
-	while (s[start + i] && s[start + i] != c)
-		i++;
-	*len = i;
-	dest = malloc((i + 1) * sizeof(char));
-	if (!dest)
-		return (NULL);
-	i = 0;
-	while (i < *len)
-		dest[i++] = s[start++];
-	dest[i] = '\0';
-	return (dest);
-}
-
-static char	**free_word(char **word, int count)
-{
-	int	i;
-
-	i = 0;
-	while (i < count)
-	{
-		free(word[i]);
-		i++;
-	}
-	free(word);
-	return (NULL);
+	return (i);
 }
 
 char	**ft_split(char const *s, char c)
 {
-	char	**dest;
-	int		len;
-	int		i;
+	size_t	i;
+	size_t	k;
+	char	**result;
 
 	i = 0;
-	dest = malloc((count_word(s, c) + 1) * sizeof(char *));
-	if (!s || !(dest))
-		return (NULL);
+	k = 0;
+	result = malloc((count_words_split(s, c) + 1) * sizeof(char *));
+	if (!result || !s)
+		return (free(result), NULL);
+	while (*s == c && *s)
+		s++;
 	while (*s)
 	{
-		if (*s != c)
-		{
-			dest[i] = extract_word(s, c, &len);
-			if (!dest[i])
-				return (free_word(dest, i));
-			i++;
-			s += len;
-		}
-		else
+		result[k] = malloc(strlen_split(s, c) + 1);
+		if (!result[k])
+			return (NULL);
+		while (*s != c && *s)
+			result[k][i++] = *s++;
+		result[k++][i] = '\0';
+		i = 0;
+		while (*s == c && *s)
 			s++;
 	}
-	dest[i] = NULL;
-	return (dest);
+	return (result[k] = NULL, result);
 }
-// void free_split(char **split)
-// {
-// 	int i = 0;
-// 	while (split[i])
-// 	{
-// 		free(split[i]);
-// 		i++;
-// 	}
-// 	free(split);
-// }
-// int main(void)
-// {
-// 	char **dest = NULL;
-// 	int i;
-// 	char s[] = "hello world";
-// 	dest = ft_split(s, '\n');
-// 	i = 0;
-// 	while (dest[i] != NULL) {
-// 	printf("%s\n", dest[i]);
-// 	i++;
-//     }
-// 	free_split(dest);
 
-// 	return (0);
-// }
+/*
+int	main(int argc, char **argv)
+{
+	(void)argc;
+	int i;
+	char **test;
+
+	i = 0;
+	if (argc < 3)
+		return (0);
+	test = ft_split(argv[1], argv[2][0]);
+	while (test[i] != NULL)
+	{
+		printf("output test[%d] : %s\n", i, test[i]);
+		free(test[i++]);
+	}
+	free(test);
+}*/
