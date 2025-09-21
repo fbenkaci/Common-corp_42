@@ -1,0 +1,11 @@
+NO ./texture/mur1.xpm
+C 100, 0 ,0
+SO ./texture/mur2.xpm
+F 255, 255, 255
+WE ./texture/mur3.xpm
+EA ./texture/mur4.xpm
+C 200, 100, 50
+
+11111
+10N01
+11111
