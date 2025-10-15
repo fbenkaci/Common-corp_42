@@ -6,7 +6,7 @@
 /*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/15 12:03:03 by fbenkaci          #+#    #+#             */
-/*   Updated: 2025/10/15 12:07:33 by fbenkaci         ###   ########.fr       */
+/*   Updated: 2025/10/15 12:16:52 by fbenkaci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,8 +43,13 @@ void Harl::complain(std::string level)
     {
        if (!strcmp(levels[i].c_str(), level.c_str()))
             (this->*functions[i])();
+        // Send i to the function that contain switch.
+        // Add all messages in the switch
+        // When the indice is enter don't break. just break at the last
     }
 }
+
+
 
 Harl::~Harl()
 {
