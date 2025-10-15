@@ -6,7 +6,7 @@
 /*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/01 11:18:43 by fbenkaci          #+#    #+#             */
-/*   Updated: 2025/10/05 14:42:47 by fbenkaci         ###   ########.fr       */
+/*   Updated: 2025/10/11 15:43:21 by fbenkaci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 #include <string>
 #include <iomanip>
 
-void	isvalid_command(std::string command, PhoneBook& phonebook)
+void	isvalid_command(std::string command, PhoneBook &phonebook)
 {
     Contact contact;
     
