@@ -6,7 +6,7 @@
 /*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/20 13:12:56 by fbenkaci          #+#    #+#             */
-/*   Updated: 2025/10/21 15:49:52 by fbenkaci         ###   ########.fr       */
+/*   Updated: 2025/10/23 11:46:58 by fbenkaci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,6 @@ class Fixed
     int toInt(void) const;
 
     ~Fixed();
-    int getRawBits(void) const;
-    void setRawBits(int const raw);
     Fixed & operator=(Fixed const & other); // Copies content into an already existing object
     
     private:
@@ -38,5 +36,7 @@ class Fixed
     int static const _nbBits = 8; 
     
 };
+
+std::ostream& operator<<(std::ostream& os, const Fixed& fixed);
 
 #endif

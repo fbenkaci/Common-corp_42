@@ -6,7 +6,7 @@
 /*   By: fbenkaci <fbenkaci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/20 13:12:37 by fbenkaci          #+#    #+#             */
-/*   Updated: 2025/10/21 16:00:07 by fbenkaci         ###   ########.fr       */
+/*   Updated: 2025/10/23 12:55:03 by fbenkaci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,10 @@ int main(void)
     
     a = Fixed( 1234.4321f );
     
-    std::cout << "a is " << a.getRawBits() << std::endl;
-    std::cout << "b is " << b.getRawBits() << std::endl;
-    std::cout << "c is " << c.getRawBits() << std::endl;
-    std::cout << "d is " << d.getRawBits() << std::endl;
+    std::cout << "a is " << a << std::endl;
+    std::cout << "b is " << b << std::endl;
+    std::cout << "c is " << c << std::endl;
+    std::cout << "d is " << d << std::endl;
     std::cout << "a is " << a.toInt() << " as integer" << std::endl;
     std::cout << "b is " << b.toInt() << " as integer" << std::endl;
     std::cout << "c is " << c.toInt() << " as integer" << std::endl;
